@@ -32,7 +32,9 @@ Delving into pseudo-LiDAR reprensetation
 
 Different from the above approach, the authors proposed PatchNet-vanilla, which follows the first three steps, but the generated 3D data is organized as image representation.
 
-Experiments show that there is no significant gap between the performance of PatchNet-vanilla and pseudo-LiDAR approach. The authors argued that pseudo-LiDAR representation is not necessary, and after integrating the generated 3D information, image representation has the same potential. **The coordinate transformation from image coordinate to the LiDAR coordinate is the key factor for performance improvement, which implicitly encodes the camera calibration information into input data.**
+Experiments show that there is no significant gap between the performance of PatchNet-vanilla and pseudo-LiDAR approach. The authors argued that pseudo-LiDAR representation is not necessary, and after integrating the generated 3D information, image representation has the same potential.
+
+**The coordinate transformation from image coordinate to the LiDAR coordinate is the key factor for performance improvement, which implicitly encodes the camera calibration information into input data.**
 
 Proposed approach: PatchNet
 -------------------------------------
