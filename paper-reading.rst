@@ -2,6 +2,6 @@ Paper Reading Notes
 =======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    rethinking-pseudo-lidar

@@ -11,23 +11,23 @@ Delving into pseudo-LiDAR reprensetation
 |     1. **Depth estimation**: Given a monocular/stereo image, estimate :math:`d` for each pixel :math:`(u, v)` using a stand alone CNN
 |     2. **2D detection**: Another CNN to generate 2D object detection proposals
 |     3. **3D data generation**: RoIs are cropped and 3D coordinates of pixels can be recovered by
-|
-|     .. math::
-|       :label: eq1
-|
-|       \begin{cases}
-|       z & = d \\\
-|       x & = (u - C\_x) \times z / f \\\
-|       y & = (v - C\_y) \times z / f
-|       \end{cases}
-|
+
+.. math::
+  :label: eq1
+
+  \begin{cases}
+  z & = d \\\
+  x & = (u - C\_x) \times z / f \\\
+  y & = (v - C\_y) \times z / f
+  \end{cases}
+
 |     where :math:`f` is the focal length, and :math:`(C_x, C_y)` is the principal point.
 |     4. **3D object detection**: Outputs from step 3 are treated as LiDAR signals, and point-wise CNN is used to predict 3D objects. In particular, they are treated as unordered point set :math:`\{x_i, \dots, x_n\}` with :math:`x_i \in \mathbb{R}^d`, and processed by PointNet, which defines a set of function :math:`f` that maps a set of points to a output vector
-|
-|     .. math::
-|
-|       f(x_1, \dots, x_n) = \gamma\left(\max_{i=1, \dots, n} h(x_i) \right)
-|
+
+.. math::
+
+  f(x_1, \dots, x_n) = \gamma\left(\max_{i=1, \dots, n} h(x_i) \right)
+
 |     where :math:`\gamma` and :math:`h` are implemented by multi-layer perceptron (MLP) layers.
 
 Different from the above approach, the authors proposed PatchNet-vanilla, which follows the first three steps, but the generated 3D data is organized as image representation.
@@ -42,7 +42,7 @@ The authors first trained two deep CNNs on two intermediate prediction tasks, th
 Next, deep features of RoIs are extracted by backbone network, and filtered by the mask global pooling and foreground mask. Finally, a detection head with difficulty assignment mechanism is used to predict the 3D bounding box parameterized by :math:`(x, y, z, h, w, l, \theta)`.
 
 .. figure:: figures/rethinking-pseudo-lidar-1.png
-  :width: 320pt
+  :width: 450pt
 
   PatchNet architecture.
 
