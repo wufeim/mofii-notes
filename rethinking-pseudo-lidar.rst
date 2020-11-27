@@ -1,5 +1,62 @@
 [PR] Rethinking Pseudo-LiDAR Representation
 =======================================
 
+| **Authors:** Xinzhu Ma, Shinan Liu, Zhiyi Xia, Hongwen Zhang, Xingyu Zeng, Wanli Ouyang
+| **Affiliations:** SenseTime Computer Vision Research Group, The university of Sydney; SenseTime Research; Institute of Automation, CAS
+
+Delving into pseudo-LiDAR reprensetation
+-------------------------------------
+
+| A pseudo-LiDAR detector can be summarized as follows:
+|     1. **Depth estimation**: Given a monocular/stereo image, estimate :math:`d` for each pixel :math:`(u, v)` using a stand alone CNN
+|     2. **2D detection**: Another CNN to generate 2D object detection proposals
+|     3. **3D data generation**: RoIs are cropped and 3D coordinates of pixels can be recovered by
+|
+|     .. math::
+|       :label: eq1
+|
+|       \begin{cases}
+|       z & = d \\\
+|       x & = (u - C\_x) \times z / f \\\
+|       y & = (v - C\_y) \times z / f
+|       \end{cases}
+|
+|     where :math:`f` is the focal length, and :math:`(C_x, C_y)` is the principal point.
+|     4. **3D object detection**: Outputs from step 3 are treated as LiDAR signals, and point-wise CNN is used to predict 3D objects. In particular, they are treated as unordered point set :math:`\{x_i, \dots, x_n\}` with :math:`x_i \in \mathbb{R}^d`, and processed by PointNet, which defines a set of function :math:`f` that maps a set of points to a output vector
+|
+|     .. math::
+|
+|       f(x_1, \dots, x_n) = \gamma\left(\max_{i=1, \dots, n} h(x_i) \right)
+|
+|     where :math:`\gamma` and :math:`h` are implemented by multi-layer perceptron (MLP) layers.
+
+Different from the above approach, the authors proposed PatchNet-vanilla, which follows the first three steps, but the generated 3D data is organized as image representation.
+
+Experiments show that there is no significant gap between the performance of PatchNet-vanilla and pseudo-LiDAR approach. The authors argued that pseudo-LiDAR representation is not necessary, and after integrating the generated 3D information, image representation has the same potential. **The coordinate transformation from image coordinate to the LiDAR coordinate is the key factor for performance improvement, which implicitly encodes the camera calibration information into input data.**
+
+Proposed approach: PatchNet
+-------------------------------------
+
+The authors first trained two deep CNNs on two intermediate prediction tasks, the 2D detection and depth estimation. For each detected 2D object proposal, the corresponding depth map is cropped and the spatial information is recovered using :eq:`eq1`.
+
+Next, deep features of RoIs are extracted by backbone network, and filtered by the mask global pooling and foreground mask. Finally, a detection head with difficulty assignment mechanism is used to predict the 3D bounding box parameterized by :math:`(x, y, z, h, w, l, \theta)`.
+
+.. figure:: figures/rethinking-pseudo-lidar-1.png
+  :width: 320pt
+
+  PatchNet architecture.
+
+**Mask global pooling**: The feature maps :math:`\mathbf{X}` output from the backbone network is converted to a feature vector by global pooling. A binary map indicating the foreground is applied to encourage the final feature to focus on the regions of interest.
+
+**Mask generation**: The foreground/background binary mask :math:`\mathbf{M}` is obtained by setting a threshold to the depth map.
+
+**Head**: A separate branch is used to predict the difficulty level of each instance, and further assign the instance to the corresponding branch.
+
+**Loss function**: Following *Frustum PointNets for 3D Object Detection from RGB-D Data*, the loss function is given by
+
+.. math::
+
+  \mathcal{L} = \mathcal{L}\_{center} + \mathcal{L}\_{size} + \mathcal{L}\_{heading} + \lambda \cdot \mathcal{L}\_{corner}
+
 Thoughts
 -------------------------------------
