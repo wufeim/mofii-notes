@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[PR] Rethinking Pseudo-LiDAR Representation &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Paper Reading Notes" href="paper-reading.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="paper-reading.html" title="Paper Reading Notes"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="paper-reading.html" accesskey="U">Paper Reading Notes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">[PR] Rethinking Pseudo-LiDAR Representation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pr-rethinking-pseudo-lidar-representation">
+<h1>[PR] Rethinking Pseudo-LiDAR Representation<a class="headerlink" href="#pr-rethinking-pseudo-lidar-representation" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Xinzhu Ma, Shinan Liu, Zhiyi Xia, Hongwen Zhang, Xingyu Zeng, Wanli Ouyang</div>
+<div class="line"><strong>Affiliations:</strong> SenseTime Computer Vision Research Group, The university of Sydney; SenseTime Research; Institute of Automation, CAS</div>
+</div>
+<div class="section" id="delving-into-pseudo-lidar-reprensetation">
+<h2>Delving into pseudo-LiDAR reprensetation<a class="headerlink" href="#delving-into-pseudo-lidar-reprensetation" title="Permalink to this headline">¶</a></h2>
+<p>A pseudo-LiDAR detector can be summarized as follows:</p>
+<ol class="arabic">
+<li><p><strong>Depth estimation</strong>: Given a monocular/stereo image, estimate <span class="math notranslate nohighlight">\(d\)</span> for each pixel <span class="math notranslate nohighlight">\((u, v)\)</span> using a stand alone CNN</p></li>
+<li><p><strong>2D detection</strong>: Another CNN to generate 2D object detection proposals</p></li>
+<li><p><strong>3D data generation</strong>: RoIs are cropped and 3D coordinates of pixels can be recovered by</p>
+<div class="math notranslate nohighlight" id="equation-eq1">
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq1" title="Permalink to this equation">¶</a></span>\[\begin{split}\begin{cases}
+z &amp; = d \\
+x &amp; = (u - C\_x) \times z / f \\
+y &amp; = (v - C\_y) \times z / f
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(f\)</span> is the focal length, and <span class="math notranslate nohighlight">\((C_x, C_y)\)</span> is the principal point.</p>
+</li>
+<li><p><strong>3D object detection</strong>: Outputs from step 3 are treated as LiDAR signals, and point-wise CNN is used to predict 3D objects. In particular, they are treated as unordered point set <span class="math notranslate nohighlight">\(\{x_i, \dots, x_n\}\)</span> with <span class="math notranslate nohighlight">\(x_i \in \mathbb{R}^d\)</span>, and processed by PointNet, which defines a set of function <span class="math notranslate nohighlight">\(f\)</span> that maps a set of points to a output vector</p>
+<div class="math notranslate nohighlight">
+\[f(x_1, \dots, x_n) = \gamma\left(\max_{i=1, \dots, n} h(x_i) \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma\)</span> and <span class="math notranslate nohighlight">\(h\)</span> are implemented by multi-layer perceptron (MLP) layers.</p>
+</li>
+</ol>
+<p>Different from the above approach, the authors proposed PatchNet-vanilla, which follows the first three steps, but the generated 3D data is organized as image representation.</p>
+<p>Experiments show that there is no significant gap between the performance of PatchNet-vanilla and pseudo-LiDAR approach. The authors argued that pseudo-LiDAR representation is not necessary, and after integrating the generated 3D information, image representation has the same potential.</p>
+<p><strong>The coordinate transformation from image coordinate to the LiDAR coordinate is the key factor for performance improvement, which implicitly encodes the camera calibration information into input data.</strong></p>
+</div>
+<div class="section" id="proposed-approach-patchnet">
+<h2>Proposed approach: PatchNet<a class="headerlink" href="#proposed-approach-patchnet" title="Permalink to this headline">¶</a></h2>
+<p>The authors first trained two deep CNNs on two intermediate prediction tasks, the 2D detection and depth estimation. For each detected 2D object proposal, the corresponding depth map is cropped and the spatial information is recovered using <a class="reference internal" href="#equation-eq1">(1)</a>.</p>
+<p>Next, deep features of RoIs are extracted by backbone network, and filtered by the mask global pooling and foreground mask. Finally, a detection head with difficulty assignment mechanism is used to predict the 3D bounding box parameterized by <span class="math notranslate nohighlight">\((x, y, z, h, w, l, \theta)\)</span>.</p>
+<div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="_images/rethinking-pseudo-lidar-1.png"><img alt="_images/rethinking-pseudo-lidar-1.png" src="_images/rethinking-pseudo-lidar-1.png" style="width: 450pt;" /></a>
+<p class="caption"><span class="caption-text">PatchNet architecture.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p><strong>Mask global pooling</strong>: The feature maps <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> output from the backbone network is converted to a feature vector by global pooling. A binary map indicating the foreground is applied to encourage the final feature to focus on the regions of interest.</p>
+<p><strong>Mask generation</strong>: The foreground/background binary mask <span class="math notranslate nohighlight">\(\mathbf{M}\)</span> is obtained by setting a threshold to the depth map.</p>
+<p><strong>Head</strong>: A separate branch is used to predict the difficulty level of each instance, and further assign the instance to the corresponding branch.</p>
+<p><strong>Loss function</strong>: Following <em>Frustum PointNets for 3D Object Detection from RGB-D Data</em>, the loss function is given by</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = \mathcal{L}\_{center} + \mathcal{L}\_{size} + \mathcal{L}\_{heading} + \lambda \cdot \mathcal{L}\_{corner}\]</div>
+</div>
+<div class="section" id="thoughts">
+<h2>Thoughts<a class="headerlink" href="#thoughts" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">[PR] Rethinking Pseudo-LiDAR Representation</a><ul>
+<li><a class="reference internal" href="#delving-into-pseudo-lidar-reprensetation">Delving into pseudo-LiDAR reprensetation</a></li>
+<li><a class="reference internal" href="#proposed-approach-patchnet">Proposed approach: PatchNet</a></li>
+<li><a class="reference internal" href="#thoughts">Thoughts</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="paper-reading.html"
+                        title="previous chapter">Paper Reading Notes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/rethinking-pseudo-lidar.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="paper-reading.html" title="Paper Reading Notes"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">[PR] Rethinking Pseudo-LiDAR Representation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
