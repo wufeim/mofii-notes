@@ -5,6 +5,8 @@ Mofii's Notes
    :maxdepth: 2
 
    paper-reading
+   interview-questions-ml
+   interview-questions-cv
 
 About
 =====================================
