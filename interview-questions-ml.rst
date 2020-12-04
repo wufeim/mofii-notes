@@ -9,7 +9,7 @@ Interview Questions (ML)
 
 3. **How is KNN different from k-means clustering?**
 
-   KNN是监督学习的一种，根据:math:`x`附近的:math:`k`个点投票预测。
+   KNN是监督学习的一种，根据 :math:`x` 附近的 :math:`k` 个点投票预测。
 
    :math:`k` -means是无监督学习的一种，通过聚类的方式分析数据。
 
