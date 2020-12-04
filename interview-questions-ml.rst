@@ -49,7 +49,7 @@ Interview Questions (ML)
 
    .. math::
 
-     P(Y=1 \mid X_1=x_1, X_2=x_2) = \frac{P(X_1=x_1 \mid Y=1) \cdot P(X_2=x_2 \mid Y=1)}{P(y=3)}
+     P(Y=1 \mid X_1=x_1, X_2=x_2) = \frac{P(X_1=x_1 \mid Y=1) \cdot P(X_2=x_2 \mid Y=1) \cdot P(Y=1)}{P(X_1=x_1, X_2=x_2)}
    
    相当于假设了 :math:`X_1` 和 :math:`X_2` 间是相互独立的。这个算法的时间复杂度是 :math:`O(kd)` ，其中 :math:`k` 是label类别数而 :math:`d` 是特征维度，因此相比起KNN等一些算法会快很多。
 

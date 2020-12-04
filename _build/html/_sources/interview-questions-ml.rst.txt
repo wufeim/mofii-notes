@@ -9,7 +9,7 @@ Interview Questions (ML)
 
 3. **How is KNN different from k-means clustering?**
 
-   KNN是监督学习的一种，根据:math:`x`附近的:math:`k`个点投票预测。
+   KNN是监督学习的一种，根据 :math:`x` 附近的 :math:`k` 个点投票预测。
 
    :math:`k` -means是无监督学习的一种，通过聚类的方式分析数据。
 
@@ -49,7 +49,7 @@ Interview Questions (ML)
 
    .. math::
 
-     P(Y=1 \mid X_1=x_1, X_2=x_2) = \frac{P(X_1=x_1 \mid Y=1) \cdot P(X_2=x_2 \mid Y=1)}{P(y=3)}
+     P(Y=1 \mid X_1=x_1, X_2=x_2) = \frac{P(X_1=x_1 \mid Y=1) \cdot P(X_2=x_2 \mid Y=1) \cdot P(Y=1)}{P(X_1=x_1, X_2=x_2)}
    
    相当于假设了 :math:`X_1` 和 :math:`X_2` 间是相互独立的。这个算法的时间复杂度是 :math:`O(kd)` ，其中 :math:`k` 是label类别数而 :math:`d` 是特征维度，因此相比起KNN等一些算法会快很多。
 
@@ -93,10 +93,34 @@ Interview Questions (ML)
 
     .. math::
 
-      f(t) = \frad{a_0}{2} + \sum_{n=1}^\infty \left[a_n\cos\left( \frac{2\pi nt}{T} \right) + b_n\sin\left( \frac{2\pi nt}{T} \right)\right]
+      f(t) = \frac{a_0}{2} + \sum_{n=1}^\infty \left[a_n\cos\left( \frac{2\pi nt}{T} \right) + b_n\sin\left( \frac{2\pi nt}{T} \right)\right]
 
 12. **What's the difference between probability and likelihood?**
 
 13. **What is deep learning, and how does it contrast with other machine learning algorithms?**
 
     深度学习是机器学习的一个子集，通过链式法则反向传播梯度。
+
+14. **What's the difference between a generative and discriminative model?**
+
+    判别模型（经过训练）对数据进行分类或回归，而生成模型（根据latent code）生成符合某种性质对特定数据。
+
+15. **What cross-validation technique would you use on a time series dataset?**
+
+16. **How is a decision tree pruned?**
+
+17. **Which is more important to you? Model accuracy, or model performance?**
+
+    模型准确度仅仅是模型性能的一个部分，例如上面的precision，recall，和AP指标都用来更客观的衡量模型的性能。
+
+18. **What's the F1 score? How would you use it?**
+
+19. **How would you handle an imbalanced dataset?**
+
+20. **When should you use classification over regression?**
+
+    首先，分类还是回归取决于输出的类型（如：性别或是身高）。其次，特殊问题下会做特别的处理：
+      - 回归车辆的偏航角较为困难，我们选用Multi-Bin的方法，首先对角度区间进行分类，再在该区间内
+      - 一些社会实验问题中，我们可能并不关注测试者具体年龄，仅仅关心他们年龄所在的区间
+
+21. **Naming an example where ensemble techniques might be useful.**
