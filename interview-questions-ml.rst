@@ -114,3 +114,13 @@ Interview Questions (ML)
     模型准确度仅仅是模型性能的一个部分，例如上面的precision，recall，和AP指标都用来更客观的衡量模型的性能。
 
 18. **What's the F1 score? How would you use it?**
+
+19. **How would you handle an imbalanced dataset?**
+
+20. **When should you use classification over regression?**
+
+    首先，分类还是回归取决于输出的类型（如：性别或是身高）。其次，特殊问题下会做特别的处理：
+      - 回归车辆的偏航角较为困难，我们选用Multi-Bin的方法，首先对角度区间进行分类，再在该区间内
+      - 一些社会实验问题中，我们可能并不关注测试者具体年龄，仅仅关心他们年龄所在的区间
+
+21. **Naming an example where ensemble techniques might be useful.**
