@@ -1,6 +1,8 @@
 Interview Questions (ML)
 =====================================
 
+前51题来自`这里 <https://www.springboard.com/blog/machine-learning-interview-questions/>`_，答案加入了很多我的理解，如有错误欢迎指正。
+
 1. **What's the trade-off between bias and variance?**
 
 2. **What is the difference between supervised and unsupervised learning?**
@@ -124,3 +126,19 @@ Interview Questions (ML)
       - 一些社会实验问题中，我们可能并不关注测试者具体年龄，仅仅关心他们年龄所在的区间
 
 21. **Naming an example where ensemble techniques might be useful.**
+
+22. **How do you ensure you're not overfitting with a model?**
+
+    为了避免过度拟合训练数据，有以下方法：
+      - 从模型设计的角度讲：更简单的模型（适当增加bias）可以帮助减少模型variance，这既包括线性回归和随机森林、gradient boosting的选择，也包括最小二乘中，采用subset selection和shrinkage method等方法减少模型的variance
+      - 从训练数据上，可以使用交叉验证的方式， :math:`k` -fold cross-validation
+
+23. **What evaluation approaches would you work to gauge the effectiveness of a machine learning model?**
+
+    首先将数据集分为训练集、验证集以及测试集。我们在验证集调节模型与参数，最后在测试集横向比较不同模型的性能。因此我们还需要一个评价指标（metric），对于不同的问题我们需要不同的评价指标：ImageNet使用了Top-5 error，KITTI3D检测数据集使用了AP40指标（IoU=0.7），COCO使用的是mAP（对于IoU和scale）和mAR（对于detection数和scale）在不同尺度上的指标。
+
+    不同的任务与需求决定使用不同的评价指标，例如目标检测的mAP指标在一些场景下不适用，由于长尾性导致高AP的模型不一定FP/Recall高。
+
+24. **How would you evaluate a logistic regression?**
+
+25. **What's the "kernel trick" and how is it useful?**

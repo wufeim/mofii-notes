@@ -1,0 +1,11 @@
+LeetCode
+=====================================
+
+3. **Longest Substring Without Repeating Characters**
+
+   Given a string :code:`s`, find the length of the longest substring without repeating characters.
+
+   .. code-block:: C++
+
+      class Solution {
+      }
