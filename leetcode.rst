@@ -84,3 +84,68 @@ LeetCode
                   l -= 1
                   r += 1
               return s[l+1:r]
+
+19. **Remove Nth Node from End of List**
+
+    Given the :code:`head` of a linked list, remove the :math:`n` th node from the end of the list and return its head.
+
+    **Follow up:** Could you do this in one pass?
+
+    - 简单题，需要注意的是如 :math:`n` 等于linked list长度的一些corner cases
+
+    .. code-block:: Python
+
+       class Solution:
+           def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+               if head is None:
+                   return head
+               front = end = head
+               for i in range(n):
+                   end = end.next
+               if end is None:
+                   head = head.next
+                   return head
+               while end.next:
+                   end = end.next
+                   front = front.next
+               front.next = front.next.next
+               return head
+
+62. **Unique Paths**
+
+    A robot is located at the top-left corner of a :math:`m \times n` grid. The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid. How many possible unique paths are there?
+
+    - 可以通过递归求解，即 :code:`uniquePaths(m, n) = uniquePaths(m-1, n) + uniquePaths(m, n-1)`
+    - 也可以直接求closed-form solution的值， 即 :math:`C_{m+n-2}^{m-1}`；另外可以利用 :math:`C_n^a = C_n^{n-1}` 进一步优化
+
+    .. code-block:: Python
+
+       class Solution:
+           def uniquePaths(self, m: int, n: int) -> int:
+               # The solution is C(m+n-2, m-1)
+               numerator = denominator = 1
+               for i in range(m-1):
+                   numerator *= (m+n-2-i)
+                   denominator *= i+1
+               return int(numerator / denominator)
+
+98. **Validate Binary Search Tre**
+
+    Given the :code:`root` of a binary tree, determine if it is a valid binary search tree (BST).
+
+    - 根据BST定义，很容易得到验证BST的递归算法
+
+    .. code-block:: Python
+
+       class Solution:
+           def isValidBST(self, root: TreeNode) -> bool:
+               return self.isValidBST_with_range(root, None, None)
+        
+           def isValidBST_with_range(self, root, low, high):
+               if root is None:
+                   return True
+               if low is not None and root.val <= low:
+                   return False
+               if high is not None and root.val >= high:
+                   return False
+               return self.isValidBST_with_range(root.left, low, root.val) and self.isValidBST_with_range(root.right, root.val, high)
