@@ -41,11 +41,47 @@
             
   <div class="section" id="leetcode">
 <h1>LeetCode<a class="headerlink" href="#leetcode" title="Permalink to this headline">¶</a></h1>
-<ol class="arabic" start="3">
+<ol class="arabic" start="2">
+<li><p><strong>Add Two Numbers</strong></p>
+<p>You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.</p>
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">addTwoNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">l2</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ListNode</span><span class="p">:</span>
+        <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">l1</span> <span class="ow">or</span> <span class="n">l2</span> <span class="ow">or</span> <span class="n">carry</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">l1</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">+=</span> <span class="n">l1</span><span class="o">.</span><span class="n">val</span>
+                <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">next</span>
+            <span class="k">if</span> <span class="n">l2</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">+=</span> <span class="n">l2</span><span class="o">.</span><span class="n">val</span>
+                <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="n">next</span>
+            <span class="n">val</span> <span class="o">+=</span> <span class="n">carry</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">9</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">-=</span> <span class="mi">10</span>
+                <span class="n">carry</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">next</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="n">next</span>
+</pre></div>
+</div>
+</li>
 <li><p><strong>Longest Substring Without Repeating Characters</strong></p>
 <p>Given a string <code class="code docutils literal notranslate"><span class="pre">s</span></code>, find the length of the longest substring without repeating characters.</p>
-<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="p">}</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">char_idx</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">256</span>
+        <span class="n">max_len</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">char_idx</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">char_idx</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
+            <span class="n">char_idx</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_len</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">max_len</span>
 </pre></div>
 </div>
 </li>

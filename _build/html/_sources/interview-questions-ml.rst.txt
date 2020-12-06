@@ -37,7 +37,7 @@ Interview Questions (ML)
 
 6. **What is Bayes' Theorem? How is it useful in a machine learning context?**
 
-   贝叶斯定理是：
+   贝叶斯定理根据事件的先验概率给出后验概率，具体形式是：
 
    .. math::
 
@@ -142,3 +142,21 @@ Interview Questions (ML)
 24. **How would you evaluate a logistic regression?**
 
 25. **What's the "kernel trick" and how is it useful?**
+
+---
+
+1. **什么是反卷积？**
+
+---
+
+1. 基于深度学习的目标检测技术演进：R-CNN，Fast R-CNN，Faster R-CNN，YOLO，SSD
+
+   `详细解释 <https://www.julyedu.com/question/big/kp_id/32/ques_id/2103>`_
+
+2. 请简单解释下目标检测中的这个IoU评价函数
+
+   IoU计算的是ground truth和预测的bounding box间交集与并集的比值：
+
+   .. math::
+
+     IoU = \frac{DT \cap GT}{DT \cup GT}
