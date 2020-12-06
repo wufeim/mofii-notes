@@ -7,6 +7,9 @@ LeetCode
 
    You may assume the two numbers do not contain any leading zero, except the number 0 itself.
 
+   - 这里将多个循环合并，即在 :code:`l1` 或 :code:`l2` 或 :code:`carry` “有意义”的情况下循环继续
+   - 如果结果 :code:`n` 的初识值为 :code:`None` ，则循环内不能直接对 :code:`n.next` 赋值，这里使用了一个trick，即给定一个dummy node :code:`ListNode(0)` ，在返还结果时再跳过 :code:`root.next`
+
    .. code-block:: Python
 
       class Solution:
@@ -34,6 +37,9 @@ LeetCode
 3. **Longest Substring Without Repeating Characters**
 
    Given a string :code:`s`, find the length of the longest substring without repeating characters.
+
+   - 这里采用了sliding window的方法，从左向右寻找最长的substring
+   - 对于每一个substring，如何检测新的字符是否已经在之前出现过呢？我们使用一个index array从字符ascii码对应到字符所在的index，如此以来只需要将映射得到的index与starting point位置做比较
 
    .. code-block:: Python
 
