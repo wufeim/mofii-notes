@@ -52,7 +52,7 @@
 </div>
 <p>In this paper, the authors propose a simple and scalable detection algorithm, known as R-CNN, which achieves a mAP of 53.3% on VOC 2012.</p>
 <p>The first challenge faced in object detection is how to use the CNN features. One approach is to frame localization problem as a regression problem, but achieves limited performance. An alternative is to build a sliding-window detector. However, large receptive fields make the precise localization difficult. Instead, the authors propose to solve the CNN localization problem by operating within the &quot;recognition using regions&quot; paradigm, as depicted in the figure below.</p>
-<a class="reference internal image-reference" href="_images/r-cnn-1.png"><img alt="_images/r-cnn-1.png" src="_images/r-cnn-1.png" style="width: 320pt;" /></a>
+<a class="reference internal image-reference" href="_images/r-cnn-1.png"><img alt="_images/r-cnn-1.png" src="_images/r-cnn-1.png" style="width: 360pt;" /></a>
 <p>The second challenge is that labeled data is scarce and the amount currently available is insufficient for training a large CNN. The authors show that the &quot;supervised pre-training followed by domain-specific fine-tuning&quot; paradigm is quite effective.</p>
 <p>The authors also note that R-CNN can be easily extend to the task of semantic segmentation with competitive results.</p>
 <div class="section" id="object-detection-with-r-cnn">

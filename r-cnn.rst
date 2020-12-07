@@ -6,12 +6,12 @@ Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation
 
 In this paper, the authors propose a simple and scalable detection algorithm, known as R-CNN, which achieves a mAP of 53.3% on VOC 2012.
 
-The first challenge faced in object detection is how to use the CNN features. One approach is to frame localization problem as a regression problem, but achieves limited performance. An alternative is to build a sliding-window detector. However, large receptive fields make the precise localization difficult. Instead, the authors propose to solve the CNN localization problem by operating within the "recognition using regions" paradigm, as depicted in the figure below.
+**The first challenge faced in object detection is how to make use of the CNN features.** One approach is to frame localization problem as a regression problem, but achieves limited performance. An alternative is to build a sliding-window detector. However, large receptive fields make the precise localization difficult. Instead, the authors propose to solve the CNN localization problem by operating within the "recognition using regions" paradigm, as depicted in the figure below.
 
 .. image:: figures/r-cnn-1.png
-   :width: 320pt
+   :width: 360pt
 
-The second challenge is that labeled data is scarce and the amount currently available is insufficient for training a large CNN. The authors show that the "supervised pre-training followed by domain-specific fine-tuning" paradigm is quite effective.
+**The second challenge is that labeled data is scarce and the amount currently available is insufficient for training a large CNN.** The authors show that the "supervised pre-training followed by domain-specific fine-tuning" paradigm is quite effective.
 
 The authors also note that R-CNN can be easily extend to the task of semantic segmentation with competitive results.
 
@@ -26,7 +26,9 @@ R-CNN consists of three modules:
 
 At test time, the authors run selective search on the test image to extract around 2000 region proposals. They warp each proposal and forward propogate it through the CNN to compute features. Then, for each class, they score each feature vector using the SVM trained for that class. Finally a greedy NMS is applied.
 
-.. note:: Why training SVMs rather than using the outputs from the final softmax layer of the fine-tuned CNN?
+.. note:: 
+
+   **Why training SVMs rather than using the outputs from the final softmax layer of the fine-tuned CNN?**
 
    The positive and negative examples are defined differently for fine-tuning the CNN versus training the SVMs:
 
