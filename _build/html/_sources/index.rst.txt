@@ -5,6 +5,8 @@ Mofii's Notes
    :maxdepth: 2
 
    paper-reading
+   obj-det
+   monocular-3d-obj-det
    interview-questions-ml
    interview-questions-cv
    leetcode

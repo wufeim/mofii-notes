@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Monocular 3D Object Detection" href="monocular-3d-obj-det.html" />
+    <link rel="prev" title="Object Detection" href="obj-det.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="obj-det.html" title="Object Detection"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="obj-det.html" accesskey="U">Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rich-feature-hierarchies-for-accurate-object-detection-and-semantic-segmentation">
+<h1>Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation<a class="headerlink" href="#rich-feature-hierarchies-for-accurate-object-detection-and-semantic-segmentation" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Ross Girshick, Jeff Donahue, Trevor Darrell, Jitendra Malik</div>
+<div class="line"><strong>Affiliations:</strong> UC Berkeley</div>
+</div>
+<p>In this paper, the authors propose a simple and scalable detection algorithm, known as R-CNN, which achieves a mAP of 53.3% on VOC 2012.</p>
+<p>The first challenge faced in object detection is how to use the CNN features. One approach is to frame localization problem as a regression problem, but achieves limited performance. An alternative is to build a sliding-window detector. However, large receptive fields make the precise localization difficult. Instead, the authors propose to solve the CNN localization problem by operating within the &quot;recognition using regions&quot; paradigm, as depicted in the figure below.</p>
+<a class="reference internal image-reference" href="_images/r-cnn-1.png"><img alt="_images/r-cnn-1.png" src="_images/r-cnn-1.png" style="width: 320pt;" /></a>
+<p>The second challenge is that labeled data is scarce and the amount currently available is insufficient for training a large CNN. The authors show that the &quot;supervised pre-training followed by domain-specific fine-tuning&quot; paradigm is quite effective.</p>
+<p>The authors also note that R-CNN can be easily extend to the task of semantic segmentation with competitive results.</p>
+<div class="section" id="object-detection-with-r-cnn">
+<h2>Object Detection with R-CNN<a class="headerlink" href="#object-detection-with-r-cnn" title="Permalink to this headline">¶</a></h2>
+<p>R-CNN consists of three modules:</p>
+<ul class="simple">
+<li><p><strong>Category-independent region proposals:</strong> There are a variety of region proposal methods. The authors use selective search for controlled comparison with prior detection work.</p></li>
+<li><p><strong>Feature extraction with CNN:</strong> Image regions are warpped to <span class="math notranslate nohighlight">\(227 \times 227\)</span> pixel size and then a 4096-dimensional feature vector is extracted using CNN.</p></li>
+<li><p><strong>Class-specific linear SVMs</strong></p></li>
+</ul>
+<p>At test time, the authors run selective search on the test image to extract around 2000 region proposals. They warp each proposal and forward propogate it through the CNN to compute features. Then, for each class, they score each feature vector using the SVM trained for that class. Finally a greedy NMS is applied.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Why training SVMs rather than using the outputs from the final softmax layer of the fine-tuned CNN?</p>
+<p>The positive and negative examples are defined differently for fine-tuning the CNN versus training the SVMs:</p>
+<ul class="simple">
+<li><p><strong>fine-tuning CNN:</strong> positive if IoU is at least 0.5 and negative otherwise</p></li>
+<li><p><strong>traning SVMs:</strong> positive if IoU is 1.0, negative if IoU smaller than 0.3, and ignored otherwise</p></li>
+</ul>
+<p>If the definition of positives and negatives in training SMVs is applied to fine-tuning CNN, there is a significant drop in model performance. One hypothesis is that the criterion used for training SVMs does not generate enough positive samples for fine-tuning the CNN due to the limited fine-tuning data.</p>
+<p>However, even with the carefully-selected positive/negative definitions for fine-tuning the CNN, there is still a gap between the performance of the softmax outputs (50.9% mAP) and the trained SVMs (54.2% mAP). The authors conjecture that with some additional tweaks to fine-tuning this performance gap may be closed.</p>
+</div>
+<p><strong>Bounding box regression:</strong> Based on the error analysis, the authors train a linear regression model to predict a new detection window given the features for a selective search region proposal. Results show that this simple approach could boost mAP by 3 to 4 points.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a><ul>
+<li><a class="reference internal" href="#object-detection-with-r-cnn">Object Detection with R-CNN</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="obj-det.html"
+                        title="previous chapter">Object Detection</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="monocular-3d-obj-det.html"
+                        title="next chapter">Monocular 3D Object Detection</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/r-cnn.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="obj-det.html" title="Object Detection"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="obj-det.html" >Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
