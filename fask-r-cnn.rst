@@ -1,0 +1,28 @@
+Fast R-CNN
+=======================================
+
+| **Authors:** Ross Girshick
+| **Affiliations:** Microsoft Research
+
+This paper proposes a Fast Region-Based Convolutional Neural Network method (Fast R-CNN) for object detection, which improves training and testing speed and increases detection accuracy compared to R-CNN.
+
+The author points out three drawbacks of R-CNN:
+
+1. **Training is a multi-stage pipeline.**
+2. **Training is expensive in space and time.**
+3. **Object detection is slow.**
+
+R-CNN is slow becuase it performs a ConvNet forward pass for each object proposal. Spatial pyramid pooling networks (SPPnets) were proposed to speed up R-CNN by sharing computation. Features are extracted for a proposal by max-pooling the portion of the feature map inside the proposal into a fixed-size output. However, there are two drawbacks of SPPnet:
+
+- Training is still a multi-stage pipeline.
+- Fine-tuning algorithm cannot update the convolutional layers that precede the spatial pyramid pooling.
+
+Fast R-CNN fixes the disadvantages of R-CNN and SPPnet. It has several advantages:
+
+- Higher detection quality (mAP)
+- Training is single-stage with a multi-task loss
+- Training can update all network layers
+- No dist storage is required for feature caching
+
+Fast R-CNN
+-------------------------------------
