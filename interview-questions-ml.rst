@@ -1,7 +1,7 @@
 Interview Questions (ML)
 =====================================
 
-前51题来自`这里 <https://www.springboard.com/blog/machine-learning-interview-questions/>`_，答案加入了很多我的理解，如有错误欢迎指正。
+前51题来自 `这里 <https://www.springboard.com/blog/machine-learning-interview-questions/>`_，答案加入了很多我的理解，如有错误欢迎指正。
 
 1. **What's the trade-off between bias and variance?**
 

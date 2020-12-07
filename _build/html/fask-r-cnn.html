@@ -51,8 +51,18 @@
 <p>R-CNN is slow becuase it performs a ConvNet forward pass for each object proposal. Spatial pyramid pooling networks (SPPnets) were proposed to speed up R-CNN by sharing computation. Features are extracted for a proposal by max-pooling the portion of the feature map inside the proposal into a fixed-size output. However, there are two drawbacks of SPPnet:</p>
 <ul class="simple">
 <li><p>Training is still a multi-stage pipeline.</p></li>
-<li><p>Fine-tuning algorithm cannot update the convolutional layers that precede the spatial pyramid pooling</p></li>
+<li><p>Fine-tuning algorithm cannot update the convolutional layers that precede the spatial pyramid pooling.</p></li>
 </ul>
+<p>Fast R-CNN fixes the disadvantages of R-CNN and SPPnet. It has several advantages:</p>
+<ul class="simple">
+<li><p>Higher detection quality (mAP)</p></li>
+<li><p>Training is single-stage with a multi-task loss</p></li>
+<li><p>Training can update all network layers</p></li>
+<li><p>No dist storage is required for feature caching</p></li>
+</ul>
+<div class="section" id="id1">
+<h2>Fast R-CNN<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
@@ -62,6 +72,14 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fast R-CNN</a><ul>
+<li><a class="reference internal" href="#id1">Fast R-CNN</a></li>
+</ul>
+</li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
