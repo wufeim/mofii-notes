@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast R-CNN &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Monocular 3D Object Detection" href="monocular-3d-obj-det.html" />
+    <link rel="prev" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation" href="r-cnn.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="r-cnn.html" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="obj-det.html" accesskey="U">Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Fast R-CNN</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fast-r-cnn">
+<h1>Fast R-CNN<a class="headerlink" href="#fast-r-cnn" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Ross Girshick</div>
+<div class="line"><strong>Affiliations:</strong> Microsoft Research</div>
+</div>
+<p>This paper proposes a Fast Region-Based Convolutional Neural Network method (Fast R-CNN) for object detection, which improves training and testing speed and increases detection accuracy compared to R-CNN.</p>
+<p>The author points out three drawbacks of R-CNN:</p>
+<ol class="arabic simple">
+<li><p><strong>Training is a multi-stage pipeline.</strong></p></li>
+<li><p><strong>Training is expensive in space and time.</strong></p></li>
+<li><p><strong>Object detection is slow.</strong></p></li>
+</ol>
+<p>R-CNN is slow becuase it performs a ConvNet forward pass for each object proposal. Spatial pyramid pooling networks (SPPnets) were proposed to speed up R-CNN by sharing computation. Features are extracted for a proposal by max-pooling the portion of the feature map inside the proposal into a fixed-size output. However, there are two drawbacks of SPPnet:</p>
+<ul class="simple">
+<li><p>Training is still a multi-stage pipeline.</p></li>
+<li><p>Fine-tuning algorithm cannot update the convolutional layers that precede the spatial pyramid pooling.</p></li>
+</ul>
+<p>Fast R-CNN fixes the disadvantages of R-CNN and SPPnet. It has several advantages:</p>
+<ul class="simple">
+<li><p>Higher detection quality (mAP)</p></li>
+<li><p>Training is single-stage with a multi-task loss</p></li>
+<li><p>Training can update all network layers</p></li>
+<li><p>No dist storage is required for feature caching</p></li>
+</ul>
+<div class="section" id="id1">
+<h2>Fast R-CNN<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fast R-CNN</a><ul>
+<li><a class="reference internal" href="#id1">Fast R-CNN</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="r-cnn.html"
+                        title="previous chapter">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="monocular-3d-obj-det.html"
+                        title="next chapter">Monocular 3D Object Detection</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fast-r-cnn.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="r-cnn.html" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="obj-det.html" >Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Fast R-CNN</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

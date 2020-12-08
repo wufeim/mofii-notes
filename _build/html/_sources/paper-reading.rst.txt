@@ -5,3 +5,4 @@ Paper Reading Notes
    :maxdepth: 1
 
    rethinking-pseudo-lidar
+   infogan

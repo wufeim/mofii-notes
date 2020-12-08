@@ -7,6 +7,7 @@ Mofii's Notes
    paper-reading
    obj-det
    monocular-3d-obj-det
+   ai-concepts
    interview-questions-ml
    interview-questions-cv
    leetcode

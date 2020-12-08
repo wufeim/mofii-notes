@@ -1,8 +1,9 @@
-Paper Reading Notes
+AI Concepts
 =======================================
 
 .. toctree::
    :maxdepth: 1
 
-   rethinking-pseudo-lidar
-   infogan
+   rf
+   svm
+   pca
