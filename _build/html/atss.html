@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Monocular 3D Object Detection" href="monocular-3d-obj-det.html" />
+    <link rel="prev" title="Fast R-CNN" href="fast-r-cnn.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fast-r-cnn.html" title="Fast R-CNN"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="obj-det.html" accesskey="U">Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="bridging-the-gap-between-anchor-based-and-anchor-free-detection-via-adaptive-training-sample-selection">
+<h1>Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection<a class="headerlink" href="#bridging-the-gap-between-anchor-based-and-anchor-free-detection-via-adaptive-training-sample-selection" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Shifeng Zhang, Cheng Chi, Yongqiang Yao, Zhen Lei, Stan Z. Li</div>
+<div class="line"><strong>Affiliations:</strong> CBSR NLPR CASIA, SAI UCAS, AIR CAS, BUPT, Westlake University</div>
+</div>
+<p>The authors argue that the essential difference between anchor-based and anchor-free detection is how to define positive and negative training samples, no matter regressing from a box or a point. Then they propose an Adaptive Training Sample Selection (ATSS) to automatically select positive and negative samples according to statistical characteristics of object. Experiments show that ATSS can achieve 50.7% AP on MS COCO.</p>
+<div class="section" id="difference-analysis-of-anchor-based-and-anchor-free-detection">
+<h2>Difference Analysis of Anchor-Based and Anchor-Free Detection<a class="headerlink" href="#difference-analysis-of-anchor-based-and-anchor-free-detection" title="Permalink to this headline">¶</a></h2>
+<p>Without loss of generality, the representative anchor-based RetinaNet and anchor-free FCOS are adopted to dissect their differences:</p>
+<ul class="simple">
+<li><p><strong>The number of anchors tile per location:</strong> RetinaNet tiles several anchor boxes per location, while FCOS tiles one anchor point per location.</p></li>
+<li><p><strong>The definition of positive and negative samples:</strong> RetinaNet resorts to IoU for positives and negatives, while FCOS utilizes spatial and scale constraints to select samples.</p></li>
+<li><p><strong>The regression starting status.</strong> RetinaNet regresses the object bounding box from preset anchor box, while FCOS locates the object from the anchor point.</p></li>
+</ul>
+<p>In this section, one square anchor is tiled per location for RetinaNet and the first difference is addressed in Section ??.</p>
+<p>By removing inconsistencies between the two methods, the authors compare the performance of RetinaNet (#A = 1) and FCOS on the MS COCO minival set, and the results are reported below.</p>
+<a class="reference internal image-reference" href="_images/atss-1.png"><img alt="_images/atss-1.png" src="_images/atss-1.png" style="width: 280pt;" /></a>
+<p><strong>The results in each column demonstrate that the definition of positive and negative samples is an essential difference between anchor-based and anchor-free detectors. The results in each row indicate that the regression starting status is an irrelevant difference.</strong></p>
+</div>
+<div class="section" id="adaptive-training-sample-selection">
+<h2>Adaptive Training Sample Selection<a class="headerlink" href="#adaptive-training-sample-selection" title="Permalink to this headline">¶</a></h2>
+<p>The authors propose the ATSS method that automatically divides positive and negative samples according to statistical characteristics of object almost without any hyperparameter.</p>
+<hr class="docutils" />
+<div class="line-block">
+<div class="line"><strong>Algorithm: Adaptive Training Sample Selection (ATSS)</strong></div>
+<div class="line-block">
+<div class="line"><strong>Inputs:</strong></div>
+<div class="line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{G}\)</span> is a set of ground-truth boxes on the image</div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{L}\)</span> is the number of feature pyramid levels</div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{A}_i\)</span> is a set of anchor boxes from the <span class="math notranslate nohighlight">\(i\)</span> th pyramid levels</div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{A}\)</span> is a set of all anchor boxes</div>
+<div class="line"><span class="math notranslate nohighlight">\(k\)</span> is a quite robust hyperparameter with a default value of 9</div>
+</div>
+<div class="line"><strong>Outputs:</strong></div>
+<div class="line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{P}\)</span> is a set of positive samples</div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{N}\)</span> is a set of negative samples</div>
+</div>
+<div class="line"><strong>Algorithm:</strong></div>
+<div class="line-block">
+<div class="line"><strong>for</strong> <span class="math notranslate nohighlight">\(g \in \mathcal{G}\)</span> <strong>do</strong></div>
+<div class="line-block">
+<div class="line">build an empty set for candidate positive samples of <span class="math notranslate nohighlight">\(g\)</span>: <span class="math notranslate nohighlight">\(\mathcal{C}_g \leftarrow \emptyset\)</span>;</div>
+<div class="line"><strong>for</strong> <span class="math notranslate nohighlight">\(i \in [1, \mathcal{L}]\)</span> <strong>do</strong></div>
+<div class="line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{S}_i\)</span> <span class="math notranslate nohighlight">\(\leftarrow\)</span> select <span class="math notranslate nohighlight">\(k\)</span> anchors from <span class="math notranslate nohighlight">\(\mathcal{A}_i\)</span> whose centers are closest to the center of <span class="math notranslate nohighlight">\(g\)</span> based on L2 distance;</div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{C}_g = \mathcal{C}_g \cup \mathcal{S}_i\)</span>;</div>
+</div>
+<div class="line"><strong>end for</strong></div>
+<div class="line">compute IoU between <span class="math notranslate nohighlight">\(\mathcal{C}_g\)</span> and <span class="math notranslate nohighlight">\(g\)</span>: <span class="math notranslate nohighlight">\(\mathcal{D}_g = IoU(\mathcal{C}_g, g)\)</span>;</div>
+<div class="line">compute mean of <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span>: <span class="math notranslate nohighlight">\(m_g = Mean(\mathcal{D}_g)\)</span>;</div>
+<div class="line">compute standard deviation of <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span>: <span class="math notranslate nohighlight">\(v_g = Std(\mathcal{D}_g)\)</span>;</div>
+<div class="line">compute IoU threshold for <span class="math notranslate nohighlight">\(g\)</span>: <span class="math notranslate nohighlight">\(t_g = m_g + v_g\)</span>;</div>
+<div class="line"><strong>for</strong> <span class="math notranslate nohighlight">\(c \in \mathcal{C}_g\)</span> <strong>do</strong></div>
+<div class="line-block">
+<div class="line"><strong>if</strong> <span class="math notranslate nohighlight">\(IoU(c, g) \geq t_g\)</span> and center of <span class="math notranslate nohighlight">\(c\)</span> in <span class="math notranslate nohighlight">\(g\)</span> <strong>then</strong></div>
+<div class="line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{P} = \mathcal{P} \cup c\)</span>;</div>
+</div>
+<div class="line"><strong>end if</strong></div>
+</div>
+<div class="line"><strong>end for</strong></div>
+</div>
+<div class="line"><strong>end for</strong></div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathcal{N} = \mathcal{A} - \mathcal{P}\)</span>;</div>
+<div class="line">return <span class="math notranslate nohighlight">\(\mathcal{P}\)</span>, <span class="math notranslate nohighlight">\(\mathcal{N}\)</span>;</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Here are some motivations behind this method:</p>
+<ul>
+<li><p><strong>Selecting candidates based on the center distance between anchor box and object.</strong></p></li>
+<li><p><strong>Using the sum of mean and standard deviation as the IoU threshold.</strong> This helps to adaptively select enough positives for each object from appropriate pyramid levels in accordance of statistical characteristics of object. The figure below illustrates this method.</p>
+<a class="reference internal image-reference" href="_images/atss-2.png"><img alt="_images/atss-2.png" src="_images/atss-2.png" style="width: 360pt;" /></a>
+</li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection</a><ul>
+<li><a class="reference internal" href="#difference-analysis-of-anchor-based-and-anchor-free-detection">Difference Analysis of Anchor-Based and Anchor-Free Detection</a></li>
+<li><a class="reference internal" href="#adaptive-training-sample-selection">Adaptive Training Sample Selection</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fast-r-cnn.html"
+                        title="previous chapter">Fast R-CNN</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="monocular-3d-obj-det.html"
+                        title="next chapter">Monocular 3D Object Detection</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/atss.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fast-r-cnn.html" title="Fast R-CNN"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="obj-det.html" >Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

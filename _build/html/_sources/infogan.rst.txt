@@ -19,7 +19,13 @@ This GAN formulation imposes no restrictions on the manner in which the generato
 
 The authors propose to decompose the input noise vector into two parts: (i) :math:`z`, which is treated as source of incompressible noise; (ii) :math:`c`, which we will call the latent code and will target the salient structured semantic features of the data distribution.
 
-Now the form of the generator becomes :math:`G(z, c)`. However, in standard GAN, the generator is free to ignore the additional latent code :math:`c` by finding a solution satisfying :math:`P_G(x \mid c) = P_G(x)`. To cope with this problem of trivial codes, the authors propose an information-theoretic regularization: there should be high mutual information between latent codes :math:`c` and generator distribution :math:`G(z, c)`. Thus :math:`I(c; G(z, c))` should be high.
+Now the form of the generator becomes :math:`G(z, c)`. However, standard GAN may ignore the additional latent code :math:`c` by finding a solution satisfying :math:`P_G(x \mid c) = P_G(x)`. To cope with this problem of trivial codes, the authors propose an information-theoretic regularization: there should be high mutual information between latent codes :math:`c` and generator distribution :math:`G(z, c)`.
+
+Given any :math:`x \sim P_G(x)`, we want :math:`P_G(c \mid x)` to have a small entropy. The information in the latent code :math:`c` should not be lost in the generation process. The authors propose to solve the following information-regularized minimax game:
+
+.. math::
+
+   \min_G \max_D V_I(D, G) = V(D, G) - \lambda I(c; G(z, c))
 
 .. note::
 
@@ -32,12 +38,6 @@ Now the form of the generator becomes :math:`G(z, c)`. However, in standard GAN,
       I(X; Y) = H(X) - H(X \mid Y) = H(Y) - H(Y \mid X)
 
    This definition has an intuitive interpretation: :math:`I(X; Y)` is the reduction of uncertainty in :math:`X` when :math:`Y` is observed.
-
-Given any :math:`x \sim P_G(x)`, we want :math:`P_G(c \mid x)` to have a small entropy. The information in the latent code :math:`c` should not be lost in the generation process. The authors propose to solve the following information-regularized minimax game:
-
-.. math::
-
-   \min_G \max_D V_I(D, G) = V(D, G) - \lambda I(c; G(z, c))
 
 Variational Mutual Information Maximization
 -------------------------------------
@@ -82,7 +82,7 @@ In practice, the authors parameterize the auxiliary distribution :math:`Q` as a 
 
 For categorical latent code :math:`c_i`, a softmax nonlinearity is used to represent :math:`Q(c_i \mid x)`. For continuous latent code :math:`c_i`, treating :math:`Q(c_i \mid x)` as a factored Gaussian is sufficient.
 
-Experiment
+Experiments
 -------------------------------------
 
 .. image:: figures/infogan-1.png

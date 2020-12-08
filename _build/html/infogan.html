@@ -58,7 +58,10 @@
 \[\min_G \max_D V(D, G) = \mathbb{E}_{x \sim P_\text{data}} [\log D(x)] + \mathbb{E}_{z \sim \text{noise}}[\log (1 - D(G(z)))]\]</div>
 <p>This GAN formulation imposes no restrictions on the manner in which the generator may use this noise <span class="math notranslate nohighlight">\(z\)</span>, which may lead to a highly entangled representation.</p>
 <p>The authors propose to decompose the input noise vector into two parts: (i) <span class="math notranslate nohighlight">\(z\)</span>, which is treated as source of incompressible noise; (ii) <span class="math notranslate nohighlight">\(c\)</span>, which we will call the latent code and will target the salient structured semantic features of the data distribution.</p>
-<p>Now the form of the generator becomes <span class="math notranslate nohighlight">\(G(z, c)\)</span>. However, in standard GAN, the generator is free to ignore the additional latent code <span class="math notranslate nohighlight">\(c\)</span> by finding a solution satisfying <span class="math notranslate nohighlight">\(P_G(x \mid c) = P_G(x)\)</span>. To cope with this problem of trivial codes, the authors propose an information-theoretic regularization: there should be high mutual information between latent codes <span class="math notranslate nohighlight">\(c\)</span> and generator distribution <span class="math notranslate nohighlight">\(G(z, c)\)</span>. Thus <span class="math notranslate nohighlight">\(I(c; G(z, c))\)</span> should be high.</p>
+<p>Now the form of the generator becomes <span class="math notranslate nohighlight">\(G(z, c)\)</span>. However, standard GAN may ignore the additional latent code <span class="math notranslate nohighlight">\(c\)</span> by finding a solution satisfying <span class="math notranslate nohighlight">\(P_G(x \mid c) = P_G(x)\)</span>. To cope with this problem of trivial codes, the authors propose an information-theoretic regularization: there should be high mutual information between latent codes <span class="math notranslate nohighlight">\(c\)</span> and generator distribution <span class="math notranslate nohighlight">\(G(z, c)\)</span>.</p>
+<p>Given any <span class="math notranslate nohighlight">\(x \sim P_G(x)\)</span>, we want <span class="math notranslate nohighlight">\(P_G(c \mid x)\)</span> to have a small entropy. The information in the latent code <span class="math notranslate nohighlight">\(c\)</span> should not be lost in the generation process. The authors propose to solve the following information-regularized minimax game:</p>
+<div class="math notranslate nohighlight">
+\[\min_G \max_D V_I(D, G) = V(D, G) - \lambda I(c; G(z, c))\]</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Mutual Information</strong></p>
@@ -67,9 +70,6 @@
 \[I(X; Y) = H(X) - H(X \mid Y) = H(Y) - H(Y \mid X)\]</div>
 <p>This definition has an intuitive interpretation: <span class="math notranslate nohighlight">\(I(X; Y)\)</span> is the reduction of uncertainty in <span class="math notranslate nohighlight">\(X\)</span> when <span class="math notranslate nohighlight">\(Y\)</span> is observed.</p>
 </div>
-<p>Given any <span class="math notranslate nohighlight">\(x \sim P_G(x)\)</span>, we want <span class="math notranslate nohighlight">\(P_G(c \mid x)\)</span> to have a small entropy. The information in the latent code <span class="math notranslate nohighlight">\(c\)</span> should not be lost in the generation process. The authors propose to solve the following information-regularized minimax game:</p>
-<div class="math notranslate nohighlight">
-\[\min_G \max_D V_I(D, G) = V(D, G) - \lambda I(c; G(z, c))\]</div>
 </div>
 <div class="section" id="variational-mutual-information-maximization">
 <h2>Variational Mutual Information Maximization<a class="headerlink" href="#variational-mutual-information-maximization" title="Permalink to this headline">¶</a></h2>
@@ -98,8 +98,8 @@
 <p>In practice, the authors parameterize the auxiliary distribution <span class="math notranslate nohighlight">\(Q\)</span> as a nueral network. <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(D\)</span> share all convolutional layers and there is one final fully connected layer to output parameters for the conditional distribution <span class="math notranslate nohighlight">\(Q(c \mid x)\)</span>.</p>
 <p>For categorical latent code <span class="math notranslate nohighlight">\(c_i\)</span>, a softmax nonlinearity is used to represent <span class="math notranslate nohighlight">\(Q(c_i \mid x)\)</span>. For continuous latent code <span class="math notranslate nohighlight">\(c_i\)</span>, treating <span class="math notranslate nohighlight">\(Q(c_i \mid x)\)</span> as a factored Gaussian is sufficient.</p>
 </div>
-<div class="section" id="experiment">
-<h2>Experiment<a class="headerlink" href="#experiment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="experiments">
+<h2>Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">¶</a></h2>
 <a class="reference internal image-reference" href="_images/infogan-1.png"><img alt="_images/infogan-1.png" src="_images/infogan-1.png" style="width: 360pt;" /></a>
 </div>
 </div>
@@ -117,7 +117,7 @@
 <li><a class="reference internal" href="#mutual-information-for-inducing-latent-codes">Mutual Information for Inducing Latent Codes</a></li>
 <li><a class="reference internal" href="#variational-mutual-information-maximization">Variational Mutual Information Maximization</a></li>
 <li><a class="reference internal" href="#implementation">Implementation</a></li>
-<li><a class="reference internal" href="#experiment">Experiment</a></li>
+<li><a class="reference internal" href="#experiments">Experiments</a></li>
 </ul>
 </li>
 </ul>
