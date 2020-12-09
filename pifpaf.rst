@@ -4,7 +4,7 @@ PifPaf: Composite Fields for Human Pose estimation
 | **Authors:** Sven Kreiss, Lorenzo Bertoni, Alexandre Alahi
 | **Affiliations:** EPFL VITA lab, CH-1015 Lausanne
 
-The authors propose a new bottom-up metho, PifPaf, for multi-person 2D human pose estimation. On the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain, it outperforms previous SOTA methods at low resolution and performs on par at high resolution.
+The authors propose a new bottom-up method, PifPaf, for multi-person 2D human pose estimation. On the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain, it outperforms previous SOTA methods at low resolution and performs on par at high resolution.
 
 The goal of PifPaf is to estimate human poses in crowded images. This method is free of any grid-based constraint on the spatial localization of the joints and has the capacity to estimate multiple poses occluding each other. The figure below presents the overall model.
 
@@ -77,4 +77,4 @@ Results
 
 In ablation study, the authors find that they can tune the performance towards smaller or larger objects by modifying the overall scale of :math:`r^\text{smooth}`.
 
-The real improvmenet is obtained with the Laplace-based loss. By adding scale component :math:`\sigma` to the PIF filed, the AP is improved from 64.5% to 65.7%.
+The real improvmenet is obtained with the Laplace-based loss. By adding scale component :math:`\sigma` to the PIF field, the AP is improved from 64.5% to 65.7%.

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PifPaf: Composite Fields for Human Pose Estimation &#8212; Mofii Notes 1.0.1 documentation</title>
+    <title>PifPaf: Composite Fields for Human Pose estimation &#8212; Mofii Notes 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -35,7 +35,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="paper-reading.html" accesskey="U">Paper Reading Notes</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">PifPaf: Composite Fields for Human Pose Estimation</a></li> 
+        <li class="nav-item nav-item-this"><a href="">PifPaf: Composite Fields for Human Pose estimation</a></li> 
       </ul>
     </div>  
 
@@ -45,15 +45,14 @@
           <div class="body" role="main">
             
   <div class="section" id="pifpaf-composite-fields-for-human-pose-estimation">
-<h1>PifPaf: Composite Fields for Human Pose Estimation<a class="headerlink" href="#pifpaf-composite-fields-for-human-pose-estimation" title="Permalink to this headline">¶</a></h1>
+<h1>PifPaf: Composite Fields for Human Pose estimation<a class="headerlink" href="#pifpaf-composite-fields-for-human-pose-estimation" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
 <div class="line"><strong>Authors:</strong> Sven Kreiss, Lorenzo Bertoni, Alexandre Alahi</div>
 <div class="line"><strong>Affiliations:</strong> EPFL VITA lab, CH-1015 Lausanne</div>
 </div>
-<p>The authors propose a new bottom-up method for multi-person 2D human pose estimation, known as PifPaf. This method uses a Part Intensity Field (PIF) to localize body parts and a Part Association Field (PAF) to form human poses. It outperforms previous methods at low resolution and in crowded, cluttered and occluded scenes thanks to (i) the composite filed PAF encoding fine-grained information and (ii) the choice of Laplace loss for regression which incorporates a notion of uncertainty. PifPaf achieves SOTA results on the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain.</p>
-<p>The authors propose to extend the notion of fields in pose estimation to go beyond scalar and vector fields to <strong>composite fields</strong>. They introduce a new neural network architecture with two head networks. For each body part or joint, one head network predicts the confidence score, the precision and the size of this joint, which we call a Part Intensity Field (PIF). The other network predicts association between parts, called the Part Association Field (PAF), which is of a new composite structure.</p>
-<p>The goal of this method is to estimate human poses in crowded images. The authors address challenges related to low-resolution and partially occluded pedestrians. The figure below presents the PifPaf model.</p>
-<a class="reference internal image-reference" href="_images/pifpaf-1.png"><img alt="_images/pifpaf-1.png" src="_images/pifpaf-1.png" style="width: 480pt;" /></a>
+<p>The authors propose a new bottom-up metho, PifPaf, for multi-person 2D human pose estimation. On the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain, it outperforms previous SOTA methods at low resolution and performs on par at high resolution.</p>
+<p>The goal of PifPaf is to estimate human poses in crowded images. This method is free of any grid-based constraint on the spatial localization of the joints and has the capacity to estimate multiple poses occluding each other. The figure below presents the overall model.</p>
+<a class="reference internal image-reference" href="_images/pifpaf-1.png"><img alt="_images/pifpaf-1.png" src="_images/pifpaf-1.png" style="width: 520pt;" /></a>
 <div class="section" id="part-intensity-fields-pif">
 <h2>Part Intensity Fields (PIF)<a class="headerlink" href="#part-intensity-fields-pif" title="Permalink to this headline">¶</a></h2>
 <p>PIF detect and precisely localize body parts. It has composite structure including</p>
@@ -66,7 +65,7 @@
 <div class="math notranslate nohighlight">
 \[f(x, y) = \sum_{ij} p_c^{ij} \mathcal{N}(x, y \mid p_x^{ij}, p_y^{ij}, p_\sigma^{ij})\]</div>
 <p>This equation emphsizes the gird-free nature of the localization. The figure below visualizes the components of the PIF for the left shoulder.</p>
-<a class="reference internal image-reference" href="_images/pifpaf-2.png"><img alt="_images/pifpaf-2.png" src="_images/pifpaf-2.png" style="width: 480pt;" /></a>
+<a class="reference internal image-reference" href="_images/pifpaf-2.png"><img alt="_images/pifpaf-2.png" src="_images/pifpaf-2.png" style="width: 520pt;" /></a>
 </div>
 <div class="section" id="part-association-fields">
 <h2>Part Association Fields<a class="headerlink" href="#part-association-fields" title="Permalink to this headline">¶</a></h2>
@@ -90,6 +89,12 @@
 <p>Multiple PAF associations can form connections between the current and the next joint. Given the location of a starting point <span class="math notranslate nohighlight">\(\overrightarrow{x}\)</span>, the scores <span class="math notranslate nohighlight">\(s\)</span> of PAF associations <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> are calculated with</p>
 <div class="math notranslate nohighlight">
 \[s(\mathbf{a}, \overrightarrow{x}) = a_c \exp \left( - \frac{\lVert \overrightarrow{x} - \overrightarrow{a}_1 \rVert_2}{b_1} \right) f_2(a_{x2}, a_{y2})\]</div>
+<p>which takes into account the confidence in this connection <span class="math notranslate nohighlight">\(a_c\)</span>, the distance to the first vector's location calibrated with the two-tailed Laplace distribution probability and the high resolution part confidence at the second vector's target location <span class="math notranslate nohighlight">\(f_2\)</span>. To confirm the proposed position of the new joint, they run reverse matching until a full pose is obtained. They also apply NMS at the keypoint level.</p>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>In ablation study, the authors find that they can tune the performance towards smaller or larger objects by modifying the overall scale of <span class="math notranslate nohighlight">\(r^\text{smooth}\)</span>.</p>
+<p>The real improvmenet is obtained with the Laplace-based loss. By adding scale component <span class="math notranslate nohighlight">\(\sigma\)</span> to the PIF filed, the AP is improved from 64.5% to 65.7%.</p>
 </div>
 </div>
 
@@ -102,11 +107,12 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">PifPaf: Composite Fields for Human Pose Estimation</a><ul>
+<li><a class="reference internal" href="#">PifPaf: Composite Fields for Human Pose estimation</a><ul>
 <li><a class="reference internal" href="#part-intensity-fields-pif">Part Intensity Fields (PIF)</a></li>
 <li><a class="reference internal" href="#part-association-fields">Part Association Fields</a></li>
 <li><a class="reference internal" href="#adaptive-regression-loss">Adaptive Regression Loss</a></li>
 <li><a class="reference internal" href="#greedy-decoding">Greedy Decoding</a></li>
+<li><a class="reference internal" href="#results">Results</a></li>
 </ul>
 </li>
 </ul>
@@ -152,7 +158,7 @@
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="paper-reading.html" >Paper Reading Notes</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">PifPaf: Composite Fields for Human Pose Estimation</a></li> 
+        <li class="nav-item nav-item-this"><a href="">PifPaf: Composite Fields for Human Pose estimation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
