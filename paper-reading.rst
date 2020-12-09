@@ -7,3 +7,4 @@ Paper Reading Notes
    rethinking-pseudo-lidar
    infogan
    pifpaf
+   uncertainty-weigh-losses
