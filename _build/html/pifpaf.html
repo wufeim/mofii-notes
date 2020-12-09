@@ -52,10 +52,44 @@
 </div>
 <p>The authors propose a new bottom-up method for multi-person 2D human pose estimation, known as PifPaf. This method uses a Part Intensity Field (PIF) to localize body parts and a Part Association Field (PAF) to form human poses. It outperforms previous methods at low resolution and in crowded, cluttered and occluded scenes thanks to (i) the composite filed PAF encoding fine-grained information and (ii) the choice of Laplace loss for regression which incorporates a notion of uncertainty. PifPaf achieves SOTA results on the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain.</p>
 <p>The authors propose to extend the notion of fields in pose estimation to go beyond scalar and vector fields to <strong>composite fields</strong>. They introduce a new neural network architecture with two head networks. For each body part or joint, one head network predicts the confidence score, the precision and the size of this joint, which we call a Part Intensity Field (PIF). The other network predicts association between parts, called the Part Association Field (PAF), which is of a new composite structure.</p>
-<div class="section" id="pifpaf">
-<h2>PifPaf<a class="headerlink" href="#pifpaf" title="Permalink to this headline">¶</a></h2>
 <p>The goal of this method is to estimate human poses in crowded images. The authors address challenges related to low-resolution and partially occluded pedestrians. The figure below presents the PifPaf model.</p>
-<a class="reference internal image-reference" href="_images/pifpaf-1.png"><img alt="_images/pifpaf-1.png" src="_images/pifpaf-1.png" style="width: 800pt;" /></a>
+<a class="reference internal image-reference" href="_images/pifpaf-1.png"><img alt="_images/pifpaf-1.png" src="_images/pifpaf-1.png" style="width: 480pt;" /></a>
+<div class="section" id="part-intensity-fields-pif">
+<h2>Part Intensity Fields (PIF)<a class="headerlink" href="#part-intensity-fields-pif" title="Permalink to this headline">¶</a></h2>
+<p>PIF detect and precisely localize body parts. It has composite structure including</p>
+<ul class="simple">
+<li><p>a scalar component for confidence: <span class="math notranslate nohighlight">\(c\)</span></p></li>
+<li><p>a vector component that points to the closest body part: <span class="math notranslate nohighlight">\((x, y)\)</span> with spread <span class="math notranslate nohighlight">\(b\)</span></p></li>
+<li><p>a scalar component for the size of the joint: <span class="math notranslate nohighlight">\(\sigma\)</span></p></li>
+</ul>
+<p>More formally, we have <span class="math notranslate nohighlight">\(\mathbf{p}^{ij} = \{p_c^{ij}, p_x^{ij}, p_y^{ij}, p_b^{ij}, p_\sigma^{ij}\}\)</span>. The confidence map of a PIF is very coarse. However, we can recover a high resolution confidence map <span class="math notranslate nohighlight">\(f(x, y)\)</span> using the other components:</p>
+<div class="math notranslate nohighlight">
+\[f(x, y) = \sum_{ij} p_c^{ij} \mathcal{N}(x, y \mid p_x^{ij}, p_y^{ij}, p_\sigma^{ij})\]</div>
+<p>This equation emphsizes the gird-free nature of the localization. The figure below visualizes the components of the PIF for the left shoulder.</p>
+<a class="reference internal image-reference" href="_images/pifpaf-2.png"><img alt="_images/pifpaf-2.png" src="_images/pifpaf-2.png" style="width: 480pt;" /></a>
+</div>
+<div class="section" id="part-association-fields">
+<h2>Part Association Fields<a class="headerlink" href="#part-association-fields" title="Permalink to this headline">¶</a></h2>
+<p>PAF connects joint locations together into poses. At every location, PAFs predict a confidence, two vectors to the two parts this association is connecting and two widths <span class="math notranslate nohighlight">\(b\)</span>, represneted by <span class="math notranslate nohighlight">\(\mathbf{a}^{ij} = \{a_c^{ij}, a_{x1}^{ij}, a_{y1}^{ij}, a_{b1}^{ij}, a_{x2}^{ij}, a_{y2}^{ij}, a_{b2}^{ij}\}\)</span>. Visualizations of the associations between left shoulders and left hips are shown in the figure below.</p>
+<a class="reference internal image-reference" href="_images/pifpaf-3.png"><img alt="_images/pifpaf-3.png" src="_images/pifpaf-3.png" style="width: 400pt;" /></a>
+<p>There are 19 connections for the person class in the COCO dataset. The algorithm to construct the PAF components at a particular feature map location consists of two steps. First, find the closest joint of either of the two types which determines one of the vector components. Second, the ground truth pose determines the other vector component to represent the association. This process is illustrated below.</p>
+<a class="reference internal image-reference" href="_images/pifpaf-4.png"><img alt="_images/pifpaf-4.png" src="_images/pifpaf-4.png" style="width: 120pt;" /></a>
+</div>
+<div class="section" id="adaptive-regression-loss">
+<h2>Adaptive Regression Loss<a class="headerlink" href="#adaptive-regression-loss" title="Permalink to this headline">¶</a></h2>
+<p>The authors use an L1-type loss to train regressive outputs. They further improve the localization ability of the network by injecting a scale dependence into that regression loss with the SmoothL1 or Laplace Loss.</p>
+<p>The SmoothL1 loss allows to tune the radius <span class="math notranslate nohighlight">\(r^\text{smooth}\)</span> around the origin where it produces softer gradients. For a person instance bounding box area of <span class="math notranslate nohighlight">\(A_i\)</span> and keypoint size of <span class="math notranslate nohighlight">\(\sigma_k\)</span>, <span class="math notranslate nohighlight">\(r_{i, k}^\text{smooth}\)</span> can be set proportioanlly to <span class="math notranslate nohighlight">\(\sqrt{A_i}\sigma_k\)</span>.</p>
+<p>The Laplace loss is another L1-type loss that is attenuated via the predicted spread <span class="math notranslate nohighlight">\(b\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[L = \lvert x - \mu \rvert / b + \log (2b)\]</div>
+<p>It is independent of any estimates of <span class="math notranslate nohighlight">\(A_i\)</span> and <span class="math notranslate nohighlight">\(\sigma_k\)</span> and is used for all vectorial componenets.</p>
+</div>
+<div class="section" id="greedy-decoding">
+<h2>Greedy Decoding<a class="headerlink" href="#greedy-decoding" title="Permalink to this headline">¶</a></h2>
+<p>A new pose is seeded by PIF vectors with the highest values in the high resolution confidence map <span class="math notranslate nohighlight">\(f(x, y)\)</span>. Starting from a seed, connections to other joints are added with the help of PAF fields. The algorithm is fast and greedy.</p>
+<p>Multiple PAF associations can form connections between the current and the next joint. Given the location of a starting point <span class="math notranslate nohighlight">\(\overrightarrow{x}\)</span>, the scores <span class="math notranslate nohighlight">\(s\)</span> of PAF associations <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> are calculated with</p>
+<div class="math notranslate nohighlight">
+\[s(\mathbf{a}, \overrightarrow{x}) = a_c \exp \left( - \frac{\lVert \overrightarrow{x} - \overrightarrow{a}_1 \rVert_2}{b_1} \right) f_2(a_{x2}, a_{y2})\]</div>
 </div>
 </div>
 
@@ -69,7 +103,10 @@
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">PifPaf: Composite Fields for Human Pose Estimation</a><ul>
-<li><a class="reference internal" href="#pifpaf">PifPaf</a></li>
+<li><a class="reference internal" href="#part-intensity-fields-pif">Part Intensity Fields (PIF)</a></li>
+<li><a class="reference internal" href="#part-association-fields">Part Association Fields</a></li>
+<li><a class="reference internal" href="#adaptive-regression-loss">Adaptive Regression Loss</a></li>
+<li><a class="reference internal" href="#greedy-decoding">Greedy Decoding</a></li>
 </ul>
 </li>
 </ul>
