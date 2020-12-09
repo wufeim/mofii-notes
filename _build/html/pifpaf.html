@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Object Detection &#8212; Mofii Notes 1.0.1 documentation</title>
+    <title>PifPaf: Composite Fields for Human Pose Estimation &#8212; Mofii Notes 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation" href="r-cnn.html" />
+    <link rel="next" title="Object Detection" href="obj-det.html" />
     <link rel="prev" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets" href="infogan.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,13 +28,14 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="r-cnn.html" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation"
+          <a href="obj-det.html" title="Object Detection"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="infogan.html" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Object Detection</a></li> 
+          <li class="nav-item nav-item-1"><a href="paper-reading.html" accesskey="U">Paper Reading Notes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PifPaf: Composite Fields for Human Pose Estimation</a></li> 
       </ul>
     </div>  
 
@@ -43,15 +44,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="object-detection">
-<h1>Object Detection<a class="headerlink" href="#object-detection" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="r-cnn.html">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fast-r-cnn.html">Fast R-CNN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atss.html">Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paa.html">Probabilistic Anchor Assignment with IoU Prediction for Object Detection</a></li>
-</ul>
+  <div class="section" id="pifpaf-composite-fields-for-human-pose-estimation">
+<h1>PifPaf: Composite Fields for Human Pose Estimation<a class="headerlink" href="#pifpaf-composite-fields-for-human-pose-estimation" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Sven Kreiss, Lorenzo Bertoni, Alexandre Alahi</div>
+<div class="line"><strong>Affiliations:</strong> EPFL VITA lab, CH-1015 Lausanne</div>
+</div>
+<p>The authors propose a new bottom-up method for multi-person 2D human pose estimation, known as PifPaf. This method uses a Part Intensity Field (PIF) to localize body parts and a Part Association Field (PAF) to form human poses. It outperforms previous methods at low resolution and in crowded, cluttered and occluded scenes thanks to (i) the composite filed PAF encoding fine-grained information and (ii) the choice of Laplace loss for regression which incorporates a notion of uncertainty. PifPaf achieves SOTA results on the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain.</p>
+<p>The authors propose to extend the notion of fields in pose estimation to go beyond scalar and vector fields to <strong>composite fields</strong>. They introduce a new neural network architecture with two head networks. For each body part or joint, one head network predicts the confidence score, the precision and the size of this joint, which we call a Part Intensity Field (PIF). The other network predicts association between parts, called the Part Association Field (PAF), which is of a new composite structure.</p>
+<div class="section" id="pifpaf">
+<h2>PifPaf<a class="headerlink" href="#pifpaf" title="Permalink to this headline">¶</a></h2>
+<p>The goal of this method is to estimate human poses in crowded images. The authors address challenges related to low-resolution and partially occluded pedestrians. The figure below presents the PifPaf model.</p>
+<a class="reference internal image-reference" href="_images/pifpaf-1.png"><img alt="_images/pifpaf-1.png" src="_images/pifpaf-1.png" style="width: 800pt;" /></a>
 </div>
 </div>
 
@@ -62,16 +66,24 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PifPaf: Composite Fields for Human Pose Estimation</a><ul>
+<li><a class="reference internal" href="#pifpaf">PifPaf</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="infogan.html"
                         title="previous chapter">InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="r-cnn.html"
-                        title="next chapter">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a></p>
+  <p class="topless"><a href="obj-det.html"
+                        title="next chapter">Object Detection</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/obj-det.rst.txt"
+      <li><a href="_sources/pifpaf.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -96,13 +108,14 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="r-cnn.html" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation"
+          <a href="obj-det.html" title="Object Detection"
              >next</a> |</li>
         <li class="right" >
           <a href="infogan.html" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Object Detection</a></li> 
+          <li class="nav-item nav-item-1"><a href="paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PifPaf: Composite Fields for Human Pose Estimation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

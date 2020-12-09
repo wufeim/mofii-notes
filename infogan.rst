@@ -64,7 +64,7 @@ With Lemma 5.1, we can define a variational lower bound :math:`L_I(G, Q)` of the
 .. math::
 
    L_I(G, Q) & = \mathbb{E}_{c \sim P(c), x \sim G(z, c)}[\log Q(c \mid x)] + H(c) \\
-   & = \mathbb{E}_{x \sim G(z, c)}[\mathbb{E}_{c' \sim P(c \mid x)[\log Q(c' \mid x)]] + H(c) \\
+   & = \mathbb{E}_{x \sim G(z, c)}[\mathbb{E}_{c' \sim P(c \mid x)}[\log Q(c' \mid x)]] + H(c) \\
    & \leq I(c; G(z, c))
 
 The authors note that :math:`L_I(G, Q)` is easy to approximate with Monte Carlo simulation. In particular, :math:`L_I` can be maximized w.r.t. :math:`Q` directly and w.r.t. :math:`G` via the reparameterization trick.

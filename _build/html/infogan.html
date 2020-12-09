@@ -86,7 +86,7 @@
 <p>With Lemma 5.1, we can define a variational lower bound <span class="math notranslate nohighlight">\(L_I(G, Q)\)</span> of the mutual information:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}L_I(G, Q) &amp; = \mathbb{E}_{c \sim P(c), x \sim G(z, c)}[\log Q(c \mid x)] + H(c) \\
-&amp; = \mathbb{E}_{x \sim G(z, c)}[\mathbb{E}_{c' \sim P(c \mid x)[\log Q(c' \mid x)]] + H(c) \\
+&amp; = \mathbb{E}_{x \sim G(z, c)}[\mathbb{E}_{c' \sim P(c \mid x)}[\log Q(c' \mid x)]] + H(c) \\
 &amp; \leq I(c; G(z, c))\end{split}\]</div>
 <p>The authors note that <span class="math notranslate nohighlight">\(L_I(G, Q)\)</span> is easy to approximate with Monte Carlo simulation. In particular, <span class="math notranslate nohighlight">\(L_I\)</span> can be maximized w.r.t. <span class="math notranslate nohighlight">\(Q\)</span> directly and w.r.t. <span class="math notranslate nohighlight">\(G\)</span> via the reparameterization trick.</p>
 <p>Hence, InfoGAN is defined as the following minimax game:</p>

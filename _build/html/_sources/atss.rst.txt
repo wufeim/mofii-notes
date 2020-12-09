@@ -15,8 +15,6 @@ Without loss of generality, the representative anchor-based RetinaNet and anchor
 - **The definition of positive and negative samples:** RetinaNet resorts to IoU for positives and negatives, while FCOS utilizes spatial and scale constraints to select samples.
 - **The regression starting status.** RetinaNet regresses the object bounding box from preset anchor box, while FCOS locates the object from the anchor point.
 
-In this section, one square anchor is tiled per location for RetinaNet and the first difference is addressed in Section ??.
-
 By removing inconsistencies between the two methods, the authors compare the performance of RetinaNet (#A = 1) and FCOS on the MS COCO minival set, and the results are reported below.
 
 .. image:: figures/atss-1.png
@@ -70,3 +68,6 @@ Here are some motivations behind this method:
 
   .. image:: figures/atss-2.png
      :width: 360pt
+
+- **Limiting the positive samples' center to object.** Althought the IoU of candidates is not a standard normal distribution, the statistical results show that each object has about :math:`0.2 \times k\mathcal{L}` positive samples, invariant to its scale, aspect ratio, and location.
+- **Keeping almost hyperparameter-free.** Experiments show that results are quite insensitive to the variations of :math:`k`.

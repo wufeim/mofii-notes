@@ -7,3 +7,4 @@ Object Detection
    r-cnn
    fast-r-cnn
    atss
+   paa

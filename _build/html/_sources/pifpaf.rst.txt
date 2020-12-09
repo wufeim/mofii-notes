@@ -1,0 +1,17 @@
+PifPaf: Composite Fields for Human Pose Estimation
+=====================================
+
+| **Authors:** Sven Kreiss, Lorenzo Bertoni, Alexandre Alahi
+| **Affiliations:** EPFL VITA lab, CH-1015 Lausanne
+
+The authors propose a new bottom-up method for multi-person 2D human pose estimation, known as PifPaf. This method uses a Part Intensity Field (PIF) to localize body parts and a Part Association Field (PAF) to form human poses. It outperforms previous methods at low resolution and in crowded, cluttered and occluded scenes thanks to (i) the composite filed PAF encoding fine-grained information and (ii) the choice of Laplace loss for regression which incorporates a notion of uncertainty. PifPaf achieves SOTA results on the standard COCO keypoint task and a modified COCO keypoint task for the transportation domain.
+
+The authors propose to extend the notion of fields in pose estimation to go beyond scalar and vector fields to **composite fields**. They introduce a new neural network architecture with two head networks. For each body part or joint, one head network predicts the confidence score, the precision and the size of this joint, which we call a Part Intensity Field (PIF). The other network predicts association between parts, called the Part Association Field (PAF), which is of a new composite structure.
+
+PifPaf
+-------------------------------------
+
+The goal of this method is to estimate human poses in crowded images. The authors address challenges related to low-resolution and partially occluded pedestrians. The figure below presents the PifPaf model.
+
+.. image:: figures/pifpaf-1.png
+   :width: 800pt
