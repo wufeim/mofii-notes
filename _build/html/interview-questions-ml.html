@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="&lt;no title&gt;" href="interview-questions-cv.html" />
-    <link rel="prev" title="Monocular 3D Object Detection" href="monocular-3d-obj-det.html" /> 
+    <link rel="prev" title="Support Vector Machine (SVM)" href="svm.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,7 +31,7 @@
           <a href="interview-questions-cv.html" title="&lt;no title&gt;"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+          <a href="svm.html" title="Support Vector Machine (SVM)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Interview Questions (ML)</a></li> 
@@ -256,6 +256,28 @@
 </li>
 <li><p><strong>什么是感受野？</strong></p></li>
 </ol>
+<hr class="docutils" />
+<ol class="arabic simple">
+<li><p><strong>What is Batch Normalization? What would be different during training and testing?</strong></p></li>
+</ol>
+<hr class="docutils" />
+<ol class="arabic">
+<li><p><strong>SGD，Momentum，Adagrad，Adam原理</strong></p>
+<ul class="simple">
+<li><p>SGD为随机梯度下降，每次迭代计算mini-batch的梯度</p></li>
+<li><p>Momentum参考了动量的概念，将前几次的梯度也考虑在内</p></li>
+<li><p>Adagrad自动变更学习率，实际的学习率与以往参数的模和的开方成反比</p></li>
+<li><p>Adam根据梯度估计海森矩阵调整学习率，整体训练较为平稳</p></li>
+</ul>
+</li>
+<li><p><strong>L1不可导该怎么办</strong></p>
+<p>Proximal Algorithm</p>
+</li>
+<li><p><strong>介绍Sigmoid函数</strong></p>
+<div class="math notranslate nohighlight">
+\[S(x) = \frac{1}{1 + e^{-x}}, \;\;\; S'(x) = \frac{e^{-x}}{(1+e^{-x})^2}\]</div>
+</li>
+</ol>
 </div>
 
 
@@ -266,8 +288,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="monocular-3d-obj-det.html"
-                        title="previous chapter">Monocular 3D Object Detection</a></p>
+  <p class="topless"><a href="svm.html"
+                        title="previous chapter">Support Vector Machine (SVM)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="interview-questions-cv.html"
                         title="next chapter">&lt;no title&gt;</a></p>
@@ -302,7 +324,7 @@
           <a href="interview-questions-cv.html" title="&lt;no title&gt;"
              >next</a> |</li>
         <li class="right" >
-          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+          <a href="svm.html" title="Support Vector Machine (SVM)"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Interview Questions (ML)</a></li> 

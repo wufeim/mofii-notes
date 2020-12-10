@@ -52,15 +52,4 @@ In maximium likelihood inference, we maximise the log likelihood of the model. I
 
 .. math::
 
-   \log p\left(\mathbf{y} \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \prop -\frac{1}{2\sigma^2} \lVert \mathbf{y} - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 - \log \sigma
-
-???
--------------------------------------
-
-The naive approach to combinining multi-objective losses would be to simply perform a weighted linear sum of the losses for each individual task:
-
-.. math::
-
-   L_\text{total} = \sum_i w_iL_i
-
-The issue with this approach is that model performance is extermely sensitive to the weight selection :math:`w_i`, but these weight hyper-parameters are quite expensive to tune.
+   \log p\left(\mathbf{y} \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \propto -\frac{1}{2\sigma^2} \lVert \mathbf{y} - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 - \log \sigma

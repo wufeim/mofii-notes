@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Concepts &#8212; Mofii Notes 1.0.1 documentation</title>
+    <title>Interview (Machine Learning) &#8212; Mofii Notes 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -18,8 +18,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Random Forest" href="rf.html" />
-    <link rel="prev" title="Monocular 3D Object Detection" href="monocular-3d-obj-det.html" /> 
+    <link rel="next" title="LeetCode" href="leetcode.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="interview-questions-cv.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,13 +28,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="rf.html" title="Random Forest"
+          <a href="leetcode.html" title="LeetCode"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+          <a href="interview-questions-cv.html" title="&lt;no title&gt;"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">AI Concepts</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Interview (Machine Learning)</a></li> 
       </ul>
     </div>  
 
@@ -43,15 +43,37 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ai-concepts">
-<h1>AI Concepts<a class="headerlink" href="#ai-concepts" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="rf.html">Random Forest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="svm.html">[ESL] 12 Support Vector Machines and Flexible Discriminants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ai-concepts/pooling-layer.html">Pooling Layer</a></li>
+  <div class="section" id="interview-machine-learning">
+<h1>Interview (Machine Learning)<a class="headerlink" href="#interview-machine-learning" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic">
+<li><p><strong>请详细说说支持向量机（SVM）的原理</strong></p>
+<p><a class="reference external" href="https://www.julyedu.com/questions/interview-detail?quesId=919&amp;cate=机器学习&amp;kp_id=23">link</a></p>
+</li>
+<li><p><strong>哪些机器学习算法不需要做归一化处理？</strong></p>
+<p>归一化、标准化的目的：数值计算（矩阵求逆、求梯度）不准；</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>需要**归一化的模型：KNN，线性模型，SVM，神经网络</p>
+<p><a href="#id3"><span class="problematic" id="id4">**</span></a>不需要**归一化的模型：树形模型，XGBoost，Random Forest</p>
+</li>
+<li><p><strong>树形结构为什么不需要归一化？</strong></p>
+<p>数值的缩放不影响分裂点的位置，对模型拟合不造成影响。</p>
+</li>
+<li><p><strong>在k-means和KNN，比较欧氏距离和曼哈顿距离的区别</strong></p>
+<p>欧氏距离不适用于量纲不同的变量</p>
+</li>
+<li><p><strong>数据归一化的原因</strong></p>
+<p>能不归一化最好不归一化，但是对于病态分布的数据归一化可以帮助准确计算矩阵的逆或是梯度</p>
+</li>
+</ol>
+<ol class="arabic simple" start="9">
+<li><p><strong>过拟合如何解决</strong></p>
+<ul class="simple">
+<li><p>正则化：L1，L2</p></li>
+<li><p>dropout：训练阶段随机失活一些神经元</p></li>
+<li><p>batch normalization：每层输出做归一化，使下一层网络更接近高斯分布，泛化效果更好</p></li>
+<li><p>early stopping</p></li>
 </ul>
-</div>
+</li>
+</ol>
 </div>
 
 
@@ -62,15 +84,15 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="monocular-3d-obj-det.html"
-                        title="previous chapter">Monocular 3D Object Detection</a></p>
+  <p class="topless"><a href="interview-questions-cv.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rf.html"
-                        title="next chapter">Random Forest</a></p>
+  <p class="topless"><a href="leetcode.html"
+                        title="next chapter">LeetCode</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/ai-concepts.rst.txt"
+      <li><a href="_sources/julyedu-ml.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -95,13 +117,13 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="rf.html" title="Random Forest"
+          <a href="leetcode.html" title="LeetCode"
              >next</a> |</li>
         <li class="right" >
-          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+          <a href="interview-questions-cv.html" title="&lt;no title&gt;"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">AI Concepts</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Interview (Machine Learning)</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

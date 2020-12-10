@@ -17,7 +17,9 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Object Detection" href="obj-det.html" />
+    <link rel="prev" title="PifPaf: Composite Fields for Human Pose estimation" href="pifpaf.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,7 +27,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="obj-det.html" title="Object Detection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pifpaf.html" title="PifPaf: Composite Fields for Human Pose estimation"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="paper-reading.html" accesskey="U">Paper Reading Notes</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a></li> 
       </ul>
     </div>  
@@ -82,14 +91,7 @@
 \[p\left(\mathbf{y}_1, \dots, \mathbf{y}_K \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) = p\left(\mathbf{y}_1 \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \dots p\left(\mathbf{y}_K \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right)\]</div>
 <p>In maximium likelihood inference, we maximise the log likelihood of the model. In regression, the log likelihood can be written as</p>
 <div class="math notranslate nohighlight">
-\[\log p\left(\mathbf{y} \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \prop -\frac{1}{2\sigma^2} \lVert \mathbf{y} - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 - \log \sigma\]</div>
-</div>
-<div class="section" id="id1">
-<h2>???<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>The naive approach to combinining multi-objective losses would be to simply perform a weighted linear sum of the losses for each individual task:</p>
-<div class="math notranslate nohighlight">
-\[L_\text{total} = \sum_i w_iL_i\]</div>
-<p>The issue with this approach is that model performance is extermely sensitive to the weight selection <span class="math notranslate nohighlight">\(w_i\)</span>, but these weight hyper-parameters are quite expensive to tune.</p>
+\[\log p\left(\mathbf{y} \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \propto -\frac{1}{2\sigma^2} \lVert \mathbf{y} - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 - \log \sigma\]</div>
 </div>
 </div>
 
@@ -105,11 +107,16 @@
 <li><a class="reference internal" href="#">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a><ul>
 <li><a class="reference internal" href="#homoscedastic-uncertainty-as-task-dependent-uncertainty">Homoscedastic Uncertainty as Task-Dependent Uncertainty</a></li>
 <li><a class="reference internal" href="#multi-task-likelihoods">Multi-Task Likelihoods</a></li>
-<li><a class="reference internal" href="#id1">???</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pifpaf.html"
+                        title="previous chapter">PifPaf: Composite Fields for Human Pose estimation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="obj-det.html"
+                        title="next chapter">Object Detection</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -137,7 +144,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="obj-det.html" title="Object Detection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pifpaf.html" title="PifPaf: Composite Fields for Human Pose estimation"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="paper-reading.html" >Paper Reading Notes</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a></li> 
       </ul>
     </div>

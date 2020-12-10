@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support Vector Machine (SVM) &#8212; Mofii Notes 1.0.1 documentation</title>
+    <title>[ESL] 12 Support Vector Machines and Flexible Discriminants &#8212; Mofii Notes 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Interview Questions (ML)" href="interview-questions-ml.html" />
+    <link rel="next" title="Pooling Layer" href="ai-concepts/pooling-layer.html" />
     <link rel="prev" title="Random Forest" href="rf.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,14 +28,14 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="interview-questions-ml.html" title="Interview Questions (ML)"
+          <a href="ai-concepts/pooling-layer.html" title="Pooling Layer"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="rf.html" title="Random Forest"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="ai-concepts.html" accesskey="U">AI Concepts</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Support Vector Machine (SVM)</a></li> 
+        <li class="nav-item nav-item-this"><a href="">[ESL] 12 Support Vector Machines and Flexible Discriminants</a></li> 
       </ul>
     </div>  
 
@@ -44,33 +44,26 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="support-vector-machine-svm">
-<h1>Support Vector Machine (SVM)<a class="headerlink" href="#support-vector-machine-svm" title="Permalink to this headline">¶</a></h1>
-<p>SVM是一种二分类模型，求解的是划分数据集并最大化几个间隔的超平面。</p>
-<a class="reference internal image-reference" href="_images/svm-1.jpg"><img alt="_images/svm-1.jpg" src="_images/svm-1.jpg" style="width: 200pt;" /></a>
-<p>给定数据集 <span class="math notranslate nohighlight">\(T = \{(x_1, y_1), \dots, (x_N, y_N)\}\)</span>，其中 <span class="math notranslate nohighlight">\(x_i \in \mathbb{R}^n, y_i \in \{-1, +1\}\)</span>。对于 <span class="math notranslate nohighlight">\((x_i, y_i)\)</span>，它到超平面 <span class="math notranslate nohighlight">\(y = wx + b\)</span> 的距离可以定义为</p>
+  <div class="section" id="esl-12-support-vector-machines-and-flexible-discriminants">
+<h1>[ESL] 12 Support Vector Machines and Flexible Discriminants<a class="headerlink" href="#esl-12-support-vector-machines-and-flexible-discriminants" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>12.1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In this chapter we describe generalizations of linear decision boundaries for classification.</p>
+</div>
+<div class="section" id="the-support-vector-classifier">
+<h2>12.2 The Support Vector Classifier<a class="headerlink" href="#the-support-vector-classifier" title="Permalink to this headline">¶</a></h2>
+<p>Our training data consists of <span class="math notranslate nohighlight">\(N\)</span> pairs <span class="math notranslate nohighlight">\((x_1, y_1), \dots, (x_N, y_N)\)</span>, with <span class="math notranslate nohighlight">\(x_i \in \mathbb{R}^p\)</span> and <span class="math notranslate nohighlight">\(y_i \in \{-1, 1\}\)</span>. Define a hyperplane by</p>
 <div class="math notranslate nohighlight">
-\[\gamma_i = y_i\left( \frac{w}{\lVert w \rVert} \cdot x_i + \frac{b}{\lVert w \rVert} \right)\]</div>
-<p>因此，想要求解SVM定义的最大间隔超平面的问题可以表述为</p>
+\[\{x: f(x) = x^\top \beta + \beta_0 = 0\}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is a unit vector: <span class="math notranslate nohighlight">\(\lVert\beta\rVert = 1\)</span>. A classification rule induced by <span class="math notranslate nohighlight">\(f(x)\)</span> is</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\max_{w, b} \; &amp; \gamma \\
-\text{subject to } &amp; y_i\left( \frac{w}{\lVert w \rVert} \cdot x_i + \frac{b}{\lVert w \rVert} \right) \geq \gamma\end{split}\]</div>
-<p>等价于</p>
+\[G(x) = \text{sign}[x^\top\beta + \beta_0]\]</div>
+<p>The signed distance from a point <span class="math notranslate nohighlight">\(x\)</span> to the hyperplane is <span class="math notranslate nohighlight">\(f(x) = x^\top\beta + \beta_0\)</span>.</p>
+<p>If the classes are separable, we can find the hyperplane that creates the biggest margin by solving the optimization problem</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\max_{w, b} \; &amp; \gamma \\
-\text{subject to } &amp; y_i\left( \frac{w}{\lVert w \rVert\gamma} \cdot x_i + \frac{b}{\lVert w \rVert\gamma} \right) \geq 1\end{split}\]</div>
-<p>令 <span class="math notranslate nohighlight">\(w = \frac{w}{\lVert w \rVert \gamma}\)</span>， <span class="math notranslate nohighlight">\(b = \frac{b}{\lVert w \rVert \gamma}\)</span>，我们有</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\max_{w, b} \; &amp; \gamma \\
-\text{subject to } &amp; y_i(w \cdot x_i + b) \geq 1\end{split}\]</div>
-<p>注意到最大化 <span class="math notranslate nohighlight">\(\gamma\)</span> 等价于最大化 <span class="math notranslate nohighlight">\(\frac{1}{\lVert w \rVert}\)</span>，又等价于最小化 <span class="math notranslate nohighlight">\(\frac{1}{2}\lVert w \rVert^2\)</span>，从而SVM定义的优化问题被转化为</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\min_{w, b} \; &amp; \frac{1}{2}\lVert w \rVert^2 \\
-\text{subject to } &amp; y_i(w \cdot x_i + b) \geq 1\end{split}\]</div>
-<p>利用拉格朗日乘子，我们得到无约束的拉格朗日目标函数：</p>
-<div class="math notranslate nohighlight">
-\[L(w, b, \alpha) = \frac{1}{2}\lVert w \rVert^2 - \sum_{i=1}^N \alpha_i (y_i(w \cdot x_i + b) - 1)\]</div>
-<p>以上的推导都是基于数据集是线性可分的，即所有的线性约束条件都可以被满足。对于线性不可分的数据集，我们引入“软间隔”的概念，即允许一部分点不满足约束条件。通过Hinge Loss，原优化问题可以写为：</p>
+\[\begin{split}\max_{\beta, \beta_0, \lVert \beta \rVert = 1} \; &amp; M \\
+\text{subject to} \; &amp; y_i(x_i^\top\beta + \beta_0) \geq M, \;\;\; i = 1, \dots, M\end{split}\]</div>
+</div>
 </div>
 
 
@@ -80,12 +73,21 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">[ESL] 12 Support Vector Machines and Flexible Discriminants</a><ul>
+<li><a class="reference internal" href="#introduction">12.1 Introduction</a></li>
+<li><a class="reference internal" href="#the-support-vector-classifier">12.2 The Support Vector Classifier</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="rf.html"
                         title="previous chapter">Random Forest</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="interview-questions-ml.html"
-                        title="next chapter">Interview Questions (ML)</a></p>
+  <p class="topless"><a href="ai-concepts/pooling-layer.html"
+                        title="next chapter">Pooling Layer</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -114,14 +116,14 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="interview-questions-ml.html" title="Interview Questions (ML)"
+          <a href="ai-concepts/pooling-layer.html" title="Pooling Layer"
              >next</a> |</li>
         <li class="right" >
           <a href="rf.html" title="Random Forest"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="ai-concepts.html" >AI Concepts</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Support Vector Machine (SVM)</a></li> 
+        <li class="nav-item nav-item-this"><a href="">[ESL] 12 Support Vector Machines and Flexible Discriminants</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -254,3 +254,26 @@ Interview Questions (ML)
     - 数据增强
 
 12. **什么是感受野？**
+
+----
+
+1. **What is Batch Normalization? What would be different during training and testing?**
+
+----
+
+1. **SGD，Momentum，Adagrad，Adam原理**
+
+   - SGD为随机梯度下降，每次迭代计算mini-batch的梯度
+   - Momentum参考了动量的概念，将前几次的梯度也考虑在内
+   - Adagrad自动变更学习率，实际的学习率与以往参数的模和的开方成反比
+   - Adam根据梯度估计海森矩阵调整学习率，整体训练较为平稳
+
+2. **L1不可导该怎么办**
+
+   Proximal Algorithm
+
+3. **介绍Sigmoid函数**
+
+   .. math::
+   
+      S(x) = \frac{1}{1 + e^{-x}}, \;\;\; S'(x) = \frac{e^{-x}}{(1+e^{-x})^2}

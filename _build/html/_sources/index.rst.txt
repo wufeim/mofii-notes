@@ -10,6 +10,7 @@ Mofii's Notes
    ai-concepts
    interview-questions-ml
    interview-questions-cv
+   julyedu-ml
    leetcode
 
 About

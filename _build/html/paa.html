@@ -50,6 +50,25 @@
 <div class="line"><strong>Authors:</strong> Kang Kim, Hee Seok Lee</div>
 <div class="line"><strong>Affiliations:</strong> XL8 Inc., Qualcomm Korea YH</div>
 </div>
+<p>In this paper the authors propose a novel anchor assignment strategy that adaptively separates anchors into positive and negative samples for a ground truth bounding box according to the model's learning status. Moreover, they propose to predict the IoU of detected boxes as a measure of localization quality to reduce the gap between the training and testing objectives. Experiments results verify the effectiveness of the proposed methods on the MS COCO dataset.</p>
+<div class="section" id="probabilistic-anchor-assignment-algorithm">
+<h2>Probabilistic Anchor Assignment Algorithm<a class="headerlink" href="#probabilistic-anchor-assignment-algorithm" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>When devising an anchor assignment strategy, the authors take three key considerations into account:</dt><dd><ul class="simple">
+<li><p>the strategy should measure the quality of an anchor based on how likely the model is to find evidence to identify the target object with that anchor</p></li>
+<li><p>the separation of anchors should be adaptive so that it does not require a hyperparameter</p></li>
+<li><p>the strategy should be formulated as a likelihood maximization for a probability distribution in order for the model to be able to reason about the assignment in a probabilistic way</p></li>
+</ul>
+</dd>
+</dl>
+<p>In this respect, they design an anchor scoring scheme and propose an anchor assignment that brings the scoring scheme into account.</p>
+<p>One intuitive way to define the score of an anchor is:</p>
+<div class="math notranslate nohighlight">
+\[S(f_\theta (a, x), g) = S_{cls} (f_\theta(a, x), g) \times S_{loc}(f_\theta(a, x), g)^\lambda\]</div>
+<p>Here <span class="math notranslate nohighlight">\(S_{loc}\)</span> is the IoU of a predicted box with its GT box:</p>
+<div class="math notranslate nohighlight">
+\[S_{loc}(f_\theta(a, x), g) = IoU(f_\theta(a, x), g)\]</div>
+</div>
 </div>
 
 
@@ -59,6 +78,14 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Probabilistic Anchor Assignment with IoU Prediction for Object Detection</a><ul>
+<li><a class="reference internal" href="#probabilistic-anchor-assignment-algorithm">Probabilistic Anchor Assignment Algorithm</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="atss.html"
                         title="previous chapter">Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection</a></p>
