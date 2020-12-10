@@ -89,9 +89,17 @@
 <p>We define <span class="math notranslate nohighlight">\(\mathbf{f}^\mathbf{W}(\mathbf{x})\)</span> as our <strong>sufficient statistics</strong> and obtain:</p>
 <div class="math notranslate nohighlight">
 \[p\left(\mathbf{y}_1, \dots, \mathbf{y}_K \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) = p\left(\mathbf{y}_1 \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \dots p\left(\mathbf{y}_K \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right)\]</div>
-<p>In maximium likelihood inference, we maximise the log likelihood of the model. In regression, the log likelihood can be written as</p>
+<p>In maximium likelihood inference, we maximise the log likelihood of the model.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some derivations are skipped here.</p>
+</div>
+<p>Assume that a model's multiple outputs are composed of a continuous output <span class="math notranslate nohighlight">\(\mathbf{y}_1\)</span> and a discrete output <span class="math notranslate nohighlight">\(\mathbf{y}_2\)</span>, modelled with a Gaussian likelihood and a soft-max likelihood, respectively. The joint loss, <span class="math notranslate nohighlight">\(\mathcal{L}(\mathbf{W}, \sigma_1, \sigma_2)\)</span>, is given as</p>
 <div class="math notranslate nohighlight">
-\[\log p\left(\mathbf{y} \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \propto -\frac{1}{2\sigma^2} \lVert \mathbf{y} - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 - \log \sigma\]</div>
+\[\begin{split}\mathcal{L}(\mathbf{W}, \sigma_1, \sigma_2) &amp; = -\log (\mathbf{y}_1, \mathbf{y}_2=c \mid \mathbf{f}^\mathbf{W}(\mathbf{x})) \\
+&amp; = -\log \mathcal{N}(\mathbf{y}_1; \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_1^2) \cdot \text{Softmax}(\mathbf{y}_2=c; \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_2) \\
+&amp; = \frac{1}{2\sigma_1^2} \lVert \mathbf{y}_1 - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 + \log\sigma_1 - \log p(\mathbf{y}_2 = c \mid \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_2) \\
+&amp; \approx \frac{1}{2\sigma_1^2} \mathcal{L}_1(\mathbf{W}) + \frac{1}{\sigma_2^2}\mathcal{L}_2(\mathbf{W}) + \log\sigma_1 + \log\sigma_2\end{split}\]</div>
 </div>
 </div>
 

@@ -48,8 +48,29 @@ We define :math:`\mathbf{f}^\mathbf{W}(\mathbf{x})` as our **sufficient statisti
 
    p\left(\mathbf{y}_1, \dots, \mathbf{y}_K \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) = p\left(\mathbf{y}_1 \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \dots p\left(\mathbf{y}_K \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right)
 
-In maximium likelihood inference, we maximise the log likelihood of the model. In regression, the log likelihood can be written as
+In maximium likelihood inference, we maximise the log likelihood of the model.
+
+.. warning::
+
+   Some derivations are skipped here.
+
+Assume that a model's multiple outputs are composed of a continuous output :math:`\mathbf{y}_1` and a discrete output :math:`\mathbf{y}_2`, modelled with a Gaussian likelihood and a soft-max likelihood, respectively. The joint loss, :math:`\mathcal{L}(\mathbf{W}, \sigma_1, \sigma_2)`, is given as
 
 .. math::
 
-   \log p\left(\mathbf{y} \mid \mathbf{f}^\mathbf{W}(\mathbf{x})\right) \propto -\frac{1}{2\sigma^2} \lVert \mathbf{y} - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 - \log \sigma
+   \mathcal{L}(\mathbf{W}, \sigma_1, \sigma_2) & = -\log (\mathbf{y}_1, \mathbf{y}_2=c \mid \mathbf{f}^\mathbf{W}(\mathbf{x})) \\
+   & = -\log \mathcal{N}(\mathbf{y}_1; \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_1^2) \cdot \text{Softmax}(\mathbf{y}_2=c; \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_2) \\
+   & = \frac{1}{2\sigma_1^2} \lVert \mathbf{y}_1 - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 + \log\sigma_1 - \log p(\mathbf{y}_2 = c \mid \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_2) \\
+   & \approx \frac{1}{2\sigma_1^2} \mathcal{L}_1(\mathbf{W}) + \frac{1}{\sigma_2^2}\mathcal{L}_2(\mathbf{W}) + \log\sigma_1 + \log\sigma_2
+
+where :math:`\mathcal{L}_1(\mathbf{W}) = \lVert \mathbf{y}_1 - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2` and :math:`\mathbf{L}_2(\mathbf{W}) = -\log\text{Softmax}(\mathbf{y}_2, \mathbf{f}^\mathbf{W}(\mathbf{x}))`.
+
+The last objective can be seen as learning the relative weights of the losses for each output. :math:`\sigma_i` controls the contribution of :math:`\mathcal{L}_i`, and at the same time regularized by :math:`\log\sigma_i`.
+
+In practice, the authors train the network to predict the log variance, :math:`s = \log \sigma^2`.
+
+Results
+-------------------------------------
+
+.. image:: figures/uncertainty-weigh-losses-2.png
+   :width: 480pt
