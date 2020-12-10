@@ -63,7 +63,7 @@ Assume that a model's multiple outputs are composed of a continuous output :math
    & = \frac{1}{2\sigma_1^2} \lVert \mathbf{y}_1 - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2 + \log\sigma_1 - \log p(\mathbf{y}_2 = c \mid \mathbf{f}^\mathbf{W}(\mathbf{x}), \sigma_2) \\
    & \approx \frac{1}{2\sigma_1^2} \mathcal{L}_1(\mathbf{W}) + \frac{1}{\sigma_2^2}\mathcal{L}_2(\mathbf{W}) + \log\sigma_1 + \log\sigma_2
 
-where :math:`\mathcal{L}_1(\mathbf{W}) = \lVert \mathbf{y}_1 - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2` and :math:`\mathbf{L}_2(\mathbf{W}) = -\log\text{Softmax}(\mathbf{y}_2, \mathbf{f}^\mathbf{W}(\mathbf{x}))`.
+where :math:`\mathcal{L}_1(\mathbf{W}) = \lVert \mathbf{y}_1 - \mathbf{f}^\mathbf{W}(\mathbf{x}) \rVert^2` and :math:`\mathcal{L}_2(\mathbf{W}) = -\log\text{Softmax}(\mathbf{y}_2, \mathbf{f}^\mathbf{W}(\mathbf{x}))`.
 
 The last objective can be seen as learning the relative weights of the losses for each output. :math:`\sigma_i` controls the contribution of :math:`\mathcal{L}_i`, and at the same time regularized by :math:`\log\sigma_i`.
 

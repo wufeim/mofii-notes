@@ -8,3 +8,5 @@ AI Concepts
    svm
    pca
    ai-concepts/pooling-layer.rst
+   ai-concepts/mil
+   ai-concepts/lr
