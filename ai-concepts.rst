@@ -2,7 +2,7 @@ AI Concepts
 =======================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    rf
    svm
@@ -12,3 +12,4 @@ AI Concepts
    ai-concepts/mil
    ai-concepts/lr
    ai-concepts/entropy
+   ai-concepts-dl
