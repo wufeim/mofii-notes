@@ -1,4 +1,4 @@
-AI Concepts
+AI Concepts (Deep Learning)
 =======================================
 
 .. toctree::
