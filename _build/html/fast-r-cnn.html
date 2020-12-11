@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Monocular 3D Object Detection" href="monocular-3d-obj-det.html" />
+    <link rel="next" title="Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection" href="atss.html" />
     <link rel="prev" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation" href="r-cnn.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+          <a href="atss.html" title="Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="r-cnn.html" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation"
@@ -71,6 +71,29 @@
 </ul>
 <div class="section" id="id1">
 <h2>Fast R-CNN<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The figure below illustrates the Fast R-CNN architecture.</p>
+<a class="reference internal image-reference" href="_images/fast-r-cnn-1.png"><img alt="_images/fast-r-cnn-1.png" src="_images/fast-r-cnn-1.png" style="width: 400pt;" /></a>
+<p>A Fast R-CNN network takes as input an entire image and a set of object proposals. The network first produce a conv feature map. Then, for each object proposal a RoI pooling layer extracts a fixed-length feature vector from the feature map. Each feature vector is fed into a sequence of fully connected layers that finally branch into two sibling output layers, which outputs the softmax probability of object classes and the refined bounding-box positions for each class.</p>
+</div>
+<div class="section" id="roi-pooling-layer">
+<h2>RoI Pooling Layer<a class="headerlink" href="#roi-pooling-layer" title="Permalink to this headline">¶</a></h2>
+<p>The RoI pooling layer uses max pooling to convert the features inside any RoI into a small feature map with a fixed size. RoI pooling works by dividing the <span class="math notranslate nohighlight">\(h \times w\)</span> RoI window into <span class="math notranslate nohighlight">\(H \times W\)</span> grid of sub-windows and then max-pooling the values in each sub-window.</p>
+</div>
+<div class="section" id="multi-task-loss">
+<h2>Multi-Task loss<a class="headerlink" href="#multi-task-loss" title="Permalink to this headline">¶</a></h2>
+<p>A Fast R-CNN network has two sibling output layers. The first ouptuts a discrete probability distribution, <span class="math notranslate nohighlight">\(p = (p_0, \dots, p_K)\)</span>, over <span class="math notranslate nohighlight">\(K + 1\)</span> categories. The second outputs bounding-box regression offsets, <span class="math notranslate nohighlight">\(t^k = (t_x^k, t_y^k, t_w^k, t_h^k)\)</span>, for each of the <span class="math notranslate nohighlight">\(K\)</span> object classes. Let the ground-truth class be <span class="math notranslate nohighlight">\(u\)</span> and the ground-truth bounding-box be <span class="math notranslate nohighlight">\(v\)</span>.</p>
+<p>A multi-task loss <span class="math notranslate nohighlight">\(L\)</span> is used to jointly train for classification and regression:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}L(p, u, t^u, v) &amp; = L_\text{cls}(p, u) + \lambda[u \geq 1]L_\text{loc}(t^u, v) \\
+L_\text{cls}(p, u) &amp; = -\log p_u \\
+L_\text{loc}(t^u, v) &amp; = \sum_{i \in \{x, y, w, h\}} \text{smooth}_{L_1}(t_i^u - v_i)\end{split}\]</div>
+<p>in which</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\text{smooth}_{L_1} (x) = \begin{cases} 0.5x^2 &amp; \text{if } \lvert x \rvert &lt; 1 \\ \lvert x \rvert - 0.5 &amp; \text{otherwise}\end{cases}\end{split}\]</div>
+</div>
+<div class="section" id="truncated-svd-for-faster-detection">
+<h2>Truncated SVD for Faster detection<a class="headerlink" href="#truncated-svd-for-faster-detection" title="Permalink to this headline">¶</a></h2>
+<p>Large fully connected layers are easily accelerated by compressing them with truncated SVD. A simple fully connected layer with weight <span class="math notranslate nohighlight">\(W\)</span> is replaced by two fully connected layers with weights <span class="math notranslate nohighlight">\(\Sigma_tV^\top\)</span> and <span class="math notranslate nohighlight">\(U\)</span>.</p>
 </div>
 </div>
 
@@ -85,6 +108,9 @@
   <ul>
 <li><a class="reference internal" href="#">Fast R-CNN</a><ul>
 <li><a class="reference internal" href="#id1">Fast R-CNN</a></li>
+<li><a class="reference internal" href="#roi-pooling-layer">RoI Pooling Layer</a></li>
+<li><a class="reference internal" href="#multi-task-loss">Multi-Task loss</a></li>
+<li><a class="reference internal" href="#truncated-svd-for-faster-detection">Truncated SVD for Faster detection</a></li>
 </ul>
 </li>
 </ul>
@@ -93,8 +119,8 @@
   <p class="topless"><a href="r-cnn.html"
                         title="previous chapter">Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="monocular-3d-obj-det.html"
-                        title="next chapter">Monocular 3D Object Detection</a></p>
+  <p class="topless"><a href="atss.html"
+                        title="next chapter">Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -123,7 +149,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+          <a href="atss.html" title="Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection"
              >next</a> |</li>
         <li class="right" >
           <a href="r-cnn.html" title="Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation"

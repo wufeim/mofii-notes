@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logistic Regression &#8212; Mofii Notes 1.0.1 documentation</title>
+    <title>Batch Normalization &#8212; Mofii Notes 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -18,8 +18,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Interview Questions (ML)" href="../interview-questions-ml.html" />
-    <link rel="prev" title="Multiple Instance Learning" href="mil.html" /> 
+    <link rel="next" title="Multiple Instance Learning" href="mil.html" />
+    <link rel="prev" title="Pooling Layer" href="pooling-layer.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,14 +28,14 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../interview-questions-ml.html" title="Interview Questions (ML)"
+          <a href="mil.html" title="Multiple Instance Learning"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="mil.html" title="Multiple Instance Learning"
+          <a href="pooling-layer.html" title="Pooling Layer"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../ai-concepts.html" accesskey="U">AI Concepts</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Logistic Regression</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Batch Normalization</a></li> 
       </ul>
     </div>  
 
@@ -44,25 +44,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="logistic-regression">
-<h1>Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h1>
-<p>Let the training data be <span class="math notranslate nohighlight">\(D = \{(x_i, y_i)\}\)</span> where <span class="math notranslate nohighlight">\(x_i \in \mathbb{R}^n\)</span> and <span class="math notranslate nohighlight">\(y_i \in \{0, 1\}\)</span>. Since the linear model <span class="math notranslate nohighlight">\(wx^\top\)</span> ranges from <span class="math notranslate nohighlight">\(-\infty\)</span> to <span class="math notranslate nohighlight">\(\infty\)</span>, we use the sigmoid function to map the output of the linear model to the range <span class="math notranslate nohighlight">\((0, 1)\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[h_w(x) = g(w^\top x), \;\;\; g(x) = \frac{1}{1 + e^{-x}}\]</div>
-<p>And we assume that</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}P(y = 1 \mid x; w) &amp; = h_w(x) \\
-P(y = 0 \mid x; w) &amp; = 1 - h_w(x)\end{split}\]</div>
-<p>With maximum likelihood, we have</p>
-<div class="math notranslate nohighlight">
-\[L(\theta) = P(D \mid \theta) = \prod P(y \mid x; \theta) = \prod g(\theta^\top x)^y(1- g(\theta^\top x))^{1-y}\]</div>
-<p>and the log likelihood is given by</p>
-<div class="math notranslate nohighlight">
-\[l(\theta) = \sum y\log g(\theta^\top x) + (1-y)\log(1 - g(\theta^\top x))\]</div>
-<p>In machine learning, we minimize the loss function. Here, we define the loss function <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> as</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{L} = \frac{1}{N} \sum - y\log g(\theta^\top x) - (1-y)\log(1 - g(\theta^\top x))\]</div>
-<p>To solve this optimization problem, we may use stochastic gradient descent, Newton's Method, conjugate gradient descent, and etc.</p>
+  <div class="section" id="batch-normalization">
+<h1>Batch Normalization<a class="headerlink" href="#batch-normalization" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -73,15 +56,15 @@ P(y = 0 \mid x; w) &amp; = 1 - h_w(x)\end{split}\]</div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="mil.html"
-                        title="previous chapter">Multiple Instance Learning</a></p>
+  <p class="topless"><a href="pooling-layer.html"
+                        title="previous chapter">Pooling Layer</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../interview-questions-ml.html"
-                        title="next chapter">Interview Questions (ML)</a></p>
+  <p class="topless"><a href="mil.html"
+                        title="next chapter">Multiple Instance Learning</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/ai-concepts/lr.rst.txt"
+      <li><a href="../_sources/ai-concepts/bn-layer.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -106,14 +89,14 @@ P(y = 0 \mid x; w) &amp; = 1 - h_w(x)\end{split}\]</div>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../interview-questions-ml.html" title="Interview Questions (ML)"
+          <a href="mil.html" title="Multiple Instance Learning"
              >next</a> |</li>
         <li class="right" >
-          <a href="mil.html" title="Multiple Instance Learning"
+          <a href="pooling-layer.html" title="Pooling Layer"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../ai-concepts.html" >AI Concepts</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Logistic Regression</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Batch Normalization</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
