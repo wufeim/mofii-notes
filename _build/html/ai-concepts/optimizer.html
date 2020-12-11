@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizer &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interview Questions (ML)" href="../interview-questions-ml.html" />
+    <link rel="prev" title="AI Concepts (Deep Learning)" href="../ai-concepts-dl.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../interview-questions-ml.html" title="Interview Questions (ML)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../ai-concepts-dl.html" title="AI Concepts (Deep Learning)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../ai-concepts.html" >AI Concepts</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../ai-concepts-dl.html" accesskey="U">AI Concepts (Deep Learning)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Optimizer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="optimizer">
+<h1>Optimizer<a class="headerlink" href="#optimizer" title="Permalink to this headline">¶</a></h1>
+<p>The framework of the optimization is:</p>
+<ol class="arabic">
+<li><p>Calculate the current gradient:</p>
+<div class="math notranslate nohighlight">
+\[g_t = \nabla f(w_t)\]</div>
+</li>
+<li><p>Estimate the first and second-order momentum:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}m_t &amp; = \phi(g_1, \dots, g_t) \\
+V_t &amp; = \psi(g_1, \dots, g_t)\end{split}\]</div>
+</li>
+<li><p>Calculate the update rule:</p>
+<div class="math notranslate nohighlight">
+\[\eta_t = \frac{\alpha}{\sqrt{V_t}} \codt m_t\]</div>
+</li>
+<li><p>Update the weights:</p>
+<div class="math notranslate nohighlight">
+\[w_{t+1} = w_t - \eta_t\]</div>
+</li>
+</ol>
+<p>Various optimizers differ in how to estimate the update rule.</p>
+<div class="section" id="sgd">
+<h2>SGD<a class="headerlink" href="#sgd" title="Permalink to this headline">¶</a></h2>
+<p>The stochastic gradient descent is given by:</p>
+<div class="math notranslate nohighlight">
+\[\eta_t = \alpha \cdot g_t\]</div>
+<p><strong>Disadvantages:</strong> frequent updates; cannot escape local minima/saddle point.</p>
+</div>
+<div class="section" id="sgd-with-momentum">
+<h2>SGD with Momentum<a class="headerlink" href="#sgd-with-momentum" title="Permalink to this headline">¶</a></h2>
+<p>Momentum is introduced in the SGD and we have</p>
+<div class="math notranslate nohighlight">
+\[m_t = \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t\]</div>
+<p>Usually we pick <span class="math notranslate nohighlight">\(\beta_1 = 0.9\)</span>, which means the current gradient only slightly adjusts the update direction.</p>
+<p><strong>Disadvantages:</strong> uniform udpate speed; cannot update parameters based on their importance.</p>
+</div>
+<div class="section" id="sgd-with-nesterov-acceleration">
+<h2>SGD with Nesterov Acceleration<a class="headerlink" href="#sgd-with-nesterov-acceleration" title="Permalink to this headline">¶</a></h2>
+<p>NAG changes the way we estimate the graident:</p>
+<div class="math notranslate nohighlight">
+\[g_t = \nabla f(w_t - \frac{\alpha}{\sqrt{V_{t-1}}} \cdot m_{t-1})\]</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Optimizer</a><ul>
+<li><a class="reference internal" href="#sgd">SGD</a></li>
+<li><a class="reference internal" href="#sgd-with-momentum">SGD with Momentum</a></li>
+<li><a class="reference internal" href="#sgd-with-nesterov-acceleration">SGD with Nesterov Acceleration</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../ai-concepts-dl.html"
+                        title="previous chapter">AI Concepts (Deep Learning)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../interview-questions-ml.html"
+                        title="next chapter">Interview Questions (ML)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/ai-concepts/optimizer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../interview-questions-ml.html" title="Interview Questions (ML)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../ai-concepts-dl.html" title="AI Concepts (Deep Learning)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../ai-concepts.html" >AI Concepts</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../ai-concepts-dl.html" >AI Concepts (Deep Learning)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Optimizer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

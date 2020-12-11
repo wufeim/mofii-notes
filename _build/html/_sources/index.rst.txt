@@ -2,7 +2,7 @@ Mofii's Notes
 *************************************
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    paper-reading
    obj-det
