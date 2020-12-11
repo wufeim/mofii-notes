@@ -17,13 +17,6 @@ R-CNN is slow becuase it performs a ConvNet forward pass for each object proposa
 - Training is still a multi-stage pipeline.
 - Fine-tuning algorithm cannot update the convolutional layers that precede the spatial pyramid pooling.
 
-Fast R-CNN fixes the disadvantages of R-CNN and SPPnet. It has several advantages:
-
-- Higher detection quality (mAP)
-- Training is single-stage with a multi-task loss
-- Training can update all network layers
-- No dist storage is required for feature caching
-
 Fast R-CNN
 -------------------------------------
 
@@ -62,3 +55,10 @@ Truncated SVD for Faster detection
 -------------------------------------
 
 Large fully connected layers are easily accelerated by compressing them with truncated SVD. A simple fully connected layer with weight :math:`W` is replaced by two fully connected layers with weights :math:`\Sigma_tV^\top` and :math:`U`.
+
+Results
+-------------------------------------
+
+The authors report SOTA results on VOC07, 2010, and 2012.
+
+The authors also present detailed experiments in the multi-task training, scale invariance, number of proposals, and etc.

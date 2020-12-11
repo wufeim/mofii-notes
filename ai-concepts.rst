@@ -11,3 +11,4 @@ AI Concepts
    ai-concepts/bn-layer
    ai-concepts/mil
    ai-concepts/lr
+   ai-concepts/entropy

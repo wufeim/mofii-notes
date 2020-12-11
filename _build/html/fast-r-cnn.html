@@ -62,13 +62,6 @@
 <li><p>Training is still a multi-stage pipeline.</p></li>
 <li><p>Fine-tuning algorithm cannot update the convolutional layers that precede the spatial pyramid pooling.</p></li>
 </ul>
-<p>Fast R-CNN fixes the disadvantages of R-CNN and SPPnet. It has several advantages:</p>
-<ul class="simple">
-<li><p>Higher detection quality (mAP)</p></li>
-<li><p>Training is single-stage with a multi-task loss</p></li>
-<li><p>Training can update all network layers</p></li>
-<li><p>No dist storage is required for feature caching</p></li>
-</ul>
 <div class="section" id="id1">
 <h2>Fast R-CNN<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>The figure below illustrates the Fast R-CNN architecture.</p>
@@ -95,6 +88,11 @@ L_\text{loc}(t^u, v) &amp; = \sum_{i \in \{x, y, w, h\}} \text{smooth}_{L_1}(t_i
 <h2>Truncated SVD for Faster detection<a class="headerlink" href="#truncated-svd-for-faster-detection" title="Permalink to this headline">¶</a></h2>
 <p>Large fully connected layers are easily accelerated by compressing them with truncated SVD. A simple fully connected layer with weight <span class="math notranslate nohighlight">\(W\)</span> is replaced by two fully connected layers with weights <span class="math notranslate nohighlight">\(\Sigma_tV^\top\)</span> and <span class="math notranslate nohighlight">\(U\)</span>.</p>
 </div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>The authors report SOTA results on VOC07, 2010, and 2012.</p>
+<p>The authors also present detailed experiments in the multi-task training, scale invariance, number of proposals, and etc.</p>
+</div>
 </div>
 
 
@@ -111,6 +109,7 @@ L_\text{loc}(t^u, v) &amp; = \sum_{i \in \{x, y, w, h\}} \text{smooth}_{L_1}(t_i
 <li><a class="reference internal" href="#roi-pooling-layer">RoI Pooling Layer</a></li>
 <li><a class="reference internal" href="#multi-task-loss">Multi-Task loss</a></li>
 <li><a class="reference internal" href="#truncated-svd-for-faster-detection">Truncated SVD for Faster detection</a></li>
+<li><a class="reference internal" href="#results">Results</a></li>
 </ul>
 </li>
 </ul>
