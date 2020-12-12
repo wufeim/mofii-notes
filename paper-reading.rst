@@ -8,3 +8,5 @@ Paper Reading Notes
    infogan
    pifpaf
    uncertainty-weigh-losses
+   obj-det
+   generative
