@@ -60,7 +60,7 @@ V_t &amp; = \psi(g_1, \dots, g_t)\end{split}\]</div>
 </li>
 <li><p>Calculate the update rule:</p>
 <div class="math notranslate nohighlight">
-\[\eta_t = \frac{\alpha}{\sqrt{V_t}} \codt m_t\]</div>
+\[\eta_t = \frac{\alpha}{\sqrt{V_t}} \cdot m_t\]</div>
 </li>
 <li><p>Update the weights:</p>
 <div class="math notranslate nohighlight">
@@ -88,6 +88,39 @@ V_t &amp; = \psi(g_1, \dots, g_t)\end{split}\]</div>
 <p>NAG changes the way we estimate the graident:</p>
 <div class="math notranslate nohighlight">
 \[g_t = \nabla f(w_t - \frac{\alpha}{\sqrt{V_{t-1}}} \cdot m_{t-1})\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>What's next?</strong></p>
+<p>The idea is that we want the learning rate is adaptive. For frequently-updated parameters, we'd like to slow down the learning rate. For rarely-updated parameters, we'd like a bigger learning rate.</p>
+</div>
+</div>
+<div class="section" id="adagrad">
+<h2>AdaGrad<a class="headerlink" href="#adagrad" title="Permalink to this headline">¶</a></h2>
+<p>Let the second-order derivative be</p>
+<div class="math notranslate nohighlight">
+\[V_t = \sum_{\tau=1}^t g_{\tau}^2\]</div>
+<p>Then the update rule is</p>
+<div class="math notranslate nohighlight">
+\[\eta_{ti} = \frac{\alpha}{\sqrt{V_{ti} + \varepsilon}} \cdot m_{ti}\]</div>
+<p><strong>Disadvantages:</strong> The denominator of the update rule builds up and the learning rate would converge to zero.</p>
+</div>
+<div class="section" id="rmsprop">
+<h2>RMSProp<a class="headerlink" href="#rmsprop" title="Permalink to this headline">¶</a></h2>
+<p>In case the learning rate drop rapidly, RMSProp changes the way we calculate the second-order derivative</p>
+<div class="math notranslate nohighlight">
+\[V_t = \beta_2 \cdot V_{t-1} + (1 - \beta_2)g_t^2\]</div>
+<p>Usually we choose <span class="math notranslate nohighlight">\(\beta_2 = 0.9\)</span> and <span class="math notranslate nohighlight">\(\alpha = 0.001\)</span>.</p>
+</div>
+<div class="section" id="adam">
+<h2>Adam<a class="headerlink" href="#adam" title="Permalink to this headline">¶</a></h2>
+<p>Adam = Adaptive + Momentum:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}m_t &amp; = \beta_1 \cdot m_{t-1} + (1 - \beta_1)\cdot g_t \\
+V_t &amp; = \beta_2 \cdot V_{t-1} + (1 - \beta_2)\cdot g_t^2\end{split}\]</div>
+</div>
+<div class="section" id="nadam">
+<h2>Nadam<a class="headerlink" href="#nadam" title="Permalink to this headline">¶</a></h2>
+<p>Nadam = Adam + Nesterov Acceleration.</p>
 </div>
 </div>
 
@@ -104,6 +137,10 @@ V_t &amp; = \psi(g_1, \dots, g_t)\end{split}\]</div>
 <li><a class="reference internal" href="#sgd">SGD</a></li>
 <li><a class="reference internal" href="#sgd-with-momentum">SGD with Momentum</a></li>
 <li><a class="reference internal" href="#sgd-with-nesterov-acceleration">SGD with Nesterov Acceleration</a></li>
+<li><a class="reference internal" href="#adagrad">AdaGrad</a></li>
+<li><a class="reference internal" href="#rmsprop">RMSProp</a></li>
+<li><a class="reference internal" href="#adam">Adam</a></li>
+<li><a class="reference internal" href="#nadam">Nadam</a></li>
 </ul>
 </li>
 </ul>
