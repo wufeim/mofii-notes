@@ -41,7 +41,7 @@ Train Phase
 -------------------------------------
 
 .. image:: figures/virtual-try-on-from-unpaired-data-3.png
-   :width: 520pt
+   :width: 400pt
 
 Online Optimization
 -------------------------------------
