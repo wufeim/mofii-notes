@@ -2,11 +2,9 @@ Paper Reading Notes
 =======================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   rethinking-pseudo-lidar
-   infogan
-   pifpaf
-   uncertainty-weigh-losses
+   deep-learning
    obj-det
    generative
+   other-papers

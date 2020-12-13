@@ -85,6 +85,53 @@ LeetCode
                   r += 1
               return s[l+1:r]
 
+6. **ZigZag Conversion**
+
+   The string ```"PAYPALISHIRING"``` is written in a zigzag pattern on a given number of rows like this:
+
+   .. code-block::
+
+      P   A   H   N
+      A P L S I I G
+      Y   I   R
+   
+   And then read line by line: ```"PAHNAPLSIIGYIR"```. Write the code that will take a string and make this conversion given a number of rows.
+
+   - 简单题，需要注意的是计算的```period```在```numRows=1```的情况下等于0导致死循环，需要单独处理
+
+   .. code-block:: Python
+
+      class Solution:
+          def convert(self, s: str, numRows: int) -> str:
+              ret = ""
+              l = len(s)
+              period = 2 * numRows - 2
+              if period == 0:
+                  return s
+              for i in range(numRows):
+                  ptr = i
+                  if i == 0:
+                      while ptr < l:
+                          ret += s[ptr]
+                          ptr += period
+                  elif i == numRows - 1:
+                      while ptr < l:
+                          ret += s[ptr]
+                          ptr += period
+                  else:
+                      skip = period - 2 * i
+                      while True:
+                          if ptr < l:
+                              ret += s[ptr]
+                          else:
+                              break
+                          if ptr + skip < l:
+                              ret += s[ptr + skip]
+                          else:
+                              break
+                          ptr += period
+              return ret
+
 19. **Remove Nth Node from End of List**
 
     Given the :code:`head` of a linked list, remove the :math:`n` th node from the end of the list and return its head.
