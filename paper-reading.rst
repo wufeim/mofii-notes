@@ -6,5 +6,6 @@ Paper Reading Notes
 
    deep-learning
    obj-det
+   monocular-3d-obj-det
    generative
    other-papers
