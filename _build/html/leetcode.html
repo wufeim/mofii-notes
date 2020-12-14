@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="interview-questions-cv.html" /> 
+    <link rel="prev" title="Interview (Machine Learning)" href="julyedu-ml.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -27,7 +27,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="interview-questions-cv.html" title="&lt;no title&gt;"
+          <a href="julyedu-ml.html" title="Interview (Machine Learning)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">LeetCode</a></li> 
@@ -123,6 +123,50 @@
 </pre></div>
 </div>
 </li>
+<li><p><strong>ZigZag Conversion</strong></p>
+<p>The string <code class="docutils literal notranslate"><span class="pre">`&quot;PAYPALISHIRING&quot;`</span></code> is written in a zigzag pattern on a given number of rows like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P</span>   <span class="n">A</span>   <span class="n">H</span>   <span class="n">N</span>
+<span class="n">A</span> <span class="n">P</span> <span class="n">L</span> <span class="n">S</span> <span class="n">I</span> <span class="n">I</span> <span class="n">G</span>
+<span class="n">Y</span>   <span class="n">I</span>   <span class="n">R</span>
+</pre></div>
+</div>
+<p>And then read line by line: <code class="docutils literal notranslate"><span class="pre">`&quot;PAHNAPLSIIGYIR&quot;`</span></code>. Write the code that will take a string and make this conversion given a number of rows.</p>
+<ul class="simple">
+<li><p>简单题，需要注意的是计算的```period```在```numRows=1```的情况下等于0导致死循环，需要单独处理</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">numRows</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">period</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numRows</span> <span class="o">-</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numRows</span><span class="p">):</span>
+            <span class="n">ptr</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">ptr</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="n">s</span><span class="p">[</span><span class="n">ptr</span><span class="p">]</span>
+                    <span class="n">ptr</span> <span class="o">+=</span> <span class="n">period</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="n">numRows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">ptr</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="n">s</span><span class="p">[</span><span class="n">ptr</span><span class="p">]</span>
+                    <span class="n">ptr</span> <span class="o">+=</span> <span class="n">period</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">skip</span> <span class="o">=</span> <span class="n">period</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ptr</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">+=</span> <span class="n">s</span><span class="p">[</span><span class="n">ptr</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">ptr</span> <span class="o">+</span> <span class="n">skip</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">+=</span> <span class="n">s</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">skip</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="n">ptr</span> <span class="o">+=</span> <span class="n">period</span>
+        <span class="k">return</span> <span class="n">ret</span>
+</pre></div>
+</div>
+</li>
 </ol>
 <ol class="arabic" start="19">
 <li><p><strong>Remove Nth Node from End of List</strong></p>
@@ -201,8 +245,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="interview-questions-cv.html"
-                        title="previous chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="julyedu-ml.html"
+                        title="previous chapter">Interview (Machine Learning)</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -231,7 +275,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="interview-questions-cv.html" title="&lt;no title&gt;"
+          <a href="julyedu-ml.html" title="Interview (Machine Learning)"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">LeetCode</a></li> 

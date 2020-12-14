@@ -5,7 +5,6 @@ Mofii's Notes
    :maxdepth: 1
 
    paper-reading
-   monocular-3d-obj-det
    ai-concepts
    interview-questions-ml
    interview-questions-cv

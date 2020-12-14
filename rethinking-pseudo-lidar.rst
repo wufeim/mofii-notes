@@ -1,4 +1,4 @@
-[PR] Rethinking Pseudo-LiDAR Representation
+Rethinking Pseudo-LiDAR Representation
 =======================================
 
 | **Authors:** Xinzhu Ma, Shinan Liu, Zhiyi Xia, Hongwen Zhang, Xingyu Zeng, Wanli Ouyang

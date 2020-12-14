@@ -1,0 +1,40 @@
+Focal Loss for Dense Object Detection (RetinaNet)
+=====================================
+
+| **Authors:** Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He, Piotr Dollar
+| **Affiliations:** Facebook AI Research
+
+In this paper, the authors discover that the central cause why one-stage detectors have trailed the accuracy of two-stage detectors is the extreme foreground-backgruond class imbalance encountered during training of dense detectors. They propose **Focal Loss** that focuses training on a sparse set of hard examples and prevents the vast number of easy negatives from overwhelming the detector during training.
+
+To evaluate the effectiveness of the loss, they design and train a simple dense detector called **RetinaNet**. Experiments on the COCO dataset show that RetinaNet trained with focal loss achieves SOTA speed and accuracy.
+
+Focal Loss
+-------------------------------------
+
+Let's first consider the binary cross entropy (CE) loss:
+
+.. math::
+
+   \text{CE}(p, y) = \begin{cases} -\log(p) & \text{if } y = 1 \\ -\log(1-p) & \text{otherwise} \end{cases}
+
+For notational convenience, we define :math:`p_t`:
+
+.. math::
+
+   p_t = \begin{cases} p & \text{if } y = 1 \\ 1 - p & \text{otherwise} \end{cases}
+
+and rewrite :math:`\text{CE}(p, y) = \text{CE}(p_t) = -\log(p_t)`.
+
+A simple extension is the **balanced cross entropy** which introduce a weighting factor :math:`\alpha`. In practice :math:`\alpha` may be set by inverse class frequency or treated as a hyperparameter to set by cross validation. We write the :math:`\alpha`-balanced CE loss as:
+
+.. math::
+
+   \text{CE}(p_t) = - \alpha_t \log(p_t)
+
+where
+
+.. math::
+
+   \alpha_t = \begin{cases} \alpha & \text{if } y = 1 \\ 1 - \alpha & \text{otherwise} \end{cases}
+
+The **focal loss** is designed to address the extreme imbalance between foreground and background classes during training. 
