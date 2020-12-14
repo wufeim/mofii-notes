@@ -11,7 +11,7 @@ To evaluate the effectiveness of the loss, they design and train a simple dense 
 Focal Loss
 -------------------------------------
 
-Let's first consider the binary cross entropy (CE) loss:
+Let's first consider the (binary) cross entropy (CE) loss:
 
 .. math::
 
@@ -23,7 +23,11 @@ For notational convenience, we define :math:`p_t`:
 
    p_t = \begin{cases} p & \text{if } y = 1 \\ 1 - p & \text{otherwise} \end{cases}
 
-and rewrite :math:`\text{CE}(p, y) = \text{CE}(p_t) = -\log(p_t)`.
+and rewrite the CE as
+
+.. math::
+
+   \text{CE}(p, y) = \text{CE}(p_t) = -\log(p_t)
 
 A simple extension is the **balanced cross entropy** which introduce a weighting factor :math:`\alpha`. In practice :math:`\alpha` may be set by inverse class frequency or treated as a hyperparameter to set by cross validation. We write the :math:`\alpha`-balanced CE loss as:
 
@@ -69,15 +73,11 @@ As shown in the figure below, RetinaNet is a single, unified network composed of
 .. image:: figures/retina-net-2.png
    :width: 520pt
 
-**Feature Pyramid Network Backbone:** The authors adopt the FPN from *Feature Pyramid Networks for Object Detection* as the backbone network for RetinaNet.
-
-**Anchors:** The authors use translation-invariant anchor boxes similar to those in the RPN variant in *Feature Pyramid Networks for Object Detection*.
-
-**Classification Subnet:** The classification subnet predicts the probability of object presence at each spatial position for each of the :math:`A` anchors and :math:`K` object classes. This subnet is a small FCN attached to each FPN level; parameters of this subnet are shared across all pyramid levels.
-
-**Box Regression Subnet:** In parallel with the object classification subnet, another small FCN is attached to each pyramid level for the purpose of regressing the offset from each anchor box to a nearby ground-truth object.
-
-**Initialization:** For the final conv layer of the classification subnet, the bias initialization is set to :math:`b = - \log((1 - \pi) / \pi)`, where :math:`\pi` specifies that at the start of training every anchor should be labeled as foreground with confidence of :math:`\sim \pi`. This initialization prevents the large number of background anchors from generating a large, destabilizing loss value in the first iteration of training.
+- **Feature Pyramid Network Backbone:** The authors adopt the FPN from *Feature Pyramid Networks for Object Detection* as the backbone network for RetinaNet.
+- **Anchors:** The authors use translation-invariant anchor boxes similar to those in the RPN variant in *Feature Pyramid Networks for Object Detection*.
+- **Classification Subnet:** The classification subnet predicts the probability of object presence at each spatial position for each of anchor and object class. This subnet is a small FCN attached to each FPN level; parameters of this subnet are shared across all pyramid levels.
+- **Box Regression Subnet:** In parallel with the object classification subnet, another small FCN is attached to each pyramid level for the purpose of regressing the offset from each anchor box to a nearby ground-truth object.
+- **Initialization:** For the final conv layer of the classification subnet, the bias initialization is set to :math:`b = - \log((1 - \pi) / \pi)`, where :math:`\pi` specifies that at the start of training every anchor should be labeled as foreground with confidence of :math:`\sim \pi`. This initialization prevents the large number of background anchors from generating a large, destabilizing loss value in the first iteration of training.
 
 Results
 -------------------------------------
