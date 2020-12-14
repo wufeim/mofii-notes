@@ -8,4 +8,4 @@ Object Detection
    fast-r-cnn
    atss
    paa
-   retina-net
+   paper-reading/retina-net
