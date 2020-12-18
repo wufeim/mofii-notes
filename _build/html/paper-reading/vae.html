@@ -47,6 +47,21 @@
             
   <div class="section" id="auto-encoding-variational-bayes">
 <h1>Auto-Encoding Variational Bayes<a class="headerlink" href="#auto-encoding-variational-bayes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tutorial-on-variational-autoencoders">
+<h2>Tutorial on Variational Autoencoders<a class="headerlink" href="#tutorial-on-variational-autoencoders" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Carl Doersch</div>
+<div class="line"><strong>Affiliations:</strong> Carnegie Mellon, UC Berkeley</div>
+</div>
+<dl class="simple">
+<dt>Training generative models has been a long-standing problem and there are three main drawbacks:</dt><dd><ol class="arabic simple">
+<li><p>they might require strong assumptions about the structure of the data</p></li>
+<li><p>they might make severe approximations, leading to suboptimal models</p></li>
+<li><p>they might rely on computationally expensive inference procedures like Markov Chain Monte Carlo</p></li>
+</ol>
+</dd>
+</dl>
+<hr class="docutils" />
 <div class="line-block">
 <div class="line"><strong>Authors:</strong> Diederik P. Kingma, Max Welling</div>
 <div class="line"><strong>Affiliations:</strong> Universiteit van Amsterdam</div>
@@ -60,6 +75,7 @@
 </dd>
 </dl>
 <p>When a neural network is used for the recognition model, we arrive at the <strong>variational auto-encoder</strong>.</p>
+</div>
 <div class="section" id="method">
 <h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
 <p>The strategy in this section can be used to derive a lower bound estimator (a stochastic objective function) for a variety of directed graphical models with continuous latent variables. We will restrict ourselves here to the common case where we have an i.i.d. dataset with latent variables per datapoint, and where we like to perform maximum likelihood (ML) or maximum a posteriori (MAP) inference on the (global) parameters, and variational inference on the latent variables.</p>
@@ -72,7 +88,14 @@
 </ol>
 </dd>
 </dl>
-<p>We assume that the prior <span class="math notranslate nohighlight">\(p_{\mathbf{\theta}^*}(\mathbf{z})\)</span> and likelihood <span class="math notranslate nohighlight">\(p_{\mathbf{\theta}^*}(\mathbf{x} \mid \mathbf{z})\)</span> come from parametric families of distributions <span class="math notranslate nohighlight">\(p_\mathbf{\theta}(\mathbf{z})\)</span> and <span class="math notranslate nohighlight">\(p_\mathbf{\theta}(\mathbf{x} \mid \mathbf{z})\)</span>, and their PDFs are differentiable almost everywhere w.r.t. both <span class="math notranslate nohighlight">\(\mathbf{\theta}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>.</p>
+<p>We assume that the prior <span class="math notranslate nohighlight">\(p_{\mathbf{\theta}^*}(\mathbf{z})\)</span> and likelihood <span class="math notranslate nohighlight">\(p_{\mathbf{\theta}^*}(\mathbf{x} \mid \mathbf{z})\)</span> come from parametric families of distributions <span class="math notranslate nohighlight">\(p_\mathbf{\theta}(\mathbf{z})\)</span> and <span class="math notranslate nohighlight">\(p_\mathbf{\theta}(\mathbf{x} \mid \mathbf{z})\)</span>, and their PDFs are differentiable almost everywhere w.r.t. both <span class="math notranslate nohighlight">\(\mathbf{\theta}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>. This process is hidden and values of <span class="math notranslate nohighlight">\(\mathbf{\theta}^*\)</span> and <span class="math notranslate nohighlight">\(\mathbf{z}^{(i)}\)</span> are unknown to us.</p>
+<dl class="simple">
+<dt>The authors do not make common simplifying assumptions about the marginal or posterior probabilities. Conversely, they are interested in a general algorithm that even works efficiently in the case of:</dt><dd><ol class="arabic simple">
+<li><p><strong>Intractability:</strong> the case where the integral of the marginal likelihood <span class="math notranslate nohighlight">\(p_\mathbf{\theta}(\mathbf{x}) = \int p_\mathbf{\theta}(\mathbf{z})p_\mathbf{\theta}(\mathbf{x} \mid \mathbf{z})d\mathbf{z}\)</span> is intractable</p></li>
+<li><p><strong>A large dataset:</strong> we have so much data that batch optimization is too costly</p></li>
+</ol>
+</dd>
+</dl>
 </div>
 </div>
 <div class="section" id="example-variation-auto-encoder">
@@ -99,6 +122,7 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Auto-Encoding Variational Bayes</a><ul>
+<li><a class="reference internal" href="#tutorial-on-variational-autoencoders">Tutorial on Variational Autoencoders</a></li>
 <li><a class="reference internal" href="#method">Method</a><ul>
 <li><a class="reference internal" href="#problem-scenario">Problem Scenario</a></li>
 </ul>

@@ -8,4 +8,6 @@ Paper Reading Notes
    obj-det
    monocular-3d-obj-det
    generative
+   compression-img
+   compression-vid
    other-papers

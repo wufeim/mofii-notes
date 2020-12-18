@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Resolution Image Compression with Recurrent Neural Networks &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Full Resolution Image Compression with Recurrent Neural Networks</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="full-resolution-image-compression-with-recurrent-neural-networks">
+<h1>Full Resolution Image Compression with Recurrent Neural Networks<a class="headerlink" href="#full-resolution-image-compression-with-recurrent-neural-networks" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> George Toderici, Damien Vincent, Nick Johnston, Sung Jin Hwang, David Minnen, Joel Shor, Michele Covell</div>
+<div class="line"><strong>Affiliations:</strong> Google Research</div>
+</div>
+<dl class="simple">
+<dt>Previous work [1] achieved better than SOTA compression rates for a given qualtiy, and was limited to <span class="math notranslate nohighlight">\(32 \times 32\)</span> images. THe authors' goal is to provide a neural network which is competitive across compression rates on images of arbitrary size. There are two possible ways to achieve this:</dt><dd><ol class="arabic simple">
+<li><p>design a stronger patch-based residual encoder</p></li>
+<li><p>design an entropy coder that is able to capture long-term dependencies between patches in the image</p></li>
+</ol>
+</dd>
+</dl>
+<p>The authors address both problems and present a set of full-resolution lossy image compression methods based on RNNs.</p>
+<p>For evaluation purposes, the authors two human visual system-inspired metrics, PSNR-HVS and MS-SSIM.</p>
+<p>Experiment results show improvements of 4.3% to 8.8% AUC on the Kodak dataset and the proposed model is the first neural network architecture that outperforms JPEG on the rate-distortion curve.</p>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<p>The proposed compression networks are comprised of an encoding network <span class="math notranslate nohighlight">\(E\)</span>, a binarizer <span class="math notranslate nohighlight">\(B\)</span> and a decoding network <span class="math notranslate nohighlight">\(D\)</span>, where <span class="math notranslate nohighlight">\(D\)</span> and <span class="math notranslate nohighlight">\(E\)</span> containt recurrent network components. The input images are first encoded, and then transformed into binary codes that can be stored or transmitted to the deocder. The decoder creates an estimate of the original input image based on the received binary code.</p>
+<p>The figure below shows the architecture of a single iteration. Note that the binarizer <span class="math notranslate nohighlight">\(B\)</span> is stateless.</p>
+<a class="reference internal image-reference" href="../_images/full-resolution-img-comp-rnn-1.png"><img alt="../_images/full-resolution-img-comp-rnn-1.png" src="../_images/full-resolution-img-comp-rnn-1.png" style="width: 520pt;" /></a>
+<p>The single iteration can represented by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}b_t = B(E_t(r_{t-1})), \;\;\; \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1} \\
+r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(D_t\)</span> and <span class="math notranslate nohighlight">\(E_t\)</span> represent the decoder and encoder with their states at iteration <span class="math notranslate nohighlight">\(t\)</span> respectively.</p>
+</div>
+<div class="section" id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Variable Rate Image Compression with Recurrent Neural Networks.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Full Resolution Image Compression with Recurrent Neural Networks</a><ul>
+<li><a class="reference internal" href="#method">Method</a></li>
+<li><a class="reference internal" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/full-resolution-img-comp-rnn.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Full Resolution Image Compression with Recurrent Neural Networks</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
