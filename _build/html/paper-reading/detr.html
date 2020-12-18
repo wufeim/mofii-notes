@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End-to-End Object Detection with Transformers (DETR) &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Monocular 3D Object Detection" href="../monocular-3d-obj-det.html" />
+    <link rel="prev" title="Focal Loss for Dense Object Detection (RetinaNet)" href="retina-net.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="retina-net.html" title="Focal Loss for Dense Object Detection (RetinaNet)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../obj-det.html" accesskey="U">Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">End-to-End Object Detection with Transformers (DETR)</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="end-to-end-object-detection-with-transformers-detr">
+<h1>End-to-End Object Detection with Transformers (DETR)<a class="headerlink" href="#end-to-end-object-detection-with-transformers-detr" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas Usunier, Alexander Kirillov, Sergey Zagoruyko</div>
+<div class="line"><strong>Affiliations:</strong> Facebook AI</div>
+</div>
+<p>The goal of object detection is predict a set of bounding boxes and category labels for each object of interest. Modern detectors address this set prediction task by defining surrogate regression and classification problems on a large set of proposals, anchors, or window centers.</p>
+<p>The authors present a new method that views object detection as a direct set prediction problem. The main ingredients of the new framework, DETR, are a set-based global loss that forces unique predictions via bipartite matching, and a transformer encoder-decoder architecture. Given a fixed small set of learned object queries, DETR reasons about the relations of the objects and the global image context to directly output the final set of predictions in parallel.</p>
+<p>Experiments show that DETR outperforms competitive baselines on the COCO object detection dataset. Also, DETR can be easily generalized to produce panoptic segmentation in a unified manner.</p>
+<a class="reference internal image-reference" href="../_images/detr-1.png"><img alt="../_images/detr-1.png" src="../_images/detr-1.png" style="width: 520pt;" /></a>
+<div class="section" id="the-detr-model">
+<h2>The DETR Model<a class="headerlink" href="#the-detr-model" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Two ingredients are essential for direct set predictions in detection:</dt><dd><ol class="arabic simple">
+<li><p>a set prediction loss that forces unique matching between predicted and ground truth boxes</p></li>
+<li><p>an architecture that predicts a set of objects in a single pass</p></li>
+</ol>
+</dd>
+</dl>
+<a class="reference internal image-reference" href="../_images/detr-2.png"><img alt="../_images/detr-2.png" src="../_images/detr-2.png" style="width: 520pt;" /></a>
+</div>
+<div class="section" id="object-detection-set-prediction-loss">
+<h2>Object Detection Set Prediction Loss<a class="headerlink" href="#object-detection-set-prediction-loss" title="Permalink to this headline">¶</a></h2>
+<p>DETR infers a fixed-size set of <span class="math notranslate nohighlight">\(N\)</span> predictions in a single pass through the decoder. To score predicted objects with respect to the ground truth, the authors propose a loss that produces an optimal bipartite matching between predicted and ground truth objects, and then optimize object-specific bounding box losses.</p>
+<p>Let <span class="math notranslate nohighlight">\(y = \{y_i\}_{i=1}^N\)</span> be the ground truth set of objects padded with <span class="math notranslate nohighlight">\(\varnothing\)</span>, and <span class="math notranslate nohighlight">\(\hat{y} = \{\hat{y}_i\}_{i=1}^N\)</span> be the set of <span class="math notranslate nohighlight">\(N\)</span> predictions. To find a bipartite matching between these two sets we search for a permutation of <span class="math notranslate nohighlight">\(N\)</span> elements <span class="math notranslate nohighlight">\(\sigma \in \mathcal{\Sigma}_N\)</span> with the lowest cost:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\sigma} = \text{argmin}_{\sigma \in \mathcal{\sigma}_N} \sum_i^N \mathcal{L}_\text{match}(y_i, \hat{y}_{\sigma(i)})\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{L}_\text{match}\)</span> is a pair-wise matching cost. The optimal assignment is computed efficiently with the Hungarian algorithm.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">End-to-End Object Detection with Transformers (DETR)</a><ul>
+<li><a class="reference internal" href="#the-detr-model">The DETR Model</a></li>
+<li><a class="reference internal" href="#object-detection-set-prediction-loss">Object Detection Set Prediction Loss</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="retina-net.html"
+                        title="previous chapter">Focal Loss for Dense Object Detection (RetinaNet)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../monocular-3d-obj-det.html"
+                        title="next chapter">Monocular 3D Object Detection</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/detr.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../monocular-3d-obj-det.html" title="Monocular 3D Object Detection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="retina-net.html" title="Focal Loss for Dense Object Detection (RetinaNet)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../obj-det.html" >Object Detection</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">End-to-End Object Detection with Transformers (DETR)</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

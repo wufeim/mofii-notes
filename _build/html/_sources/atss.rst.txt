@@ -1,4 +1,4 @@
-Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection
+Bridging the Gap Between Anchor-Based and Anchor-Free Detection via Adaptive Training Sample Selection (ATSS)
 =====================================
 
 | **Authors:** Shifeng Zhang, Cheng Chi, Yongqiang Yao, Zhen Lei, Stan Z. Li
