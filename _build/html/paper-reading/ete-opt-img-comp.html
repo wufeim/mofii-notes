@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Other Papers" href="../other-papers.html" />
+    <link rel="next" title="Generative Adversarial Networks for Extreme Learned Image Compression" href="gan-extreme-img-comp.html" />
     <link rel="prev" title="Compression (Image)" href="../compression-img.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../other-papers.html" title="Other Papers"
+          <a href="gan-extreme-img-comp.html" title="Generative Adversarial Networks for Extreme Learned Image Compression"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../compression-img.html" title="Compression (Image)"
@@ -60,9 +60,19 @@
 </div>
 <p>The authors propose a framework for end-to-end optimization of an image compression model based on nonlinear transforms. Specifically, a generalized divisive normalization (GDN) joint nonlinearity is used, followed by uniform scalar quantization. The compressed image is reconstructed from the quantized values using an approximate parametric nonlinear inverse transform. For any desired point along the rate-distortion curve, the parameters of both analysis and synthesis transofrms are jointly optimized using SGD.</p>
 <p>Experiment results show improvement in visual quality measured by MS-SSIM for all images at all bit rates.</p>
-</div>
 <div class="section" id="choice-of-forward-inverse-and-perceptual-transforms">
-<h1>Choice of Forward, Inverse, and Perceptual Transforms<a class="headerlink" href="#choice-of-forward-inverse-and-perceptual-transforms" title="Permalink to this headline">¶</a></h1>
+<h2>Choice of Forward, Inverse, and Perceptual Transforms<a class="headerlink" href="#choice-of-forward-inverse-and-perceptual-transforms" title="Permalink to this headline">¶</a></h2>
+<p>The analysis transform <span class="math notranslate nohighlight">\(g_\alpha\)</span> consists of three stages of convolution, subsampling, and divisive normalization. Each stage begins with an affine convolution followed by downsampling, and each stage concludes with a GDN operation.</p>
+<p>Analogously, the synthesis transform <span class="math notranslate nohighlight">\(g_s\)</span> consists of three stages, with the order of operations reversed within each stage, downsampling replaced by upsampling, and GDN replaced by an approximate inverse called IGDN.</p>
+</div>
+<div class="section" id="optimization-of-nonlinear-transform-coding-level">
+<h2>Optimization of Nonlinear Transform Coding Level<a class="headerlink" href="#optimization-of-nonlinear-transform-coding-level" title="Permalink to this headline">¶</a></h2>
+<p>The objective is to minimize a weighted sum of the rate and distortion, <span class="math notranslate nohighlight">\(R + \lambda D\)</span>, over the parameters of the analysis and synthesis transforms and the entropy code.</p>
+<p>Rather than attempting optimal quantization directly in the image space, which is intractable due to the high dimensionality, they instead assume a fixed uniform scalar quantizer in the code space, and aim to have the nonlinear transformations warp the space in an appropriate way. Thus they define the objective functional directly in terms of entropy:</p>
+<div class="math notranslate nohighlight">
+\[L[g_a, g_s, P_q] = - \mathbb{E}[\log_2 P_q] + \lambda \mathbb{E}[d(z, \hat{z}]\]</div>
+<a class="reference internal image-reference" href="../_images/ete-opt-img-comp-1.png"><img alt="../_images/ete-opt-img-comp-1.png" src="../_images/ete-opt-img-comp-1.png" style="width: 440pt;" /></a>
+</div>
 </div>
 
 
@@ -74,16 +84,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">End-To-End Optimized Image Compression</a></li>
+<li><a class="reference internal" href="#">End-To-End Optimized Image Compression</a><ul>
 <li><a class="reference internal" href="#choice-of-forward-inverse-and-perceptual-transforms">Choice of Forward, Inverse, and Perceptual Transforms</a></li>
+<li><a class="reference internal" href="#optimization-of-nonlinear-transform-coding-level">Optimization of Nonlinear Transform Coding Level</a></li>
+</ul>
+</li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../compression-img.html"
                         title="previous chapter">Compression (Image)</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../other-papers.html"
-                        title="next chapter">Other Papers</a></p>
+  <p class="topless"><a href="gan-extreme-img-comp.html"
+                        title="next chapter">Generative Adversarial Networks for Extreme Learned Image Compression</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -112,7 +125,7 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../other-papers.html" title="Other Papers"
+          <a href="gan-extreme-img-comp.html" title="Generative Adversarial Networks for Extreme Learned Image Compression"
              >next</a> |</li>
         <li class="right" >
           <a href="../compression-img.html" title="Compression (Image)"
