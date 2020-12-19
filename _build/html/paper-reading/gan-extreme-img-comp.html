@@ -66,6 +66,21 @@
 <p>The rate-distortion trade-off between reconstruction quality and bitrate is</p>
 <div class="math notranslate nohighlight">
 \[\mathbb{E}[d(\mathbf{x}, \hat{\mathbf{x}}] + \beta H(\hat{\mathbf{w}})\]</div>
+<p>Since the entropy is bounded by</p>
+<div class="math notranslate nohighlight">
+\[H(\hat{\mathbf{w}}) \leq \text{dim}(\hat{\mathbf{w}}) \log_2(L)\]</div>
+<p>It is also valid to set <span class="math notranslate nohighlight">\(\beta = 0\)</span> and control the maximum bitrate through the bound. While potentially leading to suboptimal bitrates, this avoids to model the entropy explicitly as a loss term.</p>
+</div>
+<div class="section" id="generative-compression-gc">
+<h2>Generative Compression (GC)<a class="headerlink" href="#generative-compression-gc" title="Permalink to this headline">¶</a></h2>
+<p>The figure below shows an overview of the GC architecture.</p>
+<a class="reference internal image-reference" href="../_images/gan-extreme-img-comp-1.png"><img alt="../_images/gan-extreme-img-comp-1.png" src="../_images/gan-extreme-img-comp-1.png" style="width: 360pt;" /></a>
+<p>With an encoder <span class="math notranslate nohighlight">\(E\)</span> and quantizer <span class="math notranslate nohighlight">\(z\)</span>, the image <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is encoded to a compressed representation</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mathbf{w}} = q(E(\mathbf{x}))\]</div>
+<p>Optionally we could concatenate <span class="math notranslate nohighlight">\(\hat{\mathbf{w}}\)</span> with noise <span class="math notranslate nohighlight">\(v\)</span> drawn from the a fixed prior <span class="math notranslate nohighlight">\(p_v\)</span> to form the latent vector <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>. The decoder/generator <span class="math notranslate nohighlight">\(G\)</span> then tries to generate an image <span class="math notranslate nohighlight">\(\hat{\mathbf{x}} = G(\mathbf{z})\)</span>. Using <span class="math notranslate nohighlight">\(\mathbf{z} = [\hat{\mathbf{w}}, \mathbf{v}]\)</span>, this can be expressed by their saddle-point objective for generative compression:</p>
+<div class="math notranslate nohighlight">
+\[\min_{E, G} \max_D \mathbb{E}[f(D(\mathbf{x}))] + \mathbb{E}[g(D(G(\mathbf{z}))] + \lambda \mathbb{E}[d(\mathbf{x}, G(\mathbf{z}))] + \beta H(\hat{\mathbf{w}})\]</div>
 </div>
 </div>
 
@@ -80,6 +95,7 @@
   <ul>
 <li><a class="reference internal" href="#">Generative Adversarial Networks for Extreme Learned Image Compression</a><ul>
 <li><a class="reference internal" href="#deep-image-compression">Deep Image Compression</a></li>
+<li><a class="reference internal" href="#generative-compression-gc">Generative Compression (GC)</a></li>
 </ul>
 </li>
 </ul>
