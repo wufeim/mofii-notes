@@ -35,3 +35,25 @@ The figure below gives an overview of the architecture.
 
 .. image:: figures/pix2pix.png
    :width: 400pt
+
+Network Architecture
+-------------------------------------
+
+The network architectures are adopted from **Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks**.
+
+The authors note that for many image-to-image translation problems, the input and output differ in surface appearance, but both are renderings of the same underlying structure. For an encoder-decoder network, a great deal of low-level information is shared between the input and output and should circumvent the bottleneck of the network. Therefore, they add skip connections, following the general shape of a U-Net.
+
+Markovian discriminator (PatchGAN)
+-------------------------------------
+
+The authors argue that although L1 losses fail to encourage high-frequency crispness, they nonetheless accurately capture the low frequencies. Hence they design a new discriminator architecture to only model high-frequency structure, namely PatchGAN. It only penalizes structure at the scale of :math:`N \times N` patches.
+
+Such a discriminator effectively models the image as a Markov random field, assuming independence between pixels separated by more than a path diameter. Therefore, PatchGAN can be understood as a form of texture/style loss.
+
+Inference
+-------------------------------------
+
+At inference time, the authors run the generator net exactly the same as during the training phase. Dropout and batch normalization (or instance normalization) using the statistics of the test batch is applied.
+
+.. image:: figures/pix2pix-3.png
+   :width: 560pt
