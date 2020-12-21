@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix) &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Image Based Virtual Try-On Network from Unpaired Data" href="virtual-try-on-from-unpaired-data.html" />
+    <link rel="prev" title="Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks" href="cycle-gan.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="virtual-try-on-from-unpaired-data.html" title="Image Based Virtual Try-On Network from Unpaired Data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cycle-gan.html" title="Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../generative.html" accesskey="U">Generative Models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="image-to-image-translation-with-conditional-adversarial-networks-pix2pix">
+<h1>Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)<a class="headerlink" href="#image-to-image-translation-with-conditional-adversarial-networks-pix2pix" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Authors:</strong> Phillip Isola, Jun-Yan Zhu, Tinghui Zhou, Alexei A. Efros</div>
+<div class="line"><strong>Affiliations:</strong> Berkeley AI Research Laboratory</div>
+</div>
+<p>The authors define <strong>automatic image-to-image translation</strong> as the task of translating one possible representation of a scene into another, given sufficient data. Whatever the taks is, the setting is always the same: predict pixels from pixels.</p>
+<p>In this work, the authors develop a cGAN (conditional GAN) framework sufficient to achieve good results for all these problems. The model conditions on an input image and generates a corresponding output image.</p>
+<a class="reference internal image-reference" href="../_images/pix2pix-1.png"><img alt="../_images/pix2pix-1.png" src="../_images/pix2pix-1.png" style="width: 520pt;" /></a>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<p>The objective of a conditional GAN can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp; \min_G\max_D \mathcal{L}_\text{cGAN}(G, D) \\
+&amp; \mathcal{L}_\text{cGAN}(G, D) = \mathbb{E}_{x,y}[\log D(x, y)] + \mathbb{E}_{x,z}[\log(1 - D(x, G(x, z))]\end{split}\]</div>
+<p>Previous approaches have found it beneficial to mix the GAN objective with a more tranditional loss. The authors use L1 distance rather than L2 distance to encourage less blurring. The final objective is:</p>
+<div class="math notranslate nohighlight">
+\[\min_G\max_D \mathcal{L}_\text{cGAN}(G, D) + \lambda \mathcal{L}_{L1}(G)\]</div>
+<p>In some GANs, Gaussian noise <span class="math notranslate nohighlight">\(z\)</span> is provided as an input to the generator. The authors didn't find this strategy effective (the noise is ignored by the generator), and instead provide noise in the form of dropout.</p>
+<p>The authors note that despite the dropout noise, they observe minor stochasticity in the output. Designing conditional GANs that produce highly stochastic output, and thereby capture the full entropy of the conditional distributions they model, is an important question left open by the present work.</p>
+<p>The figure below gives an overview of the architecture.</p>
+<a class="reference internal image-reference" href="../_images/pix2pix-2.png"><img alt="../_images/pix2pix-2.png" src="../_images/pix2pix-2.png" style="width: 400pt;" /></a>
+</div>
+<div class="section" id="network-architecture">
+<h2>Network Architecture<a class="headerlink" href="#network-architecture" title="Permalink to this headline">¶</a></h2>
+<p>The network architectures are adopted from <strong>Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</strong>.</p>
+<p>The authors note that for many image-to-image translation problems, the input and output differ in surface appearance, but both are renderings of the same underlying structure. For an encoder-decoder network, a great deal of low-level information is shared between the input and output and should circumvent the bottleneck of the network. Therefore, they add skip connections, following the general shape of a U-Net.</p>
+</div>
+<div class="section" id="markovian-discriminator-patchgan">
+<h2>Markovian discriminator (PatchGAN)<a class="headerlink" href="#markovian-discriminator-patchgan" title="Permalink to this headline">¶</a></h2>
+<p>The authors argue that although L1 losses fail to encourage high-frequency crispness, they nonetheless accurately capture the low frequencies. Hence they design a new discriminator architecture to only model high-frequency structure, namely PatchGAN. It only penalizes structure at the scale of <span class="math notranslate nohighlight">\(N \times N\)</span> patches.</p>
+<p>Such a discriminator effectively models the image as a Markov random field, assuming independence between pixels separated by more than a path diameter. Therefore, PatchGAN can be understood as a form of texture/style loss.</p>
+</div>
+<div class="section" id="inference">
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
+<p>At inference time, the authors run the generator net exactly the same as during the training phase. Dropout and batch normalization (or instance normalization) using the statistics of the test batch is applied.</p>
+</div>
+<div class="section" id="experiment-results">
+<h2>Experiment Results<a class="headerlink" href="#experiment-results" title="Permalink to this headline">¶</a></h2>
+<p>More results are available <a class="reference external" href="https://phillipi.github.io/pix2pix/">here</a>.</p>
+<a class="reference internal image-reference" href="../_images/pix2pix-3.png"><img alt="../_images/pix2pix-3.png" src="../_images/pix2pix-3.png" style="width: 560pt;" /></a>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)</a><ul>
+<li><a class="reference internal" href="#method">Method</a></li>
+<li><a class="reference internal" href="#network-architecture">Network Architecture</a></li>
+<li><a class="reference internal" href="#markovian-discriminator-patchgan">Markovian discriminator (PatchGAN)</a></li>
+<li><a class="reference internal" href="#inference">Inference</a></li>
+<li><a class="reference internal" href="#experiment-results">Experiment Results</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cycle-gan.html"
+                        title="previous chapter">Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtual-try-on-from-unpaired-data.html"
+                        title="next chapter">Image Based Virtual Try-On Network from Unpaired Data</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/pix2pix.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="virtual-try-on-from-unpaired-data.html" title="Image Based Virtual Try-On Network from Unpaired Data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cycle-gan.html" title="Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../generative.html" >Generative Models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

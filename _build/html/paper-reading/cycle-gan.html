@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)" href="pix2pix.html" />
+    <link rel="prev" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets" href="../infogan.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pix2pix.html" title="Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../infogan.html" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../generative.html" accesskey="U">Generative Models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="unpaired-image-to-image-translation-using-cycle-consistent-adversarial-networks">
+<h1>Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks<a class="headerlink" href="#unpaired-image-to-image-translation-using-cycle-consistent-adversarial-networks" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Mar 2017</div>
+<div class="line"><strong>Authors:</strong> Jun-Yan Zhu, Taesung Park, Phillip Isola, Alexei A. Efros</div>
+<div class="line"><strong>Affiliations:</strong> Berkeley AI Research Laboratory</div>
+</div>
+<p>In this work, the authors present an approach for learning to translate an image from a source domain <span class="math notranslate nohighlight">\(X\)</span> to a target domain <span class="math notranslate nohighlight">\(Y\)</span> in the absence of paired examples <span class="math notranslate nohighlight">\(\{x_i, y_i\}_{i=1}^N\)</span>.</p>
+<p>They train a mapping <span class="math notranslate nohighlight">\(G: X \to Y\)</span> such that the output <span class="math notranslate nohighlight">\(\hat{y} = G(x)\)</span>, <span class="math notranslate nohighlight">\(x \in X\)</span> is indistinguishable from images <span class="math notranslate nohighlight">\(y \in Y\)</span>. However, such a translation does not guarantee that an individual input <span class="math notranslate nohighlight">\(x\)</span> and output <span class="math notranslate nohighlight">\(y\)</span> are paired up in a meaningful way. Moreover, standard procedures often lead to the problem of <strong>mode collapse</strong>.</p>
+<p>Therefore, they exploit the property that the translation should be &quot;cycle consistent&quot;. If we have a translator <span class="math notranslate nohighlight">\(G: X \to Y\)</span> and another translator <span class="math notranslate nohighlight">\(F: Y \to X\)</span>, then <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(F\)</span> should be inverses of each other and both mappings should be bijections. They apply this structural assumption by training <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(F\)</span> simultaneously and adding a <strong>cycle consistency loss</strong> that encourages <span class="math notranslate nohighlight">\(F(G(x)) \approx x\)</span> and <span class="math notranslate nohighlight">\(G(F(y)) \approx y\)</span>.</p>
+<div class="section" id="adversarial-loss">
+<h2>Adversarial Loss<a class="headerlink" href="#adversarial-loss" title="Permalink to this headline">¶</a></h2>
+<p>Adversarial losses are applied to both mapping functions. For the mapping function <span class="math notranslate nohighlight">\(G: X \to Y\)</span> and its discriminator <span class="math notranslate nohighlight">\(D_Y\)</span>, the objective is expressed as:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_\text{GAN}(G, D_Y, X, Y) = \mathbb{E}_{y \sim p_\text{data}(y)}[\log D_Y(y)] + \mathbb{E}_{x \sim p_\text{data}(x)}[\log (1 - D_Y(G(x)))]\]</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks</a><ul>
+<li><a class="reference internal" href="#adversarial-loss">Adversarial Loss</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../infogan.html"
+                        title="previous chapter">InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pix2pix.html"
+                        title="next chapter">Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/cycle-gan.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="pix2pix.html" title="Image-to-Image Translation with Conditional Adversarial Networks (Pix2Pix)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../infogan.html" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../generative.html" >Generative Models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

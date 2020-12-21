@@ -80,7 +80,32 @@
 \[\hat{\mathbf{w}} = q(E(\mathbf{x}))\]</div>
 <p>Optionally we could concatenate <span class="math notranslate nohighlight">\(\hat{\mathbf{w}}\)</span> with noise <span class="math notranslate nohighlight">\(v\)</span> drawn from the a fixed prior <span class="math notranslate nohighlight">\(p_v\)</span> to form the latent vector <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>. The decoder/generator <span class="math notranslate nohighlight">\(G\)</span> then tries to generate an image <span class="math notranslate nohighlight">\(\hat{\mathbf{x}} = G(\mathbf{z})\)</span>. Using <span class="math notranslate nohighlight">\(\mathbf{z} = [\hat{\mathbf{w}}, \mathbf{v}]\)</span>, this can be expressed by their saddle-point objective for generative compression:</p>
 <div class="math notranslate nohighlight">
-\[\min_{E, G} \max_D \mathbb{E}[f(D(\mathbf{x}))] + \mathbb{E}[g(D(G(\mathbf{z}))] + \lambda \mathbb{E}[d(\mathbf{x}, G(\mathbf{z}))] + \beta H(\hat{\mathbf{w}})\]</div>
+\[\min_{E, G} \max_D \; \mathbb{E}[f(D(\mathbf{x}))] + \mathbb{E}[g(D(G(\mathbf{z}))] + \lambda \mathbb{E}[d(\mathbf{x}, G(\mathbf{z}))] + \beta H(\hat{\mathbf{w}})\]</div>
+<p>where <span class="math notranslate nohighlight">\(f(y) = (y - 1)^2\)</span> and <span class="math notranslate nohighlight">\(g(y) = y^2\)</span> as proposed in <em>Least Squares Generative Adversarial Networks</em>. Since the last two terms do not depend on the discriminator, the discriminator still computes the <span class="math notranslate nohighlight">\(f\)</span>-divergence <span class="math notranslate nohighlight">\(\mathcal{L}_\text{GAN}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\min_{E, G} \; \mathcal{L}_\text{GAN} + \lambda \mathbb{E}[d(\mathbf{x}, G(\mathbf{z}))] + \beta H(\hat{\mathbf{w}})\]</div>
+<p>GC can be easily extended to a conditional case, referred to as GC (D+). However, the additional information <span class="math notranslate nohighlight">\(s\)</span> is fed to the discriminator <span class="math notranslate nohighlight">\(D\)</span> only.</p>
+</div>
+<div class="section" id="selective-generative-compression-sc">
+<h2>Selective Generative Compression (SC)<a class="headerlink" href="#selective-generative-compression-sc" title="Permalink to this headline">¶</a></h2>
+<p>In the setting of SC, the network is guided in terms of what should be generated and what should be preserved. The figure belows gives an overview of the network.</p>
+<a class="reference internal image-reference" href="../_images/gan-extreme-img-comp-2.png"><img alt="../_images/gan-extreme-img-comp-2.png" src="../_images/gan-extreme-img-comp-2.png" style="width: 360pt;" /></a>
+<p>To guide the network with semantics, the authors mask the distortion <span class="math notranslate nohighlight">\(d\)</span>, such that it is only computed over the region to be preserved.</p>
+</div>
+<div class="section" id="psnr-and-ms-ssim-as-quality-measures">
+<h2>PSNR and MS-SSIM as Quality Measures<a class="headerlink" href="#psnr-and-ms-ssim-as-quality-measures" title="Permalink to this headline">¶</a></h2>
+<p>Common distortion measures, such as PSNR and MS-SSIM cannot measure the &quot;realistic-ness&quot;, as they penalize changes in local structure rather than assessing preservation of the global image content. This becomes apparent by comparing reconstructions produced by the GC model with those obtained by the MSE baseline and BPG.</p>
+<a class="reference internal image-reference" href="../_images/gan-extreme-img-comp-3.png"><img alt="../_images/gan-extreme-img-comp-3.png" src="../_images/gan-extreme-img-comp-3.png" style="width: 360pt;" /></a>
+<p>The reconstructions of the GC model look more realistic yet having 4.2 dB larger PSNR than those of BPG.</p>
+</div>
+<div class="section" id="experiment-results">
+<h2>Experiment Results<a class="headerlink" href="#experiment-results" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/gan-extreme-img-comp-5.png"><img alt="../_images/gan-extreme-img-comp-5.png" src="../_images/gan-extreme-img-comp-5.png" style="width: 420pt;" /></a>
+<a class="reference internal image-reference" href="../_images/gan-extreme-img-comp-4.png"><img alt="../_images/gan-extreme-img-comp-4.png" src="../_images/gan-extreme-img-comp-4.png" style="width: 600pt;" /></a>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Interesting directions for future work are to develop a mechanism for controlling spatial allocation of bits for GC, and to combine SC with saliency information to determine what regions to preserve.</p>
 </div>
 </div>
 
@@ -96,6 +121,10 @@
 <li><a class="reference internal" href="#">Generative Adversarial Networks for Extreme Learned Image Compression</a><ul>
 <li><a class="reference internal" href="#deep-image-compression">Deep Image Compression</a></li>
 <li><a class="reference internal" href="#generative-compression-gc">Generative Compression (GC)</a></li>
+<li><a class="reference internal" href="#selective-generative-compression-sc">Selective Generative Compression (SC)</a></li>
+<li><a class="reference internal" href="#psnr-and-ms-ssim-as-quality-measures">PSNR and MS-SSIM as Quality Measures</a></li>
+<li><a class="reference internal" href="#experiment-results">Experiment Results</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
 </ul>
 </li>
 </ul>

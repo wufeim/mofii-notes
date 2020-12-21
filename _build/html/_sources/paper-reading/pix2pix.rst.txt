@@ -55,11 +55,6 @@ Inference
 
 At inference time, the authors run the generator net exactly the same as during the training phase. Dropout and batch normalization (or instance normalization) using the statistics of the test batch is applied.
 
-FCN Score
--------------------------------------
-
-The intuition is that if the generated images are realistic, classifiers trained on real images will be able to classify the synthesized image correctly as well. The authors adopt the FCN-8s architecture for semantic segmentation and score the synthesized images by the classification accuracy against the labels these photos were synthesized from.
-
 Experiment Results
 -------------------------------------
 
