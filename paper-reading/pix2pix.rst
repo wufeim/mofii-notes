@@ -8,7 +8,7 @@ The authors define **automatic image-to-image translation** as the task of trans
 
 In this work, the authors develop a cGAN (conditional GAN) framework sufficient to achieve good results for all these problems. The model conditions on an input image and generates a corresponding output image.
 
-.. image:: figures/pix2pix.rst
+.. image:: figures/pix2pix-1.png
    :width: 520pt
 
 Method
