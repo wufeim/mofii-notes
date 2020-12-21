@@ -5,11 +5,7 @@ Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks
 | **Authors:** Jun-Yan Zhu, Taesung Park, Phillip Isola, Alexei A. Efros
 | **Affiliations:** Berkeley AI Research Laboratory
 
-In this work, the authors present an approach for learning to translate an image from a source domain :math:`X` to a target domain :math:`Y` in the absence of paired examples :math:`\{x_i, y_i\}_{i=1}^N`.
-
-They train a mapping :math:`G: X \to Y` such that the output :math:`\hat{y} = G(x)`, :math:`x \in X` is indistinguishable from images :math:`y \in Y`. However, such a translation does not guarantee that an individual input :math:`x` and output :math:`y` are paired up in a meaningful way. Moreover, standard procedures often lead to the problem of **mode collapse**.
-
-Therefore, they exploit the property that the translation should be "cycle consistent". If we have a translator :math:`G: X \to Y` and another translator :math:`F: Y \to X`, then :math:`G` and :math:`F` should be inverses of each other and both mappings should be bijections. They apply this structural assumption by training :math:`G` and :math:`F` simultaneously and adding a **cycle consistency loss** that encourages :math:`F(G(x)) \approx x` and :math:`G(F(y)) \approx y`.
+In this work, the authors present an approach for learning to translate an image from a source domain :math:`X` to a target domain :math:`Y` in the absence of paired examples :math:`\{x_i, y_i\}_{i=1}^N`. The goal is to learn a mapping :math:`G: X \to Y` such that :math:`G(X)` is indistinguishable from :math:`Y`. Because this mapping is highly under-constrained, they couple it with an inverse mapping :math:`F: Y \to X` and introduce a cycle consistency loss to enforce :math:`F(G(X)) \approx X`, and vice versa.
 
 Adversarial Loss
 -------------------------------------
