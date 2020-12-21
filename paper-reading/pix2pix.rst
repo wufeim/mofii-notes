@@ -33,7 +33,7 @@ The authors note that despite the dropout noise, they observe minor stochasticit
 
 The figure below gives an overview of the architecture.
 
-.. image:: figures/pix2pix.png
+.. image:: figures/pix2pix-2.png
    :width: 400pt
 
 Network Architecture
