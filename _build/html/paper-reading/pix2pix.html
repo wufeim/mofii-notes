@@ -82,6 +82,10 @@
 <h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
 <p>At inference time, the authors run the generator net exactly the same as during the training phase. Dropout and batch normalization (or instance normalization) using the statistics of the test batch is applied.</p>
 </div>
+<div class="section" id="fcn-score">
+<h2>FCN Score<a class="headerlink" href="#fcn-score" title="Permalink to this headline">¶</a></h2>
+<p>The intuition is that if the generated images are realistic, classifiers trained on real images will be able to classify the synthesized image correctly as well. The authors adopt the FCN-8s architecture for semantic segmentation and score the synthesized images by the classification accuracy against the labels these photos were synthesized from.</p>
+</div>
 <div class="section" id="experiment-results">
 <h2>Experiment Results<a class="headerlink" href="#experiment-results" title="Permalink to this headline">¶</a></h2>
 <p>More results are available <a class="reference external" href="https://phillipi.github.io/pix2pix/">here</a>.</p>
@@ -103,6 +107,7 @@
 <li><a class="reference internal" href="#network-architecture">Network Architecture</a></li>
 <li><a class="reference internal" href="#markovian-discriminator-patchgan">Markovian discriminator (PatchGAN)</a></li>
 <li><a class="reference internal" href="#inference">Inference</a></li>
+<li><a class="reference internal" href="#fcn-score">FCN Score</a></li>
 <li><a class="reference internal" href="#experiment-results">Experiment Results</a></li>
 </ul>
 </li>

@@ -52,14 +52,34 @@
 <div class="line"><strong>Authors:</strong> Jun-Yan Zhu, Taesung Park, Phillip Isola, Alexei A. Efros</div>
 <div class="line"><strong>Affiliations:</strong> Berkeley AI Research Laboratory</div>
 </div>
-<p>In this work, the authors present an approach for learning to translate an image from a source domain <span class="math notranslate nohighlight">\(X\)</span> to a target domain <span class="math notranslate nohighlight">\(Y\)</span> in the absence of paired examples <span class="math notranslate nohighlight">\(\{x_i, y_i\}_{i=1}^N\)</span>.</p>
-<p>They train a mapping <span class="math notranslate nohighlight">\(G: X \to Y\)</span> such that the output <span class="math notranslate nohighlight">\(\hat{y} = G(x)\)</span>, <span class="math notranslate nohighlight">\(x \in X\)</span> is indistinguishable from images <span class="math notranslate nohighlight">\(y \in Y\)</span>. However, such a translation does not guarantee that an individual input <span class="math notranslate nohighlight">\(x\)</span> and output <span class="math notranslate nohighlight">\(y\)</span> are paired up in a meaningful way. Moreover, standard procedures often lead to the problem of <strong>mode collapse</strong>.</p>
-<p>Therefore, they exploit the property that the translation should be &quot;cycle consistent&quot;. If we have a translator <span class="math notranslate nohighlight">\(G: X \to Y\)</span> and another translator <span class="math notranslate nohighlight">\(F: Y \to X\)</span>, then <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(F\)</span> should be inverses of each other and both mappings should be bijections. They apply this structural assumption by training <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(F\)</span> simultaneously and adding a <strong>cycle consistency loss</strong> that encourages <span class="math notranslate nohighlight">\(F(G(x)) \approx x\)</span> and <span class="math notranslate nohighlight">\(G(F(y)) \approx y\)</span>.</p>
+<p>In this work, the authors present an approach for learning to translate an image from a source domain <span class="math notranslate nohighlight">\(X\)</span> to a target domain <span class="math notranslate nohighlight">\(Y\)</span> in the absence of paired examples <span class="math notranslate nohighlight">\(\{x_i, y_i\}_{i=1}^N\)</span>. The goal is to learn a mapping <span class="math notranslate nohighlight">\(G: X \to Y\)</span> such that <span class="math notranslate nohighlight">\(G(X)\)</span> is indistinguishable from <span class="math notranslate nohighlight">\(Y\)</span>. Because this mapping is highly under-constrained, they couple it with an inverse mapping <span class="math notranslate nohighlight">\(F: Y \to X\)</span> and introduce a cycle consistency loss to enforce <span class="math notranslate nohighlight">\(F(G(X)) \approx X\)</span>, and vice versa.</p>
 <div class="section" id="adversarial-loss">
 <h2>Adversarial Loss<a class="headerlink" href="#adversarial-loss" title="Permalink to this headline">¶</a></h2>
-<p>Adversarial losses are applied to both mapping functions. For the mapping function <span class="math notranslate nohighlight">\(G: X \to Y\)</span> and its discriminator <span class="math notranslate nohighlight">\(D_Y\)</span>, the objective is expressed as:</p>
+<p>For the mapping function <span class="math notranslate nohighlight">\(G: X \to Y\)</span> and its discriminator <span class="math notranslate nohighlight">\(D_Y\)</span>, the objective is expressed as:</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{L}_\text{GAN}(G, D_Y, X, Y) = \mathbb{E}_{y \sim p_\text{data}(y)}[\log D_Y(y)] + \mathbb{E}_{x \sim p_\text{data}(x)}[\log (1 - D_Y(G(x)))]\]</div>
+<p>A similar adversarial loss is applied for the mapping function <span class="math notranslate nohighlight">\(F: Y \to X\)</span>.</p>
+</div>
+<div class="section" id="cycle-consistency-loss">
+<h2>Cycle Consistency Loss<a class="headerlink" href="#cycle-consistency-loss" title="Permalink to this headline">¶</a></h2>
+<p>Adversarial losses alone cannot guarantee that the learned function can map an individual input <span class="math notranslate nohighlight">\(x_i\)</span> to a desired output <span class="math notranslate nohighlight">\(y_i\)</span>. To further reduce the space of possible mapping functions, the authors argue that the learned mapping functions should be cycle-consistent: for each image <span class="math notranslate nohighlight">\(x\)</span> from domain <span class="math notranslate nohighlight">\(X\)</span>, the image translation cycle should be able to bring <span class="math notranslate nohighlight">\(x\)</span> back to the original image, i.e., <span class="math notranslate nohighlight">\(x \to G(x) \to F(G(x)) \approx x\)</span>. This is called <strong>forward cycle consistency</strong>, and we have <strong>backward cycle consistency</strong>: <span class="math notranslate nohighlight">\(y \to F(y) \to G(F(y)) \approx y\)</span>. The <strong>cycle consistency loss</strong> is given by</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_\text{cyc}(G, F) = \mathbb{E}_{x \sim p_\text{data}(x)} [\lVert F(G(x)) - x\rVert_1] + \mathbb{E}_{y \sim p_\text{data}(y)}[\lVert G(F(y)) - y\rVert_1]\]</div>
+<p>The full objective is then:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(G, F, D_X, D_Y) = \mathcal{L}_\text{GAN}(G, D_Y, X, Y) + \mathcal{L}_\text{GAN}(F, D_Y, Y, X) + \lambda \mathcal{L}_\text{cyc}(G, F)\]</div>
+<a class="reference internal image-reference" href="../_images/cycle-gan-1.png"><img alt="../_images/cycle-gan-1.png" src="../_images/cycle-gan-1.png" style="width: 480pt;" /></a>
+</div>
+<div class="section" id="experiment-results">
+<h2>Experiment Results<a class="headerlink" href="#experiment-results" title="Permalink to this headline">¶</a></h2>
+<p>During training, the authors follow the strategy in ** and update the discriminator using a history of generated images rather than the ones produced by the latest generators.</p>
+<a class="reference internal image-reference" href="../_images/cycle-gan-2.png"><img alt="../_images/cycle-gan-2.png" src="../_images/cycle-gan-2.png" style="width: 360pt;" /></a>
+<a class="reference internal image-reference" href="../_images/cycle-gan-3.png"><img alt="../_images/cycle-gan-3.png" src="../_images/cycle-gan-3.png" style="width: 560pt;" /></a>
+<img alt="../_images/cycle-gan-4.png" src="../_images/cycle-gan-4.png" />
+</div>
+<div class="section" id="thoughts">
+<h2>Thoughts<a class="headerlink" href="#thoughts" title="Permalink to this headline">¶</a></h2>
+<p>This architecture is tailored for good performance on the appearance changes, with little success on geometric changes.</p>
 </div>
 </div>
 
@@ -74,6 +94,9 @@
   <ul>
 <li><a class="reference internal" href="#">Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks</a><ul>
 <li><a class="reference internal" href="#adversarial-loss">Adversarial Loss</a></li>
+<li><a class="reference internal" href="#cycle-consistency-loss">Cycle Consistency Loss</a></li>
+<li><a class="reference internal" href="#experiment-results">Experiment Results</a></li>
+<li><a class="reference internal" href="#thoughts">Thoughts</a></li>
 </ul>
 </li>
 </ul>
