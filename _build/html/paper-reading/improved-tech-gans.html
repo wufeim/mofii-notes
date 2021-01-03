@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved Techniques for Training GANs &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks" href="cycle-gan.html" />
+    <link rel="prev" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets" href="../infogan.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cycle-gan.html" title="Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../infogan.html" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../generative.html" accesskey="U">Generative Models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Improved Techniques for Training GANs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="improved-techniques-for-training-gans">
+<h1>Improved Techniques for Training GANs<a class="headerlink" href="#improved-techniques-for-training-gans" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Jun 2016</div>
+<div class="line"><strong>Authors:</strong> Tim Salimans, Ian Goodfellow, Wojciech Zaremba, Vicki Cheung, Alec Radford, Xi Chen</div>
+<div class="line"><strong>Affiliations:</strong> OpenAI</div>
+</div>
+<p>Training GANs requires finding a Nash equilibrium of a non-convex game with continuous, high-dimensional parameters. GANs are typically trained using SGD to minimize a cost function. When used to seek a Nash equilibrium, they may fail to converge.</p>
+<p>In this work, the authors introduce several techniques intended to encourage convergence of the GANs. They lead to improved semi-supervised learning performance and improved sample generation.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../infogan.html"
+                        title="previous chapter">InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cycle-gan.html"
+                        title="next chapter">Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/improved-tech-gans.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cycle-gan.html" title="Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../infogan.html" title="InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../generative.html" >Generative Models</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Improved Techniques for Training GANs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

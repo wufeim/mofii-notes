@@ -34,9 +34,19 @@ The local enhancer network also consists of 3 components: a convolutional front-
 
 During training, they first train :math:`G_1` on lower resolution images, and then train the two networks jointly on high resolution images.
 
-**Multi-scale discriminators:** The authors use 3 discriminators that have an identical network structure but operate at different image scales, referred to as :math:`D_1`, :math:`D_2`, and :math:`D_3`. *Without the mutli-scale discriminators, the authors observe that many repeated patterns often appear in the generated images.*
+**Multi-scale discriminators:** The authors use 3 discriminators that have an identical network structure but operate at different image scales, referred to as :math:`D_1`, :math:`D_2`, and :math:`D_3`. **Without the mutli-scale discriminators, the authors observe that many repeated patterns often appear in the generated images.**
 
-**Improved adversarial loss:**
+**Improved adversarial loss:** The authors improve the GAN loss by incorporating a feature matching loss based on the discriminator. Specifically, they extract features from multiple layers of the discriminator and learn to match these intermediate representations from the real and the synthesized images. The feature matching loss :math:`\mathcal{L}_{FM}(G, D_k)` is calculated as:
+
+.. math::
+
+   \mathcal{L}_{FM}(G, D_k) = \mathbb{E}_{(\mathbf{s}, \mathbf{x})} \frac{1}{N_i} \left[ \left\lVert D_k^{(i)}(\mathbf{s}, \mathbf{x}) - D_k^{(i)}(\mathbf{s}, G(\mathbf{s})) \right\rVert_1 \right]
+
+The full objective combines both GAN loss and feature matching loss as:
+
+.. math::
+
+   \min_G \left( \left( \max_{D_1, D_2, D_3} \sum_{k=1, 2, 3} \mathcal{L}_{GAN}(G, D_k) \right) + \lambda \sum_{k=1, 2, 3} \mathcal{L}_{FM}(G, D_k) \right)
 
 References
 -------------------------------------

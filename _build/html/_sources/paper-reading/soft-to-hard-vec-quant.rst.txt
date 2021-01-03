@@ -40,3 +40,7 @@ The generic goal is hence to optimize the rate-distortion trade-off between the 
 .. math::
 
    \min_{E, D, \mathbf{W}} \mathbb{E}_{X, Y}[l(\hat{F}(X), Y) + \lambda R(\mathbf{W})] + \beta H(E(Z))
+
+----
+
+The first approximation is to consider the sample entropy instead of :math:`H(E(Z))`.
