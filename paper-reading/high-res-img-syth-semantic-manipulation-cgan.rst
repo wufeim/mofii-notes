@@ -48,6 +48,37 @@ The full objective combines both GAN loss and feature matching loss as:
 
    \min_G \left( \left( \max_{D_1, D_2, D_3} \sum_{k=1, 2, 3} \mathcal{L}_{GAN}(G, D_k) \right) + \lambda \sum_{k=1, 2, 3} \mathcal{L}_{FM}(G, D_k) \right)
 
+Using Instance Maps
+-------------------------------------
+
+The authors argue that the most critical information the instance map provides is the object boundary. A pixel in the instance boundary map is 1 if its object ID is different from any of its 4-neighbors, and 0 otherwise. The input to the networks is the channel-wise concatenation of instance boundary map, semantic label map, and the image.
+
+.. image:: figures/high-res-img-syth-semantic-manipulation-cgan-2.png
+   :width: 440pt
+
+.. image:: figures/high-res-img-syth-semantic-manipulation-cgan-3.png
+   :width: 440pt
+
+Learning an Instance-Level Feature Embedding
+-------------------------------------
+
+To generate diverse images and allow instance-level control, the authors propose adding additional low-dimensional feature channels as the input to the generator network.
+
+They train an encoder network :math:`E` to find a low-dimensional feature vector that corresopnds to the ground truth target for each instance in the image. An instance-wise average pooling layer is used to compute the average feature for the object instance. The average feature is then broadcast to all the pixel locations of the instance.
+
+.. image:: figures/high-res-img-syth-semantic-manipulation-cgan-4.png
+   :width: 440pt
+
+Results
+-------------------------------------
+
+To quantify the quality of the results, the authors perform semantic segmentation on the synthesized images and compare how well the predicted segments match the input.
+
+They further evalute the algorithm via a human subjective study.
+
+.. image:: figures/high-res-img-syth-semantic-manipulation-cgan-5.png
+   :width: 400pt
+
 References
 -------------------------------------
 
