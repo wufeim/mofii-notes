@@ -36,3 +36,5 @@ but rely on (differentiable) soft quantization
 .. math::
 
    \tilde{z}_i = \sum_{j=1}^L \frac{\exp(-\sigma \lVert z_i - c_j \rVert)}{\sum_{l=1}^L \exp(-\sigma \lVert z_i - c_j \rVert)}c_j
+
+to compute gradients during the backward loss.

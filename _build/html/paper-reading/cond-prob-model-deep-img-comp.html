@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Generative Adversarial Networks for Extreme Learned Image Compression" href="gan-extreme-img-comp.html" />
-    <link rel="prev" title="End-To-End Optimized Image Compression" href="ete-opt-img-comp.html" /> 
+    <link rel="prev" title="Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations" href="soft-to-hard-vec-quant.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,7 +31,7 @@
           <a href="gan-extreme-img-comp.html" title="Generative Adversarial Networks for Extreme Learned Image Compression"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ete-opt-img-comp.html" title="End-To-End Optimized Image Compression"
+          <a href="soft-to-hard-vec-quant.html" title="Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
@@ -70,6 +70,7 @@
 <p>but rely on (differentiable) soft quantization</p>
 <div class="math notranslate nohighlight">
 \[\tilde{z}_i = \sum_{j=1}^L \frac{\exp(-\sigma \lVert z_i - c_j \rVert)}{\sum_{l=1}^L \exp(-\sigma \lVert z_i - c_j \rVert)}c_j\]</div>
+<p>to compute gradients during the backward loss.</p>
 </div>
 </div>
 
@@ -90,8 +91,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="ete-opt-img-comp.html"
-                        title="previous chapter">End-To-End Optimized Image Compression</a></p>
+  <p class="topless"><a href="soft-to-hard-vec-quant.html"
+                        title="previous chapter">Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="gan-extreme-img-comp.html"
                         title="next chapter">Generative Adversarial Networks for Extreme Learned Image Compression</a></p>
@@ -126,7 +127,7 @@
           <a href="gan-extreme-img-comp.html" title="Generative Adversarial Networks for Extreme Learned Image Compression"
              >next</a> |</li>
         <li class="right" >
-          <a href="ete-opt-img-comp.html" title="End-To-End Optimized Image Compression"
+          <a href="soft-to-hard-vec-quant.html" title="Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>

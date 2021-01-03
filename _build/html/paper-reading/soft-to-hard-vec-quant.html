@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Conditional Probability Models for Deep Image Compression" href="cond-prob-model-deep-img-comp.html" />
+    <link rel="prev" title="End-To-End Optimized Image Compression" href="ete-opt-img-comp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cond-prob-model-deep-img-comp.html" title="Conditional Probability Models for Deep Image Compression"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ete-opt-img-comp.html" title="End-To-End Optimized Image Compression"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../compression-img.html" accesskey="U">Compression (Image)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="soft-to-hard-vector-quantization-for-end-to-end-learning-compressible-representations">
+<h1>Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations<a class="headerlink" href="#soft-to-hard-vector-quantization-for-end-to-end-learning-compressible-representations" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Apr 2017</div>
+<div class="line"><strong>Authors:</strong> Eirikur Agustsson, Fabian Mentzer, Michael Tschannen, Lukas Cavigelli, Radu Timofte, Luca Benini, Luc Van Gool</div>
+<div class="line"><strong>Affiliations:</strong> ETH Zurich, KU Leuven</div>
+</div>
+<dl class="simple">
+<dt>Two major challenges arise when minimizing <span class="math notranslate nohighlight">\(D + \beta R\)</span> for DNNs:</dt><dd><ol class="arabic simple">
+<li><p>coping with the non-differentiability (due to quantization operations) of the cost function <span class="math notranslate nohighlight">\(D + \beta R\)</span></p></li>
+<li><p>obtaining an accurate and differentiable estimate of the entropy <span class="math notranslate nohighlight">\(R\)</span></p></li>
+</ol>
+</dd>
+</dl>
+<p>In this paper, the authors propose a unified end-to-end learning framework for learning compressible representations, jointly optimizing the model parameters, the quantization levels, and the entropy of the resulting symbol stream to compress either a subset of feature representations in the network or the model itself.</p>
+<p>Experiments show that this soft-to-hard quantization approach gives results competitive with the SOTA for image compression and neural network compression.</p>
+<a class="reference internal image-reference" href="../_images/soft-to-hard-vec-quant-1.png"><img alt="../_images/soft-to-hard-vec-quant-1.png" src="../_images/soft-to-hard-vec-quant-1.png" style="width: 360pt;" /></a>
+<div class="section" id="problem-formulation">
+<h2>Problem Formulation<a class="headerlink" href="#problem-formulation" title="Permalink to this headline">¶</a></h2>
+<p>The loss of a standard DNN can be decomposed as the sample loss plus a regularization term</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\mathcal{X}, \mathcal{Y}; F) = \frac{1}{N}\sum_{i=1}^N l(F(\mathbf{x}_i), \mathbf{y}_i) + \lambda R(\mathbf{W})\]</div>
+<p>We say that the deep architecture is an autoencoder when the network maps back into the input space, with the goal of reproducing the input. Autoencoders typically condense the dimensionality of the input into some smaller dimensionality insider the network, i.e., the layer with the smallest output dimension, <span class="math notranslate nohighlight">\(\mathbf{x}^{(b)} \in \mathbb{R}^{d_b}\)</span>, has <span class="math notranslate nohighlight">\(d_b \ll d_1\)</span>, which we refer to as the &quot;bottleneck&quot;.</p>
+<p>We say that a weight parameter <span class="math notranslate nohighlight">\(\mathbf{w}_i\)</span> or a feature <span class="math notranslate nohighlight">\(\mathbf{x}^{(i)}\)</span> has a compressible representation if it can be serialized to a binary stream using few bits. We map <span class="math notranslate nohighlight">\(\mathbf{z}\)</span> to a sequence of <span class="math notranslate nohighlight">\(m\)</span> symbols using a (symbol) encoder <span class="math notranslate nohighlight">\(E: \mathbb{R}^d \mapsto [L]^m\)</span>. The reconstruction of <span class="math notranslate nohighlight">\(\mathbf{z}\)</span> is then produced by a (symbol) decoder <span class="math notranslate nohighlight">\(D: [L]^m \mapsto \mathbb{R}^d\)</span>, which maps the symbol back to <span class="math notranslate nohighlight">\(\hat{\mathbf{z}} = D(E(\mathbf{z})) \in \mathbb{R}^d\)</span>.</p>
+<p>According to Shannon's source coding theorem, the correct metric for compressibility is the entropy of <span class="math notranslate nohighlight">\(E(Z)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[H(E(Z)) = - \sum_{e \in [L]^m} P(E(Z) = e) \log(P(E(Z) = e))\]</div>
+<p>The generic goal is hence to optimize the rate-distortion trade-off between the expected loss and the entropy of <span class="math notranslate nohighlight">\(E(Z)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\min_{E, D, \mathbf{W}} \mathbb{E}_{X, Y}[l(\hat{F}(X), Y) + \lambda R(\mathbf{W})] + \beta H(E(Z))\]</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations</a><ul>
+<li><a class="reference internal" href="#problem-formulation">Problem Formulation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ete-opt-img-comp.html"
+                        title="previous chapter">End-To-End Optimized Image Compression</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cond-prob-model-deep-img-comp.html"
+                        title="next chapter">Conditional Probability Models for Deep Image Compression</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/soft-to-hard-vec-quant.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cond-prob-model-deep-img-comp.html" title="Conditional Probability Models for Deep Image Compression"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ete-opt-img-comp.html" title="End-To-End Optimized Image Compression"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../compression-img.html" >Compression (Image)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
