@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An End-to-End Learning Framework for Video Compression &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">An End-to-End Learning Framework for Video Compression</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="an-end-to-end-learning-framework-for-video-compression">
+<h1>An End-to-End Learning Framework for Video Compression<a class="headerlink" href="#an-end-to-end-learning-framework-for-video-compression" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Apr 2020</div>
+<div class="line"><strong>Authors:</strong> Guo Lu, Xiaoyun Zhang, Wanli Ouyang, Li Chen, Zhiyong Gao, Dong Xu</div>
+<div class="line"><strong>Links:</strong> <a class="reference external" href="https://ieeexplore.ieee.org/document/9072487">IEEE Xplore</a></div>
+</div>
+<p>Existing methods try to employ DNN for video compression [1]. However, most work only replace one or two modules in the traditional framework instead of optimizing the video compression system in an end-to-end fashion.</p>
+<dl class="simple">
+<dt>There are two challenges for building an end-to-end optimized video compression system:</dt><dd><ul class="simple">
+<li><p>it is very difficult to build a learning based video compression system because of the complicated coding procedure</p></li>
+<li><p>it is necessary to design a scheme to generate and compress the motion information that is tailored for video compression</p></li>
+</ul>
+</dd>
+</dl>
+<p>Inspired by the previous work [2], the authors propose the first end-to-end deep video compression (DVC) framework. All components in video compression are implemented with the end-to-end neural networks, and are jointly optimized based on the rate-distortion trade-off through a single loss function. The framework is also very flexible and two variants, <code class="code docutils literal notranslate"><span class="pre">DVC_Lite</span></code> and <code class="code docutils literal notranslate"><span class="pre">DVC_Pro</span></code>, are proposed for speed/efficiency priority. The adaptive quantization layer for the DVC framework significantly reduces the number of parameters for variable bitrate coding.</p>
+<p>Expreimental results show that the proposed approach can outperform the widely used video coding standard H.264 and be even on par with the latest standard H.265.</p>
+<div class="section" id="proposed-framework">
+<h2>Proposed Framework<a class="headerlink" href="#proposed-framework" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Notations:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathcal{V} = \{x_1, \dots, x_{t-1}, x_t, \dots \}\)</span>: current video sequences</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{x}_t\)</span>: predicted frame</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{x}_t\)</span>: reconstructed frame</p></li>
+<li><p><span class="math notranslate nohighlight">\(r_t\)</span> (transformed to <span class="math notranslate nohighlight">\(y_t\)</span>): residual (error) between the original frame <span class="math notranslate nohighlight">\(x_t\)</span> and the predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{r}_t\)</span>: residual (error) between the original frame <span class="math notranslate nohighlight">\(x_t\)</span> and the reconstructed/decoded frame <span class="math notranslate nohighlight">\(\hat{x}_t\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(v_t\)</span> (transformed to <span class="math notranslate nohighlight">\(m_t\)</span>): motion vector or optical flow value</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{v}_t\)</span>: reconstructed version</p></li>
+</ul>
+</dd>
+</dl>
+<p>Let <span class="math notranslate nohighlight">\(\mathcal{V} = \{x_1, \dots, x_{t-1}, x_t, \dots \}\)</span> denote the current video sequences. The predicted frame is denoted as <span class="math notranslate nohighlight">\(\bar{x}_t\)</span> and the reconstructed/decoded frame is denoted as <span class="math notranslate nohighlight">\(\hat{x}_t\)</span>. <span class="math notranslate nohighlight">\(r_t\)</span> represents the residual (error) between the original frame <span class="math notranslate nohighlight">\(x_t\)</span> and the predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span>. <span class="math notranslate nohighlight">\(\hat{r}_t\)</span> represents the reconstructed/decoded residual. <span class="math notranslate nohighlight">\(v_t\)</span> represents the</p>
+</div>
+<div class="section" id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Liu, D., Li, Y., Lin, J., Li, H., &amp; Wu, F. (2020). Deep learning-based video coding: A review and a case study. ACM Computing Surveys (CSUR), 53(1), 1-35.</p>
+<p><strong>[2]</strong> Lu, G., Ouyang, W., Xu, D., Zhang, X., Cai, C., &amp; Gao, Z. (2019). Dvc: An end-to-end deep video compression framework. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 11006-11015).</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">An End-to-End Learning Framework for Video Compression</a><ul>
+<li><a class="reference internal" href="#proposed-framework">Proposed Framework</a></li>
+<li><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/e2e-learning-framework-vid-comp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">An End-to-End Learning Framework for Video Compression</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

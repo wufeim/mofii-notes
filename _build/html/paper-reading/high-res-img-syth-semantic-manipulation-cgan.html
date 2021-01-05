@@ -71,10 +71,31 @@
 <p>The global generator is built on the architecture proposed in <strong>[1]</strong>. It consists of 3 components: a convolutional front-end <span class="math notranslate nohighlight">\(G_1^{(F)}\)</span>, a set of residual blocks <span class="math notranslate nohighlight">\(G_1^{(R)}\)</span>, and a transposed convolutional back-end <span class="math notranslate nohighlight">\(G_1^{(B)}\)</span>.</p>
 <p>The local enhancer network also consists of 3 components: a convolutional front-end <span class="math notranslate nohighlight">\(G_2^{(F)}\)</span>, a set of residual blocks <span class="math notranslate nohighlight">\(G_2^{(R)}\)</span>, and a transposed convolutional back-end <span class="math notranslate nohighlight">\(G_2^{(B)}\)</span>. The input to <span class="math notranslate nohighlight">\(G_2^{(R)}\)</span> is the element-wise sum of the <span class="math notranslate nohighlight">\(G_2^{(F)}\)</span> and <span class="math notranslate nohighlight">\(G_1^{(B)}\)</span>.</p>
 <p>During training, they first train <span class="math notranslate nohighlight">\(G_1\)</span> on lower resolution images, and then train the two networks jointly on high resolution images.</p>
-<p><strong>Multi-scale discriminators:</strong> The authors use 3 discriminators that have an identical network structure but operate at different image scales, referred to as <span class="math notranslate nohighlight">\(D_1\)</span>, <span class="math notranslate nohighlight">\(D_2\)</span>, and <span class="math notranslate nohighlight">\(D_3\)</span>. <em>Without the mutli-scale discriminators, the authors observe that many repeated patterns often appear in the generated images.</em></p>
+<p><strong>Multi-scale discriminators:</strong> The authors use 3 discriminators that have an identical network structure but operate at different image scales, referred to as <span class="math notranslate nohighlight">\(D_1\)</span>, <span class="math notranslate nohighlight">\(D_2\)</span>, and <span class="math notranslate nohighlight">\(D_3\)</span>. <strong>Without the mutli-scale discriminators, the authors observe that many repeated patterns often appear in the generated images.</strong></p>
 <p><strong>Improved adversarial loss:</strong> The authors improve the GAN loss by incorporating a feature matching loss based on the discriminator. Specifically, they extract features from multiple layers of the discriminator and learn to match these intermediate representations from the real and the synthesized images. The feature matching loss <span class="math notranslate nohighlight">\(\mathcal{L}_{FM}(G, D_k)\)</span> is calculated as:</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{L}_{FM}(G, D_k) = \mathbb{E}_{(\mathbf{s}, \mathbf{x})} \frac{1}{N_i} \left[ \left\lVert D_k^{(i)}(\mathbf{s}, \mathbf{x}) - D_k^{(i)}(\mathbf{s}, G(\mathbf{s})) \right\rVert_1 \right]\]</div>
+<p>The full objective combines both GAN loss and feature matching loss as:</p>
+<div class="math notranslate nohighlight">
+\[\min_G \left( \left( \max_{D_1, D_2, D_3} \sum_{k=1, 2, 3} \mathcal{L}_{GAN}(G, D_k) \right) + \lambda \sum_{k=1, 2, 3} \mathcal{L}_{FM}(G, D_k) \right)\]</div>
+</div>
+<div class="section" id="using-instance-maps">
+<h2>Using Instance Maps<a class="headerlink" href="#using-instance-maps" title="Permalink to this headline">¶</a></h2>
+<p>The authors argue that the most critical information the instance map provides is the object boundary. A pixel in the instance boundary map is 1 if its object ID is different from any of its 4-neighbors, and 0 otherwise. The input to the networks is the channel-wise concatenation of instance boundary map, semantic label map, and the image.</p>
+<a class="reference internal image-reference" href="../_images/high-res-img-syth-semantic-manipulation-cgan-2.png"><img alt="../_images/high-res-img-syth-semantic-manipulation-cgan-2.png" src="../_images/high-res-img-syth-semantic-manipulation-cgan-2.png" style="width: 360pt;" /></a>
+<a class="reference internal image-reference" href="../_images/high-res-img-syth-semantic-manipulation-cgan-3.png"><img alt="../_images/high-res-img-syth-semantic-manipulation-cgan-3.png" src="../_images/high-res-img-syth-semantic-manipulation-cgan-3.png" style="width: 360pt;" /></a>
+</div>
+<div class="section" id="learning-an-instance-level-feature-embedding">
+<h2>Learning an Instance-Level Feature Embedding<a class="headerlink" href="#learning-an-instance-level-feature-embedding" title="Permalink to this headline">¶</a></h2>
+<p>To generate diverse images and allow instance-level control, the authors propose adding additional low-dimensional feature channels as the input to the generator network.</p>
+<p>They train an encoder network <span class="math notranslate nohighlight">\(E\)</span> to find a low-dimensional feature vector that corresopnds to the ground truth target for each instance in the image. An instance-wise average pooling layer is used to compute the average feature for the object instance. The average feature is then broadcast to all the pixel locations of the instance.</p>
+<a class="reference internal image-reference" href="../_images/high-res-img-syth-semantic-manipulation-cgan-4.png"><img alt="../_images/high-res-img-syth-semantic-manipulation-cgan-4.png" src="../_images/high-res-img-syth-semantic-manipulation-cgan-4.png" style="width: 360pt;" /></a>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>To quantify the quality of the results, the authors perform semantic segmentation on the synthesized images and compare how well the predicted segments match the input.</p>
+<p>They further evalute the algorithm via a human subjective study.</p>
+<a class="reference internal image-reference" href="../_images/high-res-img-syth-semantic-manipulation-cgan-5.png"><img alt="../_images/high-res-img-syth-semantic-manipulation-cgan-5.png" src="../_images/high-res-img-syth-semantic-manipulation-cgan-5.png" style="width: 360pt;" /></a>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -93,6 +114,9 @@
   <ul>
 <li><a class="reference internal" href="#">High-Resolution Image Synthesis and Semantic Manipulation with Conditional GANs (Pix2PixHD)</a><ul>
 <li><a class="reference internal" href="#improving-photorealism-and-resolution">Improving Photorealism and Resolution</a></li>
+<li><a class="reference internal" href="#using-instance-maps">Using Instance Maps</a></li>
+<li><a class="reference internal" href="#learning-an-instance-level-feature-embedding">Learning an Instance-Level Feature Embedding</a></li>
+<li><a class="reference internal" href="#results">Results</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
