@@ -60,6 +60,59 @@ Motion, residual and entropy bits for hybrid coding are all learned by networks 
 .. image:: figures/e2e-learning-framework-vid-comp-2.png
    :width: 320pt
 
+Motion Estimation Net
+-------------------------------------
+
+The authors use the learning based optical flow method Spynet to estimate motion information. Spynet is jointly optimized with the whole compression system by minimizing the rate-distorition trade-off.
+
+MV Encoder and Decoder Net
+-------------------------------------
+
+To compress pixel-level optical flow :math:`v_t` from motion estimation network, the authors utilize an auto-encoder style network, as proposed in [6].
+
+Motion Compensation Net
+-------------------------------------
+
+Given the previous reconstructed frame :math:`\hat{x}_{t-1}` and the motion vector :math:`\hat{v}_t`, the motion compensation network obtains the predicted frame :math:`\bar{x}_t`.
+
+The previous frame :math:`\hat{x}_{t-1}` is first warped to the current frame based on the motion information :math:`\hat{v}_t`:
+
+.. math::
+
+   \tilde{x}_t = \mathcal{W}(\hat{x}_{t-1}, \hat{v}_t)
+
+where :math:`\mathcal{W}` is the backward warp operation [7]. Then they concatenate :math:`\tilde{x}` and the reference frame :math:`\hat{x}_{t-1}`, and feed them into another CNN to obtain the refined predicted frame :math:`\bar{x}_t`.
+
+.. image:: figures/e2e-learning-framework-vid-comp-3.png
+   :width: 320pt
+
+Residual Encoder and Decoder Net
+-------------------------------------
+
+After motion estimation and motion compensation, we obtain the predicted frame :math:`\bar{x}_t` and the residual information :math:`r_t`. A variational image compression framework [8] is used to compress the residual.
+
+Bit Rate Estimation Net
+-------------------------------------
+
+To optimize the whole network by considering the rate-distortion trade-off, the authors use the CNN model in [8] to estimate the probability distributions of :math:`\hat{y}_t` and :math:`\hat{m}_t`.
+
+Loss Function
+-------------------------------------
+
+The authors propose the following rate-distortion optimization problem:
+
+.. math::
+
+   \mathcal{L} = \lambda D + R = \lambda d(x_t, \hat{x}_t) + [H(\hat{m}_t) + H(\hat{y}_t)]
+
+where :math:`d(x_t, \hat{x}_t)` can be measured by MSE or MS-MSSIM. To stablize the training procedure, the authors also introduce an auxiliary loss, formulated as:
+
+.. math::
+
+   \mathcal{L}_0 = \lambda D + R = \lambda [d(x_t, \hat{x}_t) + \beta d(x_t, \tilde{x}_t)] + [H(\hat{m}_t) + H(\hat{y}_t)]
+
+:math:`\beta` is the weight parameter and set to 0.1.
+
 Reference
 -------------------------------------
 
@@ -72,3 +125,9 @@ Reference
 **[4]** Sullivan, G. J., Ohm, J. R., Han, W. J., & Wiegand, T. (2012). Overview of the high efficiency video coding (HEVC) standard. IEEE Transactions on circuits and systems for video technology, 22(12), 1649-1668.
 
 **[5]** Ranjan, A., & Black, M. J. (2017). Optical flow estimation using a spatial pyramid network. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 4161-4170).
+
+**[6]** Ballé, J., Laparra, V., & Simoncelli, E. P. (2016). End-to-end optimized image compression. arXiv preprint arXiv:1611.01704.
+
+**[7]** Jaderberg, M., Simonyan, K., & Zisserman, A. (2015). Spatial transformer networks. Advances in neural information processing systems, 28, 2017-2025.
+
+**[8]** Ballé, J., Minnen, D., Singh, S., Hwang, S. J., & Johnston, N. (2018). Variational image compression with a scale hyperprior. arXiv preprint arXiv:1802.01436.
