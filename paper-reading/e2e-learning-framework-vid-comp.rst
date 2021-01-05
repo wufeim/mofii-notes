@@ -29,7 +29,7 @@ Notations
 Hybrid Coding Framework of Video Compression
 -------------------------------------
 
-The input frame :math:`x_t` is split into a set of blocks. The traditional video compression algorithm is summarized as:
+The input frame :math:`x_t` is split into a set of blocks. The traditional video compression algorithm is summarized as follows,
     1. Block based motion estimation.
     2. Motion compensation.
     3. Transform and quantization.
@@ -38,15 +38,27 @@ The input frame :math:`x_t` is split into a set of blocks. The traditional video
     6. Frame reconstruction.
 
 .. image:: figures/e2e-learning-framework-vid-comp-1.png
-   :width: 360pt
+   :width: 320pt
 
 Refer to [3, 4] for more details.
 
 The Proposed End-to-End Deep Video Compression Framework
 -------------------------------------
 
+Motion, residual and entropy bits for hybrid coding are all learned by networks in the proposed framework. All these functional modules are jointly optimized in an end-to-end way using a single rate-distortion loss. The differences between the proposed method and traditional video compression codecs are summarized below.
+
+**Step 1. Motion estimation and compression.** The authors use a CNN model to estimate the optical flow [5], which is considered as the motion information :math:`v_t`. An auto-encoder network with quantization is used to compress the optical flow in a lossy way.
+
+**Step 2. Motion compensation.** A pixel-wise motion compensation approach is implemented using a neural network.
+
+**Step 3-4. Transform, quantization and inverse transform.** The linear transform is replaced by a highly non-linear residual encoder-decoder network.
+
+**Step 5. Entropy coding.** At the training stage, a bit rate estimation net is used to obtain probability distribution of each symbol.
+
+**Step 6. Frame reconstruction.** Reconstructed frame :math:`\hat{x}_t` is generated based on predicted frame :math:`\bar{x}_t` and the reconstructed residual :math:`\hat{r}_t`.
+
 .. image:: figures/e2e-learning-framework-vid-comp-2.png
-   :width: 360pt
+   :width: 320pt
 
 Reference
 -------------------------------------
@@ -58,3 +70,5 @@ Reference
 **[3]** Wiegand, T., Sullivan, G. J., Bjontegaard, G., & Luthra, A. (2003). Overview of the H. 264/AVC video coding standard. IEEE Transactions on circuits and systems for video technology, 13(7), 560-576.
 
 **[4]** Sullivan, G. J., Ohm, J. R., Han, W. J., & Wiegand, T. (2012). Overview of the high efficiency video coding (HEVC) standard. IEEE Transactions on circuits and systems for video technology, 22(12), 1649-1668.
+
+**[5]** Ranjan, A., & Black, M. J. (2017). Optical flow estimation using a spatial pyramid network. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 4161-4170).
