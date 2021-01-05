@@ -24,7 +24,7 @@ Notations
 - :math:`r_t` (transformed to :math:`y_t`): residual (error) between the original frame :math:`x_t` and the predicted frame :math:`\bar{x}_t`
 - :math:`\hat{r}_t`: residual (error) between the original frame :math:`x_t` and the reconstructed/decoded frame :math:`\hat{x}_t`
 - :math:`v_t` (transformed to :math:`m_t`): motion vector or optical flow value
-- :math:`\hat{v}_t`: reconstructed version>
+- :math:`\hat{v}_t`: reconstructed version
 
 Hybrid Coding Framework of Video Compression
 -------------------------------------
