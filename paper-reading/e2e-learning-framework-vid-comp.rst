@@ -135,7 +135,7 @@ Adaptive Quantization Layer
 In order to reduce the number of models for video coding at multiple bitrates, the authors introduce the **adaptive quantization layer** (AQL). In the proposed video compression scheme, they first train a DVC model at high-bitrate without using the AQL. To obtain other models at low-bitrates, they integrate the AQL to the pre-trained baseline DVC model. Finally, they only fine-tune the AQL for other models at different bitrates.
 
 .. image:: figures/e2e-learning-framework-vid-comp-4.png
-   :width: 360pt
+   :width: 320pt
 
 Reference
 -------------------------------------
