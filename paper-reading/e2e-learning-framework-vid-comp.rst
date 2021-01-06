@@ -113,6 +113,30 @@ where :math:`d(x_t, \hat{x}_t)` can be measured by MSE or MS-MSSIM. To stablize 
 
 :math:`\beta` is the weight parameter and set to 0.1.
 
+Quantization
+-------------------------------------
+
+Quantization operation is not differential, which makes end-to-end training impossible. Inspired by [6], the authors replace the quantization operation by adding uniform noise in the training stage.
+
+Decoded Frame Buffer
+-------------------------------------
+
+The encoding procedure forms a chain of dependency. To simplify the training procedure, the authors adopt an online updating strategy. They use a buffer to store the previous frame and update each training sample in an epoch.
+
+Flexible Extensions for the DVC Model
+-------------------------------------
+
+* :code:`DVC_Lite`
+* :code:`DVC_Pro`
+
+Adaptive Quantization Layer
+-------------------------------------
+
+In order to reduce the number of models for video coding at multiple bitrates, the authors introduce the **adaptive quantization layer** (AQL). In the proposed video compression scheme, they first train a DVC model at high-bitrate without using the AQL. To obtain other models at low-bitrates, they integrate the AQL to the pre-trained baseline DVC model. Finally, they only fine-tune the AQL for other models at different bitrates.
+
+.. image:: figures/e2e-learning-framework-vid-comp-4.png
+   :width: 360pt
+
 Reference
 -------------------------------------
 
