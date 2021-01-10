@@ -31,7 +31,7 @@ The overall architecture of IPT consists of four components:
 
 **Transformer encoder.** Features :math:`f_H \in \mathbb{R}^{C \times H \times W}` are reshaped into a sequence of patches ("words"), :math:`f_{p_i} \in \mathbb{R}^{P^2 \times C}`, :math:`i \in \{1, \dots, N = \frac{HW}{P^2}\}`. To maintain the position information, the authors add learnable position encodings :math:`E_{p_i} \in \mathbb{R}^{P^2 \times C}` for each patch for feature :math:`f_{p_i}` following [1, 2], and :math:`E_{p_i} + f_{p_i}` is directly input into the transformer encoder.
 
-The architecture of encoder layer is following the original structure in [3], which has a multi-head self-attention module and a feed forward network. The output of encoder for each patch is :math:`f_{E_i} \in \mathbb{R}^{P^2 \times C}`. The calculation can be formulated as
+The architecture of encoder layer is following the original structure in [3], which has a multi-head self-attention module and a feed forward network. The output of encoder for each patch is :math:`f_{E_i} \in \mathbb{R}^{P^2 \times C}`. The calculation can be formulated as:
 
 .. math::
 
@@ -43,12 +43,37 @@ The architecture of encoder layer is following the original structure in [3], wh
 
 where :math:`l` denotes the number of layers in the module, MSA denotes the multi-head self-attention module, and FFN denotes the feed forward network with two fully-connected layers.
 
-**Transformer decoder.**
+**Transformer decoder.** The difference to that of the original transformer is that they utilize a task-specific embedding as an additional input of the decoder. These task-specific embedding :math:`E_t \in \mathbb{R}^{P^2 \times C}, \; i = \{1, \dots, N_t\}` are learned to decode features for different tasks. The outputs of the decoder are :math:`f_{D_i} \in \mathbb{R}^{P^2 \times C}`, which is then reshaped to :math:`f_D` with size :math:`C \times H \times W`. The calculation can be formulated as:
 
-**Tails.**
+.. math::
+
+   & z_0 = [f_{E_1}, \dots, f_{E_N}] \\
+   & q_i = k_i = LN(z_{i-1}) + E_t, \; v_i = LN(z_{i-1}) \\
+   & z_i' = MSA(q_i, k_i, v_i) + z_{i-1} \\
+   & q_i' = LN(z_i') + E_t, \; k_i' = v_i' = LN(z_0) \\
+   & z_i'' = MSA(q_i', k_i', v_i') + z_i' \\
+   & z_i = FFN(LN(z_i'')) + z_i'' \\
+   & [f_{D_1}, \dots, f_{D_N}] = y_l
+
+**Tails.** The calculation can be formulated as :math:`f_T = T^i (f_D) \in \mathbb{R}^{3 \times H' \times W'}`.
 
 .. image:: figures/pretrained-img-proc-transformer-1.png
    :width: 600pt
+
+Pre-Training on ImageNet
+-------------------------------------
+
+One of the key factors for successfully training an excellent transformer is that the well use of large-scale datasets. Using the same degeneration methods as suggested in [4, 5], the authors generate synthetic datasets for several image processing tasks from the ImageNet.
+
+The loss function for learning the IPT in the supervised fashion can be formulated as:
+
+.. math::
+
+   \mathcal{L}_{supervised} = \sum_{i=1}^{N_t} L_1 (IPT(I_{corrupted}^i), I_{clean})
+
+where :math:`I_{corrupted}^i` is the corrupted image for task :math:`i`.
+
+Due to the variety of degradation models, such as the wide range of possible noise levels, the generalization ability of the IPT should be further enhanced.
 
 References
 -------------------------------------
@@ -58,3 +83,7 @@ References
 **[2]** Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., & Zagoruyko, S. (2020). End-to-End Object Detection with Transformers. arXiv preprint arXiv:2005.12872.
 
 **[3]** Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. In Advances in neural information processing systems (pp. 5998-6008).
+
+**[4]** Gu, S., Meng, D., Zuo, W., & Zhang, L. (2017). Joint convolutional analysis and synthesis sparse representation for single image layer separation. In Proceedings of the IEEE International Conference on Computer Vision (pp. 1708-1716).
+
+**[5]** Agustsson, E., & Timofte, R. (2017). Ntire 2017 challenge on single image super-resolution: Dataset and study. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops (pp. 126-135).
