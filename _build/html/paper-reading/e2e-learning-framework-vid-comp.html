@@ -17,7 +17,9 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Improving Deep Video Compression by Resolution-Adaptive Flow Coding" href="improv-dvc-by-res-adap-flow-coding.html" />
+    <link rel="prev" title="Compression (Video)" href="../compression-vid.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,7 +27,15 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="improv-dvc-by-res-adap-flow-coding.html" title="Improving Deep Video Compression by Resolution-Adaptive Flow Coding"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../compression-vid.html" title="Compression (Video)"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../compression-vid.html" accesskey="U">Compression (Video)</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">An End-to-End Learning Framework for Video Compression</a></li> 
       </ul>
     </div>  
@@ -52,10 +62,9 @@
 </dl>
 <p>Inspired by the previous work [2], the authors propose the first end-to-end deep video compression (DVC) framework. All components in video compression are implemented with the end-to-end neural networks, and are jointly optimized based on the rate-distortion trade-off through a single loss function. The framework is also very flexible and two variants, <code class="code docutils literal notranslate"><span class="pre">DVC_Lite</span></code> and <code class="code docutils literal notranslate"><span class="pre">DVC_Pro</span></code>, are proposed for speed/efficiency priority. The adaptive quantization layer for the DVC framework significantly reduces the number of parameters for variable bitrate coding.</p>
 <p>Expreimental results show that the proposed approach can outperform the widely used video coding standard H.264 and be even on par with the latest standard H.265.</p>
-<div class="section" id="proposed-framework">
-<h2>Proposed Framework<a class="headerlink" href="#proposed-framework" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>Notations:</dt><dd><ul class="simple">
+<div class="section" id="notations">
+<h2>Notations<a class="headerlink" href="#notations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\mathcal{V} = \{x_1, \dots, x_{t-1}, x_t, \dots \}\)</span>: current video sequences</p></li>
 <li><p><span class="math notranslate nohighlight">\(\bar{x}_t\)</span>: predicted frame</p></li>
 <li><p><span class="math notranslate nohighlight">\(\hat{x}_t\)</span>: reconstructed frame</p></li>
@@ -64,14 +73,98 @@
 <li><p><span class="math notranslate nohighlight">\(v_t\)</span> (transformed to <span class="math notranslate nohighlight">\(m_t\)</span>): motion vector or optical flow value</p></li>
 <li><p><span class="math notranslate nohighlight">\(\hat{v}_t\)</span>: reconstructed version</p></li>
 </ul>
+</div>
+<div class="section" id="hybrid-coding-framework-of-video-compression">
+<h2>Hybrid Coding Framework of Video Compression<a class="headerlink" href="#hybrid-coding-framework-of-video-compression" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>The input frame <span class="math notranslate nohighlight">\(x_t\)</span> is split into a set of blocks. The traditional video compression algorithm is summarized as follows,</dt><dd><ol class="arabic simple">
+<li><p>Block based motion estimation.</p></li>
+<li><p>Motion compensation.</p></li>
+<li><p>Transform and quantization.</p></li>
+<li><p>Inverse transform.</p></li>
+<li><p>Entropy coding.</p></li>
+<li><p>Frame reconstruction.</p></li>
+</ol>
 </dd>
 </dl>
-<p>Let <span class="math notranslate nohighlight">\(\mathcal{V} = \{x_1, \dots, x_{t-1}, x_t, \dots \}\)</span> denote the current video sequences. The predicted frame is denoted as <span class="math notranslate nohighlight">\(\bar{x}_t\)</span> and the reconstructed/decoded frame is denoted as <span class="math notranslate nohighlight">\(\hat{x}_t\)</span>. <span class="math notranslate nohighlight">\(r_t\)</span> represents the residual (error) between the original frame <span class="math notranslate nohighlight">\(x_t\)</span> and the predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span>. <span class="math notranslate nohighlight">\(\hat{r}_t\)</span> represents the reconstructed/decoded residual. <span class="math notranslate nohighlight">\(v_t\)</span> represents the</p>
+<a class="reference internal image-reference" href="../_images/e2e-learning-framework-vid-comp-1.png"><img alt="../_images/e2e-learning-framework-vid-comp-1.png" src="../_images/e2e-learning-framework-vid-comp-1.png" style="width: 320pt;" /></a>
+<p>Refer to [3, 4] for more details.</p>
+</div>
+<div class="section" id="the-proposed-end-to-end-deep-video-compression-framework">
+<h2>The Proposed End-to-End Deep Video Compression Framework<a class="headerlink" href="#the-proposed-end-to-end-deep-video-compression-framework" title="Permalink to this headline">¶</a></h2>
+<p>Motion, residual and entropy bits for hybrid coding are all learned by networks in the proposed framework. All these functional modules are jointly optimized in an end-to-end way using a single rate-distortion loss. The differences between the proposed method and traditional video compression codecs are summarized below.</p>
+<p><strong>Step 1. Motion estimation and compression.</strong> The authors use a CNN model to estimate the optical flow [5], which is considered as the motion information <span class="math notranslate nohighlight">\(v_t\)</span>. An auto-encoder network with quantization is used to compress the optical flow in a lossy way.</p>
+<p><strong>Step 2. Motion compensation.</strong> A pixel-wise motion compensation approach is implemented using a neural network.</p>
+<p><strong>Step 3-4. Transform, quantization and inverse transform.</strong> The linear transform is replaced by a highly non-linear residual encoder-decoder network.</p>
+<p><strong>Step 5. Entropy coding.</strong> At the training stage, a bit rate estimation net is used to obtain probability distribution of each symbol.</p>
+<p><strong>Step 6. Frame reconstruction.</strong> Reconstructed frame <span class="math notranslate nohighlight">\(\hat{x}_t\)</span> is generated based on predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span> and the reconstructed residual <span class="math notranslate nohighlight">\(\hat{r}_t\)</span>.</p>
+<a class="reference internal image-reference" href="../_images/e2e-learning-framework-vid-comp-2.png"><img alt="../_images/e2e-learning-framework-vid-comp-2.png" src="../_images/e2e-learning-framework-vid-comp-2.png" style="width: 320pt;" /></a>
+</div>
+<div class="section" id="motion-estimation-net">
+<h2>Motion Estimation Net<a class="headerlink" href="#motion-estimation-net" title="Permalink to this headline">¶</a></h2>
+<p>The authors use the learning based optical flow method Spynet to estimate motion information. Spynet is jointly optimized with the whole compression system by minimizing the rate-distorition trade-off.</p>
+</div>
+<div class="section" id="mv-encoder-and-decoder-net">
+<h2>MV Encoder and Decoder Net<a class="headerlink" href="#mv-encoder-and-decoder-net" title="Permalink to this headline">¶</a></h2>
+<p>To compress pixel-level optical flow <span class="math notranslate nohighlight">\(v_t\)</span> from motion estimation network, the authors utilize an auto-encoder style network, as proposed in [6].</p>
+</div>
+<div class="section" id="motion-compensation-net">
+<h2>Motion Compensation Net<a class="headerlink" href="#motion-compensation-net" title="Permalink to this headline">¶</a></h2>
+<p>Given the previous reconstructed frame <span class="math notranslate nohighlight">\(\hat{x}_{t-1}\)</span> and the motion vector <span class="math notranslate nohighlight">\(\hat{v}_t\)</span>, the motion compensation network obtains the predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span>.</p>
+<p>The previous frame <span class="math notranslate nohighlight">\(\hat{x}_{t-1}\)</span> is first warped to the current frame based on the motion information <span class="math notranslate nohighlight">\(\hat{v}_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\tilde{x}_t = \mathcal{W}(\hat{x}_{t-1}, \hat{v}_t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{W}\)</span> is the backward warp operation [7]. Then they concatenate <span class="math notranslate nohighlight">\(\tilde{x}\)</span> and the reference frame <span class="math notranslate nohighlight">\(\hat{x}_{t-1}\)</span>, and feed them into another CNN to obtain the refined predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span>.</p>
+<a class="reference internal image-reference" href="../_images/e2e-learning-framework-vid-comp-3.png"><img alt="../_images/e2e-learning-framework-vid-comp-3.png" src="../_images/e2e-learning-framework-vid-comp-3.png" style="width: 320pt;" /></a>
+</div>
+<div class="section" id="residual-encoder-and-decoder-net">
+<h2>Residual Encoder and Decoder Net<a class="headerlink" href="#residual-encoder-and-decoder-net" title="Permalink to this headline">¶</a></h2>
+<p>After motion estimation and motion compensation, we obtain the predicted frame <span class="math notranslate nohighlight">\(\bar{x}_t\)</span> and the residual information <span class="math notranslate nohighlight">\(r_t\)</span>. A variational image compression framework [8] is used to compress the residual.</p>
+</div>
+<div class="section" id="bit-rate-estimation-net">
+<h2>Bit Rate Estimation Net<a class="headerlink" href="#bit-rate-estimation-net" title="Permalink to this headline">¶</a></h2>
+<p>To optimize the whole network by considering the rate-distortion trade-off, the authors use the CNN model in [8] to estimate the probability distributions of <span class="math notranslate nohighlight">\(\hat{y}_t\)</span> and <span class="math notranslate nohighlight">\(\hat{m}_t\)</span>.</p>
+</div>
+<div class="section" id="loss-function">
+<h2>Loss Function<a class="headerlink" href="#loss-function" title="Permalink to this headline">¶</a></h2>
+<p>The authors propose the following rate-distortion optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = \lambda D + R = \lambda d(x_t, \hat{x}_t) + [H(\hat{m}_t) + H(\hat{y}_t)]\]</div>
+<p>where <span class="math notranslate nohighlight">\(d(x_t, \hat{x}_t)\)</span> can be measured by MSE or MS-MSSIM. To stablize the training procedure, the authors also introduce an auxiliary loss, formulated as:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_0 = \lambda D + R = \lambda [d(x_t, \hat{x}_t) + \beta d(x_t, \tilde{x}_t)] + [H(\hat{m}_t) + H(\hat{y}_t)]\]</div>
+<p><span class="math notranslate nohighlight">\(\beta\)</span> is the weight parameter and set to 0.1.</p>
+</div>
+<div class="section" id="quantization">
+<h2>Quantization<a class="headerlink" href="#quantization" title="Permalink to this headline">¶</a></h2>
+<p>Quantization operation is not differential, which makes end-to-end training impossible. Inspired by [6], the authors replace the quantization operation by adding uniform noise in the training stage.</p>
+</div>
+<div class="section" id="decoded-frame-buffer">
+<h2>Decoded Frame Buffer<a class="headerlink" href="#decoded-frame-buffer" title="Permalink to this headline">¶</a></h2>
+<p>The encoding procedure forms a chain of dependency. To simplify the training procedure, the authors adopt an online updating strategy. They use a buffer to store the previous frame and update each training sample in an epoch.</p>
+</div>
+<div class="section" id="flexible-extensions-for-the-dvc-model">
+<h2>Flexible Extensions for the DVC Model<a class="headerlink" href="#flexible-extensions-for-the-dvc-model" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">DVC_Lite</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">DVC_Pro</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="adaptive-quantization-layer">
+<h2>Adaptive Quantization Layer<a class="headerlink" href="#adaptive-quantization-layer" title="Permalink to this headline">¶</a></h2>
+<p>In order to reduce the number of models for video coding at multiple bitrates, the authors introduce the <strong>adaptive quantization layer</strong> (AQL). In the proposed video compression scheme, they first train a DVC model at high-bitrate without using the AQL. To obtain other models at low-bitrates, they integrate the AQL to the pre-trained baseline DVC model. Finally, they only fine-tune the AQL for other models at different bitrates.</p>
+<a class="reference internal image-reference" href="../_images/e2e-learning-framework-vid-comp-4.png"><img alt="../_images/e2e-learning-framework-vid-comp-4.png" src="../_images/e2e-learning-framework-vid-comp-4.png" style="width: 320pt;" /></a>
 </div>
 <div class="section" id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
 <p><strong>[1]</strong> Liu, D., Li, Y., Lin, J., Li, H., &amp; Wu, F. (2020). Deep learning-based video coding: A review and a case study. ACM Computing Surveys (CSUR), 53(1), 1-35.</p>
 <p><strong>[2]</strong> Lu, G., Ouyang, W., Xu, D., Zhang, X., Cai, C., &amp; Gao, Z. (2019). Dvc: An end-to-end deep video compression framework. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 11006-11015).</p>
+<p><strong>[3]</strong> Wiegand, T., Sullivan, G. J., Bjontegaard, G., &amp; Luthra, A. (2003). Overview of the H. 264/AVC video coding standard. IEEE Transactions on circuits and systems for video technology, 13(7), 560-576.</p>
+<p><strong>[4]</strong> Sullivan, G. J., Ohm, J. R., Han, W. J., &amp; Wiegand, T. (2012). Overview of the high efficiency video coding (HEVC) standard. IEEE Transactions on circuits and systems for video technology, 22(12), 1649-1668.</p>
+<p><strong>[5]</strong> Ranjan, A., &amp; Black, M. J. (2017). Optical flow estimation using a spatial pyramid network. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 4161-4170).</p>
+<p><strong>[6]</strong> Ballé, J., Laparra, V., &amp; Simoncelli, E. P. (2016). End-to-end optimized image compression. arXiv preprint arXiv:1611.01704.</p>
+<p><strong>[7]</strong> Jaderberg, M., Simonyan, K., &amp; Zisserman, A. (2015). Spatial transformer networks. Advances in neural information processing systems, 28, 2017-2025.</p>
+<p><strong>[8]</strong> Ballé, J., Minnen, D., Singh, S., Hwang, S. J., &amp; Johnston, N. (2018). Variational image compression with a scale hyperprior. arXiv preprint arXiv:1802.01436.</p>
 </div>
 </div>
 
@@ -85,12 +178,30 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">An End-to-End Learning Framework for Video Compression</a><ul>
-<li><a class="reference internal" href="#proposed-framework">Proposed Framework</a></li>
+<li><a class="reference internal" href="#notations">Notations</a></li>
+<li><a class="reference internal" href="#hybrid-coding-framework-of-video-compression">Hybrid Coding Framework of Video Compression</a></li>
+<li><a class="reference internal" href="#the-proposed-end-to-end-deep-video-compression-framework">The Proposed End-to-End Deep Video Compression Framework</a></li>
+<li><a class="reference internal" href="#motion-estimation-net">Motion Estimation Net</a></li>
+<li><a class="reference internal" href="#mv-encoder-and-decoder-net">MV Encoder and Decoder Net</a></li>
+<li><a class="reference internal" href="#motion-compensation-net">Motion Compensation Net</a></li>
+<li><a class="reference internal" href="#residual-encoder-and-decoder-net">Residual Encoder and Decoder Net</a></li>
+<li><a class="reference internal" href="#bit-rate-estimation-net">Bit Rate Estimation Net</a></li>
+<li><a class="reference internal" href="#loss-function">Loss Function</a></li>
+<li><a class="reference internal" href="#quantization">Quantization</a></li>
+<li><a class="reference internal" href="#decoded-frame-buffer">Decoded Frame Buffer</a></li>
+<li><a class="reference internal" href="#flexible-extensions-for-the-dvc-model">Flexible Extensions for the DVC Model</a></li>
+<li><a class="reference internal" href="#adaptive-quantization-layer">Adaptive Quantization Layer</a></li>
 <li><a class="reference internal" href="#reference">Reference</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../compression-vid.html"
+                        title="previous chapter">Compression (Video)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="improv-dvc-by-res-adap-flow-coding.html"
+                        title="next chapter">Improving Deep Video Compression by Resolution-Adaptive Flow Coding</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -118,7 +229,15 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="improv-dvc-by-res-adap-flow-coding.html" title="Improving Deep Video Compression by Resolution-Adaptive Flow Coding"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../compression-vid.html" title="Compression (Video)"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../compression-vid.html" >Compression (Video)</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">An End-to-End Learning Framework for Video Compression</a></li> 
       </ul>
     </div>

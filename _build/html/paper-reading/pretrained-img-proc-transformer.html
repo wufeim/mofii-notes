@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Trained Image Processing Transformer &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="PifPaf: Composite Fields for Human Pose estimation" href="../pifpaf.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../pifpaf.html" title="PifPaf: Composite Fields for Human Pose estimation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../other-papers.html" accesskey="U">Other Papers</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pre-Trained Image Processing Transformer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pre-trained-image-processing-transformer">
+<h1>Pre-Trained Image Processing Transformer<a class="headerlink" href="#pre-trained-image-processing-transformer" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Dec 2020</div>
+<div class="line"><strong>Authors:</strong> Hanting Chen, Yunhe Wang, Tianyu Guo, Chang Xu, Yiping Deng, Zhenhua Liu, Siwei Ma, Chunjing Xu, Chao Xu, Wen Gao</div>
+<div class="line"><strong>Affiliations:</strong> Peking University, Huawei Technologies, The University of Sydney, Peng Cheng Laboratory</div>
+</div>
+<p>Pre-training has the potential to provide an attractive solution to image processing tasks by addressing the following two challenges:</p>
+<ol class="arabic simple">
+<li><p>Task-specific data can be limited.</p></li>
+<li><p>It is unknown which type of image processing job will be requested until the test image is presented.</p></li>
+</ol>
+<p>In this paper, the authors study the low-level computer vision task (e.g., denoising, super-resolution, and deraining) and develop a new pre-trained model, namely, <strong>Image Processing Transformer</strong> (IPT). In order to be compatible with different image processing tasks, the entire network is composed of multiple pairs of head and tail corresponding to different tasks and a single shared body. The proposed IPT is learned in an end-to-end manner on ImageNet.</p>
+<p>With only one pre-trained model, IPT outperforms the current SOTA methods on various low-level benchmarks.</p>
+<div class="section" id="ipt-architecture">
+<h2>IPT Architecture<a class="headerlink" href="#ipt-architecture" title="Permalink to this headline">¶</a></h2>
+<p>The overall architecture of IPT consists of four components:</p>
+<ul class="simple">
+<li><p>heads for extracting features from the input corrupted images</p></li>
+<li><p>an encoder-decoder transformer for recovering the missing information in input data</p></li>
+<li><p>tails for formapping the features into restored images</p></li>
+</ul>
+<p><strong>Heads.</strong> Denote the input image as <span class="math notranslate nohighlight">\(x \in \mathbb{R}^{3 \times H \times W}\)</span>. The head generates a feature map <span class="math notranslate nohighlight">\(f_H \in \mathbb{R}^{C \times H \times W}\)</span>. (Typically, <span class="math notranslate nohighlight">\(C = 64\)</span>.) The calculation can be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[f_H = H^i(x), \; i \in \{1, \dots, N_t\}\]</div>
+<p><strong>Transformer encoder.</strong> Features <span class="math notranslate nohighlight">\(f_H \in \mathbb{R}^{C \times H \times W}\)</span> are reshaped into a sequence of patches (&quot;words&quot;), <span class="math notranslate nohighlight">\(f_{p_i} \in \mathbb{R}^{P^2 \times C}\)</span>, <span class="math notranslate nohighlight">\(i \in \{1, \dots, N = \frac{HW}{P^2}\}\)</span>. To maintain the position information, the authors add learnable position encodings <span class="math notranslate nohighlight">\(E_{p_i} \in \mathbb{R}^{P^2 \times C}\)</span> for each patch for feature <span class="math notranslate nohighlight">\(f_{p_i}\)</span> following [1, 2], and <span class="math notranslate nohighlight">\(E_{p_i} + f_{p_i}\)</span> is directly input into the transformer encoder.</p>
+<p>The architecture of encoder layer is following the original structure in [3], which has a multi-head self-attention module and a feed forward network. The output of encoder for each patch is <span class="math notranslate nohighlight">\(f_{E_i} \in \mathbb{R}^{P^2 \times C}\)</span>. The calculation can be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp; y_0 = [E_{p_1} + f_{p_1}, \dots, E_{p_N} + f_{p_N}] \\
+&amp; q_i = k_i = v_i = LN(y_{i-1}) \\
+&amp; y_i' = MSA(q_i, k_i, v_i) + y_{i-1} \\
+&amp; y_i = FFN(LN(y_i')) + y_i', \; i = 1, \dots, l \\
+&amp; [f_{E_1}, \dots, f_{E_N}] = y_l\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(l\)</span> denotes the number of layers in the module, MSA denotes the multi-head self-attention module, and FFN denotes the feed forward network with two fully-connected layers.</p>
+<p><strong>Transformer decoder.</strong> The difference to that of the original transformer is that they utilize a task-specific embedding as an additional input of the decoder. These task-specific embedding <span class="math notranslate nohighlight">\(E_t \in \mathbb{R}^{P^2 \times C}, \; i = \{1, \dots, N_t\}\)</span> are learned to decode features for different tasks. The outputs of the decoder are <span class="math notranslate nohighlight">\(f_{D_i} \in \mathbb{R}^{P^2 \times C}\)</span>, which is then reshaped to <span class="math notranslate nohighlight">\(f_D\)</span> with size <span class="math notranslate nohighlight">\(C \times H \times W\)</span>. The calculation can be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp; z_0 = [f_{E_1}, \dots, f_{E_N}] \\
+&amp; q_i = k_i = LN(z_{i-1}) + E_t, \; v_i = LN(z_{i-1}) \\
+&amp; z_i' = MSA(q_i, k_i, v_i) + z_{i-1} \\
+&amp; q_i' = LN(z_i') + E_t, \; k_i' = v_i' = LN(z_0) \\
+&amp; z_i'' = MSA(q_i', k_i', v_i') + z_i' \\
+&amp; z_i = FFN(LN(z_i'')) + z_i'' \\
+&amp; [f_{D_1}, \dots, f_{D_N}] = y_l\end{split}\]</div>
+<p><strong>Tails.</strong> The calculation can be formulated as <span class="math notranslate nohighlight">\(f_T = T^i (f_D) \in \mathbb{R}^{3 \times H' \times W'}\)</span>.</p>
+<a class="reference internal image-reference" href="../_images/pretrained-img-proc-transformer-1.png"><img alt="../_images/pretrained-img-proc-transformer-1.png" src="../_images/pretrained-img-proc-transformer-1.png" style="width: 600pt;" /></a>
+</div>
+<div class="section" id="pre-training-on-imagenet">
+<h2>Pre-Training on ImageNet<a class="headerlink" href="#pre-training-on-imagenet" title="Permalink to this headline">¶</a></h2>
+<p>One of the key factors for successfully training an excellent transformer is that the well use of large-scale datasets. Using the same degeneration methods as suggested in [4, 5], the authors generate synthetic datasets for several image processing tasks from the ImageNet.</p>
+<p>The loss function for learning the IPT in the supervised fashion can be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_{supervised} = \sum_{i=1}^{N_t} L_1 (IPT(I_{corrupted}^i), I_{clean})\]</div>
+<p>where <span class="math notranslate nohighlight">\(I_{corrupted}^i\)</span> is the corrupted image for task <span class="math notranslate nohighlight">\(i\)</span>.</p>
+<p>Due to the variety of degradation models, such as the wide range of possible noise levels, the generalization ability of the IPT should be further enhanced. The authors introduece <strong>contrastive learning</strong> [6, 7] for learning universal features so that the pre-trained IPT model can be utilized to unseen tasks. Denote the output patched features generated by the IPT decoder for the given input <span class="math notranslate nohighlight">\(x_j\)</span> as <span class="math notranslate nohighlight">\(f_{D_i}^j \in \mathbb{R}^{P^2 \times C}, \; i \in \{1, \dots, N\}\)</span>, where <span class="math notranslate nohighlight">\(x_j \in X = \{x_1, \dots, x_B\}\)</span>. They aims to minimize the distance between patched features from the same images while maximize the distance between patches from different images. The loss function is formulated as:</p>
+<div class="math notranslate nohighlight">
+\[l(f_{D_{i_1}}^j, f_{D_{i_2}}^j) = - \log \frac{\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^j))}{\sum_{k=1}^B \mathbb{I}_{k\neq j}\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^k))}\]</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., ... &amp; Houlsby, N. (2020). An image is worth 16x16 words: Transformers for image recognition at scale. arXiv preprint arXiv:2010.11929.</p>
+<p><strong>[2]</strong> Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., &amp; Zagoruyko, S. (2020). End-to-End Object Detection with Transformers. arXiv preprint arXiv:2005.12872.</p>
+<p><strong>[3]</strong> Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... &amp; Polosukhin, I. (2017). Attention is all you need. In Advances in neural information processing systems (pp. 5998-6008).</p>
+<p><strong>[4]</strong> Gu, S., Meng, D., Zuo, W., &amp; Zhang, L. (2017). Joint convolutional analysis and synthesis sparse representation for single image layer separation. In Proceedings of the IEEE International Conference on Computer Vision (pp. 1708-1716).</p>
+<p><strong>[5]</strong> Agustsson, E., &amp; Timofte, R. (2017). Ntire 2017 challenge on single image super-resolution: Dataset and study. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops (pp. 126-135).</p>
+<p><strong>[6]</strong> Chen, T., Kornblith, S., Norouzi, M., &amp; Hinton, G. (2020). A simple framework for contrastive learning of visual representations. arXiv preprint arXiv:2002.05709.</p>
+<p><strong>[7]</strong> He, K., Fan, H., Wu, Y., Xie, S., &amp; Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 9729-9738).</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Pre-Trained Image Processing Transformer</a><ul>
+<li><a class="reference internal" href="#ipt-architecture">IPT Architecture</a></li>
+<li><a class="reference internal" href="#pre-training-on-imagenet">Pre-Training on ImageNet</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../pifpaf.html"
+                        title="previous chapter">PifPaf: Composite Fields for Human Pose estimation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/pretrained-img-proc-transformer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../pifpaf.html" title="PifPaf: Composite Fields for Human Pose estimation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../other-papers.html" >Other Papers</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pre-Trained Image Processing Transformer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

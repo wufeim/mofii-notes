@@ -18,8 +18,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Generative Adversarial Networks for Extreme Learned Image Compression" href="gan-extreme-img-comp.html" />
-    <link rel="prev" title="Compression (Image)" href="../compression-img.html" /> 
+    <link rel="next" title="Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations" href="soft-to-hard-vec-quant.html" />
+    <link rel="prev" title="Reducing the Dimensionality of Data with Neural Networks" href="redu-dim-data-nn.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,10 +28,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="gan-extreme-img-comp.html" title="Generative Adversarial Networks for Extreme Learned Image Compression"
+          <a href="soft-to-hard-vec-quant.html" title="Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../compression-img.html" title="Compression (Image)"
+          <a href="redu-dim-data-nn.html" title="Reducing the Dimensionality of Data with Neural Networks"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
@@ -51,7 +51,9 @@
 <div class="line"><strong>Authors:</strong> Johannes Balle, Valero Laparra, Eero P. Simoncelli</div>
 <div class="line"><strong>Affiliations:</strong> New York University, Universitat de Valencia</div>
 </div>
-<p>The authors propose an image compression method, consisting of a nonlinear analysis transformation, a uniform quantizer, and a nonlinear synthesis transformation.</p>
+<p>The authors propose an image compression method, consisting of a nonlinear analysis transformation, a uniform quantizer, and a nonlinear synthesis transformation. Using a variant of SGD, they jointly optimize the entire model for rate-distortion performance over a dataset of training images.</p>
+<p>Experiment results show that the proposed method generally exhibits better rate-distortion performance than the standard JPEG and JPEG 2000. The authors observe improvement in visual quality measured by MS-SSIM for all images at all bit rates.</p>
+<hr class="docutils" />
 <p>For <strong>lossy compression problem</strong>, one must trade off two competing costs: the entropy of the discretized representation (<strong>rate</strong>) and the error arising from the quantization (<strong>distortion</strong>). Joint optimization of rate and distortion is difficult.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -59,7 +61,6 @@
 <p>Most existing image compression methods operate by linearly transforming the data vector into a suitable continuous-valued representation, quantizing its elements independently, and then encoding the resulting discrete representation using a lossless <strong>entropy code</strong>. This scheme is called <strong>transform coding</strong> due to the central role of the transformation. Typically, the three components of transform coding methods - transform, quantizer, and entropy code - are separately optimized.</p>
 </div>
 <p>The authors propose a framework for end-to-end optimization of an image compression model based on nonlinear transforms. Specifically, a generalized divisive normalization (GDN) joint nonlinearity is used, followed by uniform scalar quantization. The compressed image is reconstructed from the quantized values using an approximate parametric nonlinear inverse transform. For any desired point along the rate-distortion curve, the parameters of both analysis and synthesis transofrms are jointly optimized using SGD.</p>
-<p>Experiment results show improvement in visual quality measured by MS-SSIM for all images at all bit rates.</p>
 <div class="section" id="choice-of-forward-inverse-and-perceptual-transforms">
 <h2>Choice of Forward, Inverse, and Perceptual Transforms<a class="headerlink" href="#choice-of-forward-inverse-and-perceptual-transforms" title="Permalink to this headline">¶</a></h2>
 <p>The analysis transform <span class="math notranslate nohighlight">\(g_\alpha\)</span> consists of three stages of convolution, subsampling, and divisive normalization. Each stage begins with an affine convolution followed by downsampling, and each stage concludes with a GDN operation.</p>
@@ -92,11 +93,11 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../compression-img.html"
-                        title="previous chapter">Compression (Image)</a></p>
+  <p class="topless"><a href="redu-dim-data-nn.html"
+                        title="previous chapter">Reducing the Dimensionality of Data with Neural Networks</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="gan-extreme-img-comp.html"
-                        title="next chapter">Generative Adversarial Networks for Extreme Learned Image Compression</a></p>
+  <p class="topless"><a href="soft-to-hard-vec-quant.html"
+                        title="next chapter">Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -125,10 +126,10 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="gan-extreme-img-comp.html" title="Generative Adversarial Networks for Extreme Learned Image Compression"
+          <a href="soft-to-hard-vec-quant.html" title="Soft-to-Hard Vector Quantization for End-to-End Learning Compressible Representations"
              >next</a> |</li>
         <li class="right" >
-          <a href="../compression-img.html" title="Compression (Image)"
+          <a href="redu-dim-data-nn.html" title="Reducing the Dimensionality of Data with Neural Networks"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
