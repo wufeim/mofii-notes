@@ -78,7 +78,7 @@ Due to the variety of degradation models, such as the wide range of possible noi
 .. math::
 
    l(f_{D_{i_1}}^j, f_{D_{i_2}}^j) & = - \log \frac{\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^j))}{\sum_{k=1}^B \mathbb{I}_{k\neq j}\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^k))} \\
-   \mathcal{L}_{contrastive} = \frac{1}{BN^2} \sum_{i_1=1}^n \sum_{i_2=1}^N \sum_{j=1}^B l(f_{D_{i_1}}^j, f_{D_{i_2}}^j)
+   \mathcal{L}_{contrastive} & = \frac{1}{BN^2} \sum_{i_1=1}^n \sum_{i_2=1}^N \sum_{j=1}^B l(f_{D_{i_1}}^j, f_{D_{i_2}}^j)
 
 where :math:`d(a, b) = \frac{a^\top b}{\lVert a \rVert\lVert b \rVert}` denotes the cosine similarity. And the overall loss function is:
 
