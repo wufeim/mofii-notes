@@ -25,7 +25,7 @@ Self-Attention Layer
 
 In self-attention layer, the input vector is firstly transformed into three different vectors, the query vector :math:`q`, the key vector :math:`k`, and the value vector :math:`v` with the same dimension :math:`d_q = d_k = d_v = d_{model} = 512`. Vectors derived from different inputs are then packed together into three different matrices, :math:`Q`, :math:`K`, and :math:`V`. As shown in the figure below, the attention function between different input vectors is calculated with the following steps:
 
-- **Step 1:** Compute scores: :math:`S = Q \cdot K^\top`.
+- **Step 1:** Compute scores between input vectors: :math:`S = Q \cdot K^\top`. The score is to determine the degree of attention we put on other words when encoding the current word.
 - **Step 2:** Normalize the scores for the stability of gradient with :math:`S_n = S / \sqrt{d_k}`.
 - **Step 3:** Translate the scores into probabilities with softmax function :math:`P = softmax(S_n)`.
 - **Step 4:** Get the weighted value matrix with :math:`Z = V \cdot P`.
@@ -37,7 +37,22 @@ The process can be formulated as:
    Attention(Q, K, V) = softmax\left( \frac{Q \cdot K^\top}{\sqrt{d_k}} \right) \cdot V
 
 .. image:: figures/survey-vis-transformer-3.png
-   :width: 320pt
+   :width: 160pt
+
+To capture the positional information of each word, a positional encoding with dimension :math:`d_{model}` is added to the original input embedding:
+
+.. math::
+
+   PE(pos, 2i) & = \sin \left( \frac{pos}{10000^{\frac{2i}{d_{model}}} \right) \\
+   PE(pos, 2i + 1) & = \cos \left( \frac{pos}{10000^{\frac{2i}{d_{model}}} \right)
+
+where :math:`i` is the current dimension of the positional encoding.
+
+Multi-Head Attention
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: figures/survey-vis-transformer-4.png
+   :width: 240pt
 
 References
 -------------------------------------
