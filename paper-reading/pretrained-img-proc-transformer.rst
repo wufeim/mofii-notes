@@ -10,7 +10,7 @@ Pre-training has the potential to provide an attractive solution to image proces
 1. Task-specific data can be limited.
 2. It is unknown which type of image processing job will be requested until the test image is presented.
 
-In this paper, the authors study the low-level computer vision task (e.g., denoising, super-resolution, and deraining) and develop a new pre-trained model, namely, **Image Processing Transformer** (IPT). In order to be compatible with different image processing tasks, the entire network is composed of multiple pairs of head and tail corresponding to different tasks and a single shared body. The proposed IPT is learned in an end-to-end manner on ImageNet.
+In this paper, the authors study the low-level computer vision task (e.g., denoising, super-resolution, and deraining) and develop a new pre-trained model, namely, **Image Processing Transformer** (IPT). The proposed IPT is learned in an end-to-end manner on ImageNet.
 
 With only one pre-trained model, IPT outperforms the current SOTA methods on various low-level benchmarks.
 

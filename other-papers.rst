@@ -5,4 +5,3 @@ Other Papers
    :maxdepth: 1
 
    pifpaf
-   paper-reading/pretrained-img-proc-transformer.rst

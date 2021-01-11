@@ -10,4 +10,5 @@ Paper Reading Notes
    generative
    compression-img
    compression-vid
+   transformer
    other-papers
