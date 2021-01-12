@@ -31,6 +31,9 @@ In model design, the authors follow the original Transformer [1] as closely as p
    \mathbf{z}_l & = \text{MLP}(\text{LN}(\mathbf{z}_l')) + \mathbf{z}_l' \;\;\; && l = 1 \dots L \\
    \mathbf{y} & = \text{LN}(\mathbf{z}_L^0)
 
+.. image:: figures/img-is-16x16-words-1.png
+   :width: 520pt
+
 Fine-Tuning and Higher Resolution
 -------------------------------------
 
