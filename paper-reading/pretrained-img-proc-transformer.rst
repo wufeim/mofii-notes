@@ -86,6 +86,12 @@ where :math:`d(a, b) = \frac{a^\top b}{\lVert a \rVert\lVert b \rVert}` denotes 
 
    \mathcal{L}_{IPT} = \lambda \cdot \mathcal{L}_{contrastive} + \mathcal{L}_{supervised}
 
+Ablation Study
+-------------------------------------
+
+- **Impact of data percentage.**
+- **Impact of contrasitive learning.**
+
 Conclusion
 -------------------------------------
 

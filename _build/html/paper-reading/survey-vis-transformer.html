@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Survey on Visual Transformer &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Other Papers" href="../other-papers.html" />
+    <link rel="prev" title="Pre-Trained Image Processing Transformer" href="pretrained-img-proc-transformer.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../other-papers.html" title="Other Papers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pretrained-img-proc-transformer.html" title="Pre-Trained Image Processing Transformer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">A Survey on Visual Transformer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="a-survey-on-visual-transformer">
+<h1>A Survey on Visual Transformer<a class="headerlink" href="#a-survey-on-visual-transformer" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Dec 2020</div>
+<div class="line"><strong>Authors:</strong> Kai Han, Yunhe Wang, Hanting Chen, Xinghao Chen, Jianyuan Guo, Zhenhua Liu, Yehui Tang, An Xiao, Chunjing Xu, Yixing Xu, Zhaohui Yang, Yiman Zhang, Dacheng Tao</div>
+<div class="line"><strong>Affiliations:</strong> Noah's Ark Lab, Peking University, University of Sydney</div>
+</div>
+<p>Transformer is originally applied on natural language processing (NLP) tasks and brings in significant improvement [1, 2, 3]. Inspired by the power of transformer in NLP, recently researchers extend transformer for computer vision (CV) tasks.</p>
+<p>In this paper, the authors provide a literature review of these visual transformer models by categorizing them in different tasks and analyze the advantages and disadvantages of these methods. The table below lists the representative works of visual transformers.</p>
+<a class="reference internal image-reference" href="../_images/survey-vis-transformer-1.png"><img alt="../_images/survey-vis-transformer-1.png" src="../_images/survey-vis-transformer-1.png" style="width: 600pt;" /></a>
+<div class="section" id="formulation-of-transformer">
+<h2>Formulation of Transformer<a class="headerlink" href="#formulation-of-transformer" title="Permalink to this headline">¶</a></h2>
+<p>As shown in the figure below, transformer consists of an encoder module and a decoder module with several encoders/decoders of the same architecture. Each encoder is composed of a self-attention layer and a feed-forward neural network, while each decoder is composed of a self-attention layer, an encoder-decoder attention layer and a feed-forward neural network. Before feeding into the transformer, each &quot;word&quot; is embedded into a vector with <span class="math notranslate nohighlight">\(d_{model} = 512\)</span> dimensions.</p>
+<a class="reference internal image-reference" href="../_images/survey-vis-transformer-2.png"><img alt="../_images/survey-vis-transformer-2.png" src="../_images/survey-vis-transformer-2.png" style="width: 400pt;" /></a>
+<div class="section" id="self-attention-layer">
+<h3>Self-Attention Layer<a class="headerlink" href="#self-attention-layer" title="Permalink to this headline">¶</a></h3>
+<p>In self-attention layer, the input vector is firstly transformed into three different vectors, the query vector <span class="math notranslate nohighlight">\(q\)</span>, the key vector <span class="math notranslate nohighlight">\(k\)</span>, and the value vector <span class="math notranslate nohighlight">\(v\)</span> with the same dimension <span class="math notranslate nohighlight">\(d_q = d_k = d_v = d_{model} = 512\)</span>. Vectors derived from different inputs are then packed together into three different matrices, <span class="math notranslate nohighlight">\(Q\)</span>, <span class="math notranslate nohighlight">\(K\)</span>, and <span class="math notranslate nohighlight">\(V\)</span>. As shown in the figure below, the attention function between different input vectors is calculated with the following steps:</p>
+<ul class="simple">
+<li><p><strong>Step 1:</strong> Compute scores between input vectors: <span class="math notranslate nohighlight">\(S = Q \cdot K^\top\)</span>. The score is to determine the degree of attention we put on other words when encoding the current word.</p></li>
+<li><p><strong>Step 2:</strong> Normalize the scores for the stability of gradient with <span class="math notranslate nohighlight">\(S_n = S / \sqrt{d_k}\)</span>.</p></li>
+<li><p><strong>Step 3:</strong> Translate the scores into probabilities with softmax function <span class="math notranslate nohighlight">\(P = softmax(S_n)\)</span>.</p></li>
+<li><p><strong>Step 4:</strong> Get the weighted value matrix with <span class="math notranslate nohighlight">\(Z = V \cdot P\)</span>.</p></li>
+</ul>
+<p>The process can be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[Attention(Q, K, V) = softmax\left( \frac{Q \cdot K^\top}{\sqrt{d_k}} \right) \cdot V\]</div>
+<a class="reference internal image-reference" href="../_images/survey-vis-transformer-3.png"><img alt="../_images/survey-vis-transformer-3.png" src="../_images/survey-vis-transformer-3.png" style="width: 100pt;" /></a>
+<p>To capture the positional information of each word, a positional encoding with dimension <span class="math notranslate nohighlight">\(d_{model}\)</span> is added to the original input embedding:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}PE(pos, 2i) &amp; = \sin \left( \frac{pos}{10000^{\frac{2i}{d_{model}}} \right) \\
+PE(pos, 2i + 1) &amp; = \cos \left( \frac{pos}{10000^{\frac{2i}{d_{model}}} \right)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> is the current dimension of the positional encoding.</p>
+</div>
+<div class="section" id="multi-head-attention">
+<h3>Multi-Head Attention<a class="headerlink" href="#multi-head-attention" title="Permalink to this headline">¶</a></h3>
+<p>A single-head self-attention layer limits the ability of focusing on several specific positions while does not influence the attention on other positions that is equally important at the same time. Multi-head attention is added to boost the performance of the vanilla self-attention layer.</p>
+<p>Given an input vector and the number of heads <span class="math notranslate nohighlight">\(h\)</span>, the input vector is firstly transformed into three different groups of vectors, the query group, the key group, and the value group. There are <span class="math notranslate nohighlight">\(h\)</span> vectors in each group with dimension <span class="math notranslate nohighlight">\(d_{q'} = d_{k'} = d_{v'} = d_{model}/h\)</span>. By packing them into groups of matrices, <span class="math notranslate nohighlight">\(\{Q_i}_{i=1}^h\)</span>, <span class="math notranslate nohighlight">\(\{K_i\}_{i=1}^h\)</span>, and <span class="math notranslate nohighlight">\(\{V_i\}_{i=1}^h\)</span>, the process of multi-head attention is as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}MultiHead(Q', K', V') &amp; = Concat(head_1, \dots, head_h)W^0 \\
+head_i &amp; = Attention(Q_i, K_i, V_i)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(W^0 \in \mathbb{R}^{d_{model} \times d_{model}}\)</span> is the linear projection matrix.</p>
+<a class="reference internal image-reference" href="../_images/survey-vis-transformer-4.png"><img alt="../_images/survey-vis-transformer-4.png" src="../_images/survey-vis-transformer-4.png" style="width: 150pt;" /></a>
+</div>
+<div class="section" id="residual-in-the-encoder-and-decoder">
+<h3>Residual in the Encoder and Decoder<a class="headerlink" href="#residual-in-the-encoder-and-decoder" title="Permalink to this headline">¶</a></h3>
+<p>A residual connection is added in each sub-layer in the encoder and decoder in order to strengthen the flow of information and get a better performance. A layer normalization [4] is followed afterward:</p>
+<div class="math notranslate nohighlight">
+\[LayerNorm(X + Attention(X))\]</div>
+</div>
+<div class="section" id="feed-forward-neural-network">
+<h3>Feed-Forward Neural Network<a class="headerlink" href="#feed-forward-neural-network" title="Permalink to this headline">¶</a></h3>
+<p>A feed-forward NN is applied after the self-attention layers in each encoder and decoder, denoted as</p>
+<div class="math notranslate nohighlight">
+\[FFNN(X) = W_2\sigma(W_1 X)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma\)</span> is the ReLU activation and the hidden layer dimension is 2048.</p>
+</div>
+<div class="section" id="final-layer-in-decoder">
+<h3>Final Layer in Decoder<a class="headerlink" href="#final-layer-in-decoder" title="Permalink to this headline">¶</a></h3>
+<p>The final layer turns the stack of vectors back into a word. This is achieved by a linear layer followed by a softmax layer.</p>
+</div>
+</div>
+<div class="section" id="visual-transformer-image-classification">
+<h2>Visual Transformer: Image Classification<a class="headerlink" href="#visual-transformer-image-classification" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="igpt">
+<h3>iGPT<a class="headerlink" href="#igpt" title="Permalink to this headline">¶</a></h3>
+<p>This approach consists of a pre-training stage followed by a fine-tuning stage.</p>
+<p>Given an unlabeled dataset <span class="math notranslate nohighlight">\(X\)</span> consisting of high dimensional data <span class="math notranslate nohighlight">\(x = \{x_1, \dots, x_n\}\)</span>, they train the model by minimizing the negative log-likelihood of the data:</p>
+<div class="math notranslate nohighlight">
+\[L_\text{AR} = \mathbb{E}_{x \sim X} [-\log p(x)]\]</div>
+<p>where <span class="math notranslate nohighlight">\(p(x)\)</span> is the density of the data of images, which can be modeled by</p>
+<div class="math notranslate nohighlight">
+\[p(x) = \prod_{i=1}^n p(x_{\pi_i}) \mid x_{\pi_1}, \dots, x_{\pi_{i-1}}, \theta)\]</div>
+<p>where the identity permutation <span class="math notranslate nohighlight">\(\pi_i = i\)</span> is adopted for <span class="math notranslate nohighlight">\(1 \leq i \leq n\)</span>, known as the raster order.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... &amp; Polosukhin, I. (2017). Attention is all you need. In Advances in neural information processing systems (pp. 5998-6008).</p>
+<p><strong>[2]</strong> Devlin, J., Chang, M. W., Lee, K., &amp; Toutanova, K. (2018). Bert: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805.</p>
+<p><strong>[3]</strong> Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., ... &amp; Amodei, D. (2020). Language models are few-shot learners. arXiv preprint arXiv:2005.14165.</p>
+<p><strong>[4]</strong> Ba, J. L., Kiros, J. R., &amp; Hinton, G. E. (2016). Layer normalization. arXiv preprint arXiv:1607.06450.</p>
+<p><strong>[5]</strong> Chen, M., Radford, A., Child, R., Wu, J., Jun, H., Luan, D., &amp; Sutskever, I. (2020, November). Generative pretraining from pixels. In International Conference on Machine Learning (pp. 1691-1703). PMLR.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A Survey on Visual Transformer</a><ul>
+<li><a class="reference internal" href="#formulation-of-transformer">Formulation of Transformer</a><ul>
+<li><a class="reference internal" href="#self-attention-layer">Self-Attention Layer</a></li>
+<li><a class="reference internal" href="#multi-head-attention">Multi-Head Attention</a></li>
+<li><a class="reference internal" href="#residual-in-the-encoder-and-decoder">Residual in the Encoder and Decoder</a></li>
+<li><a class="reference internal" href="#feed-forward-neural-network">Feed-Forward Neural Network</a></li>
+<li><a class="reference internal" href="#final-layer-in-decoder">Final Layer in Decoder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#visual-transformer-image-classification">Visual Transformer: Image Classification</a><ul>
+<li><a class="reference internal" href="#igpt">iGPT</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pretrained-img-proc-transformer.html"
+                        title="previous chapter">Pre-Trained Image Processing Transformer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../other-papers.html"
+                        title="next chapter">Other Papers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/survey-vis-transformer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../other-papers.html" title="Other Papers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pretrained-img-proc-transformer.html" title="Pre-Trained Image Processing Transformer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">A Survey on Visual Transformer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

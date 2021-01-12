@@ -10,7 +10,7 @@ Pre-training has the potential to provide an attractive solution to image proces
 1. Task-specific data can be limited.
 2. It is unknown which type of image processing job will be requested until the test image is presented.
 
-In this paper, the authors study the low-level computer vision task (e.g., denoising, super-resolution, and deraining) and develop a new pre-trained model, namely, **Image Processing Transformer** (IPT). In order to be compatible with different image processing tasks, the entire network is composed of multiple pairs of head and tail corresponding to different tasks and a single shared body. The proposed IPT is learned in an end-to-end manner on ImageNet.
+In this paper, the authors study the low-level computer vision task (e.g., denoising, super-resolution, and deraining) and develop a new pre-trained model, namely, **Image Processing Transformer** (IPT). The proposed IPT is learned in an end-to-end manner on ImageNet.
 
 With only one pre-trained model, IPT outperforms the current SOTA methods on various low-level benchmarks.
 
@@ -77,7 +77,19 @@ Due to the variety of degradation models, such as the wide range of possible noi
 
 .. math::
 
-   l(f_{D_{i_1}}^j, f_{D_{i_2}}^j) = - \log \frac{\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^j))}{\sum_{k=1}^B \mathbb{I}_{k\neq j}\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^k))}
+   l(f_{D_{i_1}}^j, f_{D_{i_2}}^j) & = - \log \frac{\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^j))}{\sum_{k=1}^B \mathbb{I}_{k\neq j}\exp(d(f_{D_{i_1}}^j, f_{D_{i_1}}^k))} \\
+   \mathcal{L}_{contrastive} & = \frac{1}{BN^2} \sum_{i_1=1}^n \sum_{i_2=1}^N \sum_{j=1}^B l(f_{D_{i_1}}^j, f_{D_{i_2}}^j)
+
+where :math:`d(a, b) = \frac{a^\top b}{\lVert a \rVert\lVert b \rVert}` denotes the cosine similarity. And the overall loss function is:
+
+.. math::
+
+   \mathcal{L}_{IPT} = \lambda \cdot \mathcal{L}_{contrastive} + \mathcal{L}_{supervised}
+
+Conclusion
+-------------------------------------
+
+In the future work, the authors aim to extend the IPT model to more tasks such as deblurring, dehazing, etc.
 
 References
 -------------------------------------
