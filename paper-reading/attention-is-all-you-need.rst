@@ -35,7 +35,7 @@ An attention function can be described as mapping a query and a set of key-value
 
 .. math::
 
-   \text{Attention}(Q, K, V) = \text{Softmax}\left( \frac{QK^\top}{\sqrt{d_k}} \right} V
+   \text{Attention}(Q, K, V) = \text{Softmax}\left( \frac{QK^\top}{\sqrt{d_k}} \right) V
 
 For larger values of :math:`d_k`, the dot products may grow large in magnitude, pushing the softmax function into regions where it has extermely small gradients. The authors scale the dot products by :math:`\frac{1}{\sqrt{d_k}}`.
 
@@ -47,7 +47,7 @@ For larger values of :math:`d_k`, the dot products may grow large in magnitude, 
 .. math::
 
    \text{MultiHead}(Q, K, V) & = \text{Concat}(\text{head}_1, \dots, \text{head}_h)W^O \\
-   \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
+   \text{head}_i & = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
 
 where the projections are parameter matrices :math:`W_i^Q \in \mathbb{R}^{d_{model} \times d_k}`, :math:`W_i^K \in \mathbb{R}^{d_{model} \times d_k}`, :math:`W_i^V \in \mathbb{R}^{d_{model} \times d_v}`.
 
