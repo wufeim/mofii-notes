@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale &#8212; Mofii Notes 1.0.1 documentation</title>
+    <title>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT) &#8212; Mofii Notes 1.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -17,7 +17,9 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pre-Trained Image Processing Transformer" href="pretrained-img-proc-transformer.html" />
+    <link rel="prev" title="Transformer" href="../transformer.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,8 +27,16 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pretrained-img-proc-transformer.html" title="Pre-Trained Image Processing Transformer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../transformer.html" title="Transformer"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a></li> 
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)</a></li> 
       </ul>
     </div>  
 
@@ -35,8 +45,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="an-image-is-worth-16x16-words-transformers-for-image-recognition-at-scale">
-<h1>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale<a class="headerlink" href="#an-image-is-worth-16x16-words-transformers-for-image-recognition-at-scale" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="an-image-is-worth-16x16-words-transformers-for-image-recognition-at-scale-vit">
+<h1>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)<a class="headerlink" href="#an-image-is-worth-16x16-words-transformers-for-image-recognition-at-scale-vit" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
 <div class="line"><strong>Year:</strong> Oct 2020</div>
 <div class="line"><strong>Authors:</strong> Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, Jokob Uszkoreit, Neil Houlsby</div>
@@ -57,12 +67,28 @@
 \mathbf{z}_l' &amp; = \text{MSA}(\text{LN}(\mathbf{z}_{l-1})) + \mathbf{z}_{l-1} \;\;\; &amp;&amp; l = 1 \dots L \\
 \mathbf{z}_l &amp; = \text{MLP}(\text{LN}(\mathbf{z}_l')) + \mathbf{z}_l' \;\;\; &amp;&amp; l = 1 \dots L \\
 \mathbf{y} &amp; = \text{LN}(\mathbf{z}_L^0)\end{split}\]</div>
+<a class="reference internal image-reference" href="../_images/img-is-16x16-words-1.png"><img alt="../_images/img-is-16x16-words-1.png" src="../_images/img-is-16x16-words-1.png" style="width: 520pt;" /></a>
+</div>
+<div class="section" id="fine-tuning-and-higher-resolution">
+<h2>Fine-Tuning and Higher Resolution<a class="headerlink" href="#fine-tuning-and-higher-resolution" title="Permalink to this headline">¶</a></h2>
+<p>When fine-tuning to smaller downstream tasks, we remove the pre-trained prediction head and attain a zero-initiated <span class="math notranslate nohighlight">\(D \times K\)</span> feedforward layer, where <span class="math notranslate nohighlight">\(K\)</span> is the number of downstream classes.</p>
+<p>When feeding images of higher resolution, the authors keep the patch size the same, which results in a larger effective sequence length and makes the pre-trained position embeddings meaningless. They therefore perform 2D interpolation of the pre-trained position embeddings according to their location in the original image.</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>While the initial results are encouraging, many challenges remain:</p>
+<ul class="simple">
+<li><p>Apply to ViT to other CV tasks, such as detection and segmentation [4]</p></li>
+<li><p>Continue exploring self-supervised pre-training methods</p></li>
+<li><p>Further scaling of ViT would likely lead to improved performance</p></li>
+</ul>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p><strong>[1]</strong> Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... &amp; Polosukhin, I. (2017). Attention is all you need. In <em>Advances in neural information processing systems</em> (pp. 5998-6008).</p>
 <p><strong>[2]</strong> Wang, Q., Li, B., Xiao, T., Zhu, J., Li, C., Wong, D. F., &amp; Chao, L. S. (2019). Learning deep transformer models for machine translation. <em>arXiv preprint arXiv:1906.01787</em>.</p>
 <p><strong>[3]</strong> Baevski, A., &amp; Auli, M. (2018). Adaptive input representations for neural language modeling. <em>arXiv preprint arXiv:1809.10853</em>.</p>
+<p><strong>[4]</strong> Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., &amp; Zagoruyko, S. (2020). End-to-End Object Detection with Transformers. <em>arXiv preprint arXiv:2005.12872</em>.</p>
 </div>
 </div>
 
@@ -75,13 +101,21 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a><ul>
+<li><a class="reference internal" href="#">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)</a><ul>
 <li><a class="reference internal" href="#vision-transformer-vit">Vision Transformer (ViT)</a></li>
+<li><a class="reference internal" href="#fine-tuning-and-higher-resolution">Fine-Tuning and Higher Resolution</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../transformer.html"
+                        title="previous chapter">Transformer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pretrained-img-proc-transformer.html"
+                        title="next chapter">Pre-Trained Image Processing Transformer</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -109,8 +143,16 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="pretrained-img-proc-transformer.html" title="Pre-Trained Image Processing Transformer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../transformer.html" title="Transformer"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a></li> 
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

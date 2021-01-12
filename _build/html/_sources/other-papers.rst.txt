@@ -5,3 +5,4 @@ Other Papers
    :maxdepth: 1
 
    pifpaf
+   paper-reading/non-local-nns.rst

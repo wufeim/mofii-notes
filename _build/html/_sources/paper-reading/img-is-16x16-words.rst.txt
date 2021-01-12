@@ -1,4 +1,4 @@
-An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)
 =====================================
 
 | **Year:** Oct 2020
@@ -31,6 +31,25 @@ In model design, the authors follow the original Transformer [1] as closely as p
    \mathbf{z}_l & = \text{MLP}(\text{LN}(\mathbf{z}_l')) + \mathbf{z}_l' \;\;\; && l = 1 \dots L \\
    \mathbf{y} & = \text{LN}(\mathbf{z}_L^0)
 
+.. image:: figures/img-is-16x16-words-1.png
+   :width: 520pt
+
+Fine-Tuning and Higher Resolution
+-------------------------------------
+
+When fine-tuning to smaller downstream tasks, we remove the pre-trained prediction head and attain a zero-initiated :math:`D \times K` feedforward layer, where :math:`K` is the number of downstream classes.
+
+When feeding images of higher resolution, the authors keep the patch size the same, which results in a larger effective sequence length and makes the pre-trained position embeddings meaningless. They therefore perform 2D interpolation of the pre-trained position embeddings according to their location in the original image.
+
+Conclusion
+-------------------------------------
+
+While the initial results are encouraging, many challenges remain:
+
+- Apply to ViT to other CV tasks, such as detection and segmentation [4]
+- Continue exploring self-supervised pre-training methods
+- Further scaling of ViT would likely lead to improved performance
+
 References
 -------------------------------------
 
@@ -39,3 +58,5 @@ References
 **[2]** Wang, Q., Li, B., Xiao, T., Zhu, J., Li, C., Wong, D. F., & Chao, L. S. (2019). Learning deep transformer models for machine translation. *arXiv preprint arXiv:1906.01787*.
 
 **[3]** Baevski, A., & Auli, M. (2018). Adaptive input representations for neural language modeling. *arXiv preprint arXiv:1809.10853*.
+
+**[4]** Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., & Zagoruyko, S. (2020). End-to-End Object Detection with Transformers. *arXiv preprint arXiv:2005.12872*.
