@@ -11,4 +11,5 @@ Paper Reading Notes
    compression-img
    compression-vid
    transformer
+   super-resolution
    other-papers

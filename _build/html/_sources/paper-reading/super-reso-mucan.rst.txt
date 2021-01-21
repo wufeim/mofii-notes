@@ -5,7 +5,7 @@ MuCAN: Multi-Correspondence Aggregation Network for Video Super-Resolution
 | **Authors:** Wenbo Li, Xin Tao, Taian Guo, Lu Qi, Jiangbo Lu, Jiaya Jia
 | **Affiliations:** The Chinese University of Hong Kong, Kuaishou Tech, Tsinghua University, SmartMore
 
-Video super-resolutino (VSR) aims to utilize multiple low-resolution frames to generate a high-resolution prediction for each frame. The authors argues that there are two main limitations for existing VSR methods:
+Video super-resolution (VSR) aims to utilize multiple low-resolution frames to generate a high-resolution prediction for each frame. The authors argues that there are two main limitations for existing VSR methods:
 
 - Flow estimation is error-prone and affects recovery results.
 - Similar patterns in natural images are rarely exploited.
