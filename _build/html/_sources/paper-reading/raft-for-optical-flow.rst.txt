@@ -50,6 +50,26 @@ They use the local neighborhood :math:`\mathcal{N}(\mathbf{x}')_r` to index from
 Iterative Updates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+The update operator estimates a sequence of flow estimates :math:`\{\mathbf{f}_1, \dots, \mathbf{f}_N\}` from an initial starting point :math:`\mathbf{f}_0 = 0`. In each iteration, we have :math:`\mathbf{f}_{k+1} = \Delta \mathbf{f} + \mathbf{f}_k`.
+
+The update operator takes flow, correlation, and a latent hidden state as input, and outputs :math:`\Delta \mathbf{f}` and an updated hidden state.
+
+**Inputs:** Given current flow :math:`\mathbf{f}^k`, we retrieve correlation features from the correlation pyramid. The correlation feature are then processed by 2 convolutional layers. Another 2 convolutional layers are applied to the flow estimate for flow features. The input feature map is then taken as the concatenation of the correlation, flow and context features.
+
+**Update:** A core component of the update operator is the gated activation unit based on the GRU cell:
+
+.. math::
+
+   z_t & = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_z)) \\
+   r_t & = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_r)) \\
+   \tilde{h}_t & = \text{tanh}(\text{Conv}_{3 \times 3}([r_t \bigodot h_{t-1}, x_t], W_h)) \\
+   h_t & = (1 - z_t) \bigodot h_{t-1} + z_t \bigodot \tilde{h}_t
+
+**Flow Prediction:** The hidden state outputted by the GRU is passed through two convolutional layers to predict the flow update :math:`\Delta \mathbf{f}`.
+
+Supervision
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 They supervise the network with the L1 distance between the full sequence of predictions and the ground truth flow with exponentially increasing weights:
 
 .. math::

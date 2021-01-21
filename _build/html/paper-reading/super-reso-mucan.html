@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuCAN: Multi-Correspondence Aggregation Network for Video Super-Resolution &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">MuCAN: Multi-Correspondence Aggregation Network for Video Super-Resolution</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mucan-multi-correspondence-aggregation-network-for-video-super-resolution">
+<h1>MuCAN: Multi-Correspondence Aggregation Network for Video Super-Resolution<a class="headerlink" href="#mucan-multi-correspondence-aggregation-network-for-video-super-resolution" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Jul 2020</div>
+<div class="line"><strong>Authors:</strong> Wenbo Li, Xin Tao, Taian Guo, Lu Qi, Jiangbo Lu, Jiaya Jia</div>
+<div class="line"><strong>Affiliations:</strong> The Chinese University of Hong Kong, Kuaishou Tech, Tsinghua University, SmartMore</div>
+</div>
+<p>Video super-resolutino (VSR) aims to utilize multiple low-resolution frames to generate a high-resolution prediction for each frame. The authors argues that there are two main limitations for existing VSR methods:</p>
+<ul class="simple">
+<li><p>Flow estimation is error-prone and affects recovery results.</p></li>
+<li><p>Similar patterns in natural images are rarely exploited.</p></li>
+</ul>
+<p>In this work, the authors propose the multi-correspondence aggregation network (MuCAN) for VSR. This method achieves SOTA results on multiple benchmark datasets.</p>
+<p>In contrast to previous methods that model VSR as separate alignment and regression stages, the authors view this problem as an inter- and intra-frame correspondence aggregation task.</p>
+<ul>
+<li><dl>
+<dt><strong>Inter-frame correspondence:</strong> Motion estimation may suffer from inevitable errors so the authors resort to simultaneously consider multiple correspondence candidates for each pixel. They propose a <strong>temporal multi-corresopndence aggregation module</strong> (TM-CAM) for alignment.</dt><dd><a class="reference internal image-reference" href="../_images/mucan-2.png"><img alt="../_images/mucan-2.png" src="../_images/mucan-2.png" style="width: 420pt;" /></a>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Intra-frame correspondence:</strong> Similar pattern within each frame can benefit detail restoration. The authors design a new <strong>cross-scale nonlocal-correspondence aggregation module</strong> (CN-CAM) to exploit multi-scale self-similarity property.</dt><dd><a class="reference internal image-reference" href="../_images/mucan-1.png"><img alt="../_images/mucan-1.png" src="../_images/mucan-1.png" style="width: 280pt;" /></a>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/super-reso-mucan.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">MuCAN: Multi-Correspondence Aggregation Network for Video Super-Resolution</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

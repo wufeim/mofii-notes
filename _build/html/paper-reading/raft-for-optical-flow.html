@@ -74,6 +74,19 @@
 </div>
 <div class="section" id="iterative-updates">
 <h3>Iterative Updates<a class="headerlink" href="#iterative-updates" title="Permalink to this headline">¶</a></h3>
+<p>The update operator estimates a sequence of flow estimates <span class="math notranslate nohighlight">\(\{\mathbf{f}_1, \dots, \mathbf{f}_N\}\)</span> from an initial starting point <span class="math notranslate nohighlight">\(\mathbf{f}_0 = 0\)</span>. In each iteration, we have <span class="math notranslate nohighlight">\(\mathbf{f}_{k+1} = \Delta \mathbf{f} + \mathbf{f}_k\)</span>.</p>
+<p>The update operator takes flow, correlation, and a latent hidden state as input, and outputs <span class="math notranslate nohighlight">\(\Delta \mathbf{f}\)</span> and an updated hidden state.</p>
+<p><strong>Inputs:</strong> Given current flow <span class="math notranslate nohighlight">\(\mathbf{f}^k\)</span>, we retrieve correlation features from the correlation pyramid. The correlation feature are then processed by 2 convolutional layers. Another 2 convolutional layers are applied to the flow estimate for flow features. The input feature map is then taken as the concatenation of the correlation, flow and context features.</p>
+<p><strong>Update:</strong> A core component of the update operator is the gated activation unit based on the GRU cell:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}z_t &amp; = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_z)) \\
+r_t &amp; = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_r)) \\
+\tilde{h}_t &amp; = \text{tanh}(\text{Conv}_{3 \times 3}([r_t \bigodot h_{t-1}, x_t], W_h)) \\
+h_t &amp; = (1 - z_t) \bigodot h_{t-1} + z_t \bigodot \tilde{h}_t\end{split}\]</div>
+<p><strong>Flow Prediction:</strong> The hidden state outputted by the GRU is passed through two convolutional layers to predict the flow update <span class="math notranslate nohighlight">\(\Delta \mathbf{f}\)</span>.</p>
+</div>
+<div class="section" id="supervision">
+<h3>Supervision<a class="headerlink" href="#supervision" title="Permalink to this headline">¶</a></h3>
 <p>They supervise the network with the L1 distance between the full sequence of predictions and the ground truth flow with exponentially increasing weights:</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{L} = \sum_{i=1}^N \gamma^{N - i} \lVert \mathbf{F}_{gt} - \mathbf{f}_i\rVert_1\]</div>
@@ -95,6 +108,7 @@
 <li><a class="reference internal" href="#feature-extraction">Feature Extraction</a></li>
 <li><a class="reference internal" href="#computing-visual-similarity">Computing Visual Similarity</a></li>
 <li><a class="reference internal" href="#iterative-updates">Iterative Updates</a></li>
+<li><a class="reference internal" href="#supervision">Supervision</a></li>
 </ul>
 </li>
 </ul>
