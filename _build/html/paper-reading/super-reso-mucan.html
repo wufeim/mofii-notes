@@ -59,18 +59,48 @@
 </ul>
 <p>In this work, the authors propose the multi-correspondence aggregation network (MuCAN) for VSR. This method achieves SOTA results on multiple benchmark datasets.</p>
 <p>In contrast to previous methods that model VSR as separate alignment and regression stages, the authors view this problem as an inter- and intra-frame correspondence aggregation task.</p>
-<ul>
-<li><dl>
-<dt><strong>Inter-frame correspondence:</strong> Motion estimation may suffer from inevitable errors so the authors resort to simultaneously consider multiple correspondence candidates for each pixel. They propose a <strong>temporal multi-corresopndence aggregation module</strong> (TM-CAM) for alignment.</dt><dd><a class="reference internal image-reference" href="../_images/mucan-2.png"><img alt="../_images/mucan-2.png" src="../_images/mucan-2.png" style="width: 420pt;" /></a>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><strong>Intra-frame correspondence:</strong> Similar pattern within each frame can benefit detail restoration. The authors design a new <strong>cross-scale nonlocal-correspondence aggregation module</strong> (CN-CAM) to exploit multi-scale self-similarity property.</dt><dd><a class="reference internal image-reference" href="../_images/mucan-1.png"><img alt="../_images/mucan-1.png" src="../_images/mucan-1.png" style="width: 280pt;" /></a>
-</dd>
-</dl>
-</li>
+<ul class="simple">
+<li><p><strong>Inter-frame correspondence:</strong> Motion estimation may suffer from inevitable errors so the authors resort to simultaneously consider multiple correspondence candidates for each pixel. They propose a <strong>temporal multi-correspondence aggregation module</strong> (TM-CAM) for alignment.</p></li>
 </ul>
+<a class="reference internal image-reference" href="../_images/mucan-2.png"><img alt="../_images/mucan-2.png" src="../_images/mucan-2.png" style="width: 420pt;" /></a>
+<ul class="simple">
+<li><p><strong>Intra-frame correspondence:</strong> Similar pattern within each frame can benefit detail restoration. The authors design a new <strong>cross-scale nonlocal-correspondence aggregation module</strong> (CN-CAM) to exploit multi-scale self-similarity property.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/mucan-1.png"><img alt="../_images/mucan-1.png" src="../_images/mucan-1.png" style="width: 210pt;" /></a>
+<div class="section" id="proposed-method">
+<h2>Proposed Method<a class="headerlink" href="#proposed-method" title="Permalink to this headline">¶</a></h2>
+<p>Given <span class="math notranslate nohighlight">\(2N + 1\)</span> consecutive low-resolution frames <span class="math notranslate nohighlight">\(\{\mathbf{I}_{t-N}^L, \dots, \mathbf{I}_t^L, \dots, \mathbf{I}_{t+N}^L\}\)</span>, MuCAN predicts a high-resolution central image <span class="math notranslate nohighlight">\(\mathbf{I}_t^H\)</span>. It consists of three modules: TM-CAM, CXN-CAM, and a reconstruction module.</p>
+<a class="reference internal image-reference" href="../_images/mucan-3.png"><img alt="../_images/mucan-3.png" src="../_images/mucan-3.png" style="width: 600pt;" /></a>
+</div>
+<div class="section" id="temporal-multi-correspondence-aggregation-module-tm-cam">
+<h2>Temporal Multi-Correspondence Aggregation Module (TM-CAM)<a class="headerlink" href="#temporal-multi-correspondence-aggregation-module-tm-cam" title="Permalink to this headline">¶</a></h2>
+<p>The authors design a hierarchical correspondence aggregation strategy to handle large and subtle motion simultaneously.</p>
+<p>Given two neighboring low resolution images <span class="math notranslate nohighlight">\(\mathbf{I}_{t-1}^L\)</span> and <span class="math notranslate nohighlight">\(\mathbf{I}_t^L\)</span>, they first encode them into lower resolutions. Then the aggregation starts in the lower resolution stage compensating large motion, while progressively moving up to higher resolution stages for subtle sub-pixel shift.</p>
+<p>The authors use correlation as the distance measure:</p>
+<div class="math notranslate nohighlight">
+\[\text{corr}(\mathbf{f}_{t-1}^l, \mathbf{f}_t^l) = \frac{\mathbf{f}_{t-1}^l}{\lVert \mathbf{f}_{t-1}^l \rVert} \cdot \frac{\mathbf{f}_t^l}{\lVert \mathbf{f}_t^l \rVert}\]</div>
+<p>By calculating correlations, we can find the top-K most correlated patches (in a local search area) in a descending order, and concatenate and aggregate them using convolution layers. In order to enable varying aggregation patterns in different locations, they further introduce a weight map obtained by concatenating the feature maps and going through a convolution layer.</p>
+<p>Finally, the value at position <span class="math notranslate nohighlight">\(\mathbf{p}_t\)</span> on the aligned neighboring frame <span class="math notranslate nohighlight">\(\bar{\mathbf{F}}_{t-1}^l\)</span> is obtained as</p>
+<div class="math notranslate nohighlight">
+\[\bar{\mathbf{F}}_{t-1}^l (\mathbf{p}_t) = \bar{\mathbf{f}}_{t-1}^l \cdot \mathbf{W}_{t-1}^l(\mathbf{p}_t)\]</div>
+<a class="reference internal image-reference" href="../_images/mucan-4.png"><img alt="../_images/mucan-4.png" src="../_images/mucan-4.png" style="width: 360pt;" /></a>
+<a class="reference internal image-reference" href="../_images/mucan-5.png"><img alt="../_images/mucan-5.png" src="../_images/mucan-5.png" style="width: 360pt;" /></a>
+</div>
+<div class="section" id="cross-scale-nonlocal-correspondence-aggregation-module-cn-cam">
+<h2>Cross-Scale Nonlocal-Correspondence Aggregation Module (CN-CAM)<a class="headerlink" href="#cross-scale-nonlocal-correspondence-aggregation-module-cn-cam" title="Permalink to this headline">¶</a></h2>
+<p>With average pooling, the authors first downsampling the input features maps and obtain a feature pyramid. Given a query patch in <span class="math notranslate nohighlight">\(\mathbf{M}_t^0\)</span>, the nearest neighbor patch is found in each stage. Further, a self-attention module [1] is applied to determine whether the information is useful.</p>
+<p>Finally, the aggregated feature <span class="math notranslate nohighlight">\(\bar{\mathbf{m}}_t^0\)</span> at position <span class="math notranslate nohighlight">\(\mathbf{p}_t\)</span> is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[\bar{\mathbf{m}}_t^0 = \text{Aggr}([\text{Att}(\mathbf{m}_t^0), \text{Att}(\tilde{\mathbf{m}}_t^1), \text{Att}(\tilde{\mathbf{m}}_t^2), \text{Att}(\tilde{\mathbf{m}}_t^3)])\]</div>
+<a class="reference internal image-reference" href="../_images/mucan-6.png"><img alt="../_images/mucan-6.png" src="../_images/mucan-6.png" style="width: 340pt;" /></a>
+</div>
+<div class="section" id="edge-aware-loss">
+<h2>Edge-Aware Loss<a class="headerlink" href="#edge-aware-loss" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong></p>
+</div>
 </div>
 
 
@@ -80,6 +110,18 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">MuCAN: Multi-Correspondence Aggregation Network for Video Super-Resolution</a><ul>
+<li><a class="reference internal" href="#proposed-method">Proposed Method</a></li>
+<li><a class="reference internal" href="#temporal-multi-correspondence-aggregation-module-tm-cam">Temporal Multi-Correspondence Aggregation Module (TM-CAM)</a></li>
+<li><a class="reference internal" href="#cross-scale-nonlocal-correspondence-aggregation-module-cn-cam">Cross-Scale Nonlocal-Correspondence Aggregation Module (CN-CAM)</a></li>
+<li><a class="reference internal" href="#edge-aware-loss">Edge-Aware Loss</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="../super-resolution.html"
                         title="previous chapter">Super Resolution</a></p>

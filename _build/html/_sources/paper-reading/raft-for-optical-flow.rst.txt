@@ -11,7 +11,7 @@ Optical flow has traditionally been approached as an optimization problem which 
 
 In this paper, the authors introduce Recurrent All-Pairs Field Transforms (RAFT), a new deep network architecture for optical flow. It achieves SOTA results on KITTI and Sintel, and displays strong cross-dataset generalization and high efficiency.
 
-.. image:: figures/raft-for-optical-flow-1.png
+.. image:: figures/raft-1.png
    :width: 600pt
 
 Approach
