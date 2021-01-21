@@ -18,6 +18,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RAFT: Recurrent All-Pairs Field Transforms for Optical Flow" href="raft-for-optical-flow.html" />
     <link rel="prev" title="PifPaf: Composite Fields for Human Pose estimation" href="../pifpaf.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -26,6 +27,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="raft-for-optical-flow.html" title="RAFT: Recurrent All-Pairs Field Transforms for Optical Flow"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../pifpaf.html" title="PifPaf: Composite Fields for Human Pose estimation"
              accesskey="P">previous</a> |</li>
@@ -85,16 +89,18 @@
 <div class="math notranslate nohighlight">
 \[\mathbf{z}_i = W_z \mathbf{y}_i + \mathbf{x}_i\]</div>
 <p>The residual connection allows us to insert a new non-local block into any pre-trained model, without breaking its initial behavior.</p>
-<a class="reference internal image-reference" href="../_images/non-local-nns-1.png"><img alt="../_images/non-local-nns-1.png" src="../_images/non-local-nns-1.png" style="width: 360pt;" /></a>
 <p><strong>Implementation of non-local blocks.</strong> The authors set the number of channels represented by <span class="math notranslate nohighlight">\(W_g\)</span>, <span class="math notranslate nohighlight">\(W_\theta\)</span>, and <span class="math notranslate nohighlight">\(W_\phi\)</span> to be half of the number of channels in <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. This follows the bottlenect design of [3] and reduces the computation of a block by about a half.</p>
 <p>A subsampling trick is used to further reduce computation. We have:</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{y}_i = \frac{1}{\mathcal{C}(\hat{\mathbf{x}})} \sum_{\forall j} f(\mathbf{x}_i, \hat{\mathbf{x}}_j)g(\hat{\mathbf{x}}_j)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{\mathbf{x}}\)</span> is a subsampled version of <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>.</p>
+<a class="reference internal image-reference" href="../_images/non-local-nns-1.png"><img alt="../_images/non-local-nns-1.png" src="../_images/non-local-nns-1.png" style="width: 360pt;" /></a>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p><strong>[1]</strong> Buades, A., Coll, B., &amp; Morel, J. M. (2005, June). A non-local algorithm for image denoising. In <em>2005 IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'05)</em> (Vol. 2, pp. 60-65). IEEE.</p>
 <p><strong>[2]</strong> Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... &amp; Polosukhin, I. (2017). Attention is all you need. In <em>Advances in neural information processing systems</em> (pp. 5998-6008).</p>
+<p><strong>[3]</strong> He, K., Zhang, X., Ren, S., &amp; Sun, J. (2016). Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 770-778).</p>
 </div>
 </div>
 
@@ -118,6 +124,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="../pifpaf.html"
                         title="previous chapter">PifPaf: Composite Fields for Human Pose estimation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="raft-for-optical-flow.html"
+                        title="next chapter">RAFT: Recurrent All-Pairs Field Transforms for Optical Flow</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -145,6 +154,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="raft-for-optical-flow.html" title="RAFT: Recurrent All-Pairs Field Transforms for Optical Flow"
+             >next</a> |</li>
         <li class="right" >
           <a href="../pifpaf.html" title="PifPaf: Composite Fields for Human Pose estimation"
              >previous</a> |</li>

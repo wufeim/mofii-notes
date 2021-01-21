@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention is All You Need &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)" href="img-is-16x16-words.html" />
+    <link rel="prev" title="Transformer" href="../transformer.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="img-is-16x16-words.html" title="An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../transformer.html" title="Transformer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Attention is All You Need</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="attention-is-all-you-need">
+<h1>Attention is All You Need<a class="headerlink" href="#attention-is-all-you-need" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Jun 2017</div>
+<div class="line"><strong>Authors:</strong> Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin</div>
+<div class="line"><strong>Affiliations:</strong> Google Brain, Google Research, University of Toronto</div>
+</div>
+<p>In this work, the authors propose the Transformer, a model architecture based solely on an attention mechanism to draw global dependencies between input and output, dispensing with recurrence and convolutions entirely.</p>
+<p>Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train.</p>
+<div class="section" id="model-architecture">
+<h2>Model architecture<a class="headerlink" href="#model-architecture" title="Permalink to this headline">¶</a></h2>
+<p>Most competitive neural sequence transduction models have an encoder-decoder structure. The encoder maps an input sequence of symbol representations <span class="math notranslate nohighlight">\((x_1, \dots, x_n)\)</span> to a sequence of continuous representations <span class="math notranslate nohighlight">\(\mathbf{z} = (z_1, \dots, z_n)\)</span>. Given <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>, the decoder then generates an output sequence <span class="math notranslate nohighlight">\((y_1, \dots, y_m)\)</span> of symbols one element at a time. At each step the model is auto-regressive[1], consuming the previously generated symbols as additional input when generating the next.</p>
+<p>The transformer follows the overall architecture using stacked self-attention and point-wise, fully-connected layers for both the encoder and decoder.</p>
+<a class="reference internal image-reference" href="../_images/attention-is-all-you-need-1.png"><img alt="../_images/attention-is-all-you-need-1.png" src="../_images/attention-is-all-you-need-1.png" style="width: 400pt;" /></a>
+<div class="section" id="encoder-and-decoder-stacks">
+<h3>Encoder and Decoder Stacks<a class="headerlink" href="#encoder-and-decoder-stacks" title="Permalink to this headline">¶</a></h3>
+<p><strong>Encoder.</strong> The encoder is composed of a stack of <span class="math notranslate nohighlight">\(N = 6\)</span> idential layers. Each layer has two sub-layers, a multi-head self-attention mechanism and a position-wise fully connected feed-forward network. A residual connection is employed around each of the two sub-layers, followed by layer normalization.</p>
+<p><strong>Decoder.</strong> The decoder has a similar structure to the encoder. In addition to the two sub-layers in each encoder layer, the decoder inserts a third sub-layer, which performs multi-head attention over the output of the encoder stack. A mask is also added to prevent positions from attending to subsequent positions.</p>
+</div>
+<div class="section" id="attention">
+<h3>Attention<a class="headerlink" href="#attention" title="Permalink to this headline">¶</a></h3>
+<p>An attention function can be described as mapping a query and a set of key-value pairs to an output.</p>
+<p><strong>Scaled dot-product attention.</strong> The input consists of queries and keys of dimension <span class="math notranslate nohighlight">\(d_k\)</span> and values of dimension <span class="math notranslate nohighlight">\(d_v\)</span>. By stacking the vectors into matrices, the attention is given by:</p>
+<div class="math notranslate nohighlight">
+\[\text{Attention}(Q, K, V) = \text{Softmax}\left( \frac{QK^\top}{\sqrt{d_k}} \right) V\]</div>
+<p>For larger values of <span class="math notranslate nohighlight">\(d_k\)</span>, the dot products may grow large in magnitude, pushing the softmax function into regions where it has extermely small gradients. The authors scale the dot products by <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{d_k}}\)</span>.</p>
+<a class="reference internal image-reference" href="../_images/attention-is-all-you-need-2.png"><img alt="../_images/attention-is-all-you-need-2.png" src="../_images/attention-is-all-you-need-2.png" style="width: 100pt;" /></a>
+<p><strong>Multi-Head Attention.</strong> The authors find it beneficial to linearly project the queries, keys, and values <span class="math notranslate nohighlight">\(h\)</span> times with different learned linear projections to <span class="math notranslate nohighlight">\(d_k\)</span>, <span class="math notranslate nohighlight">\(d_k\)</span>, and <span class="math notranslate nohighlight">\(d_v\)</span> dimensions. On each of the projected versions, they then apply the attention function in parallel, yielding <span class="math notranslate nohighlight">\(d_v\)</span>-dimensional output values.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\text{MultiHead}(Q, K, V) &amp; = \text{Concat}(\text{head}_1, \dots, \text{head}_h)W^O \\
+\text{head}_i &amp; = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)\end{split}\]</div>
+<p>where the projections are parameter matrices <span class="math notranslate nohighlight">\(W_i^Q \in \mathbb{R}^{d_{model} \times d_k}\)</span>, <span class="math notranslate nohighlight">\(W_i^K \in \mathbb{R}^{d_{model} \times d_k}\)</span>, <span class="math notranslate nohighlight">\(W_i^V \in \mathbb{R}^{d_{model} \times d_v}\)</span>.</p>
+<p>Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions.</p>
+<a class="reference internal image-reference" href="../_images/attention-is-all-you-need-3.png"><img alt="../_images/attention-is-all-you-need-3.png" src="../_images/attention-is-all-you-need-3.png" style="width: 150pt;" /></a>
+</div>
+<div class="section" id="position-wise-feed-forward-networks">
+<h3>Position-Wise Feed-Forward Networks<a class="headerlink" href="#position-wise-feed-forward-networks" title="Permalink to this headline">¶</a></h3>
+<p>Each of the layers in the encoder-decoder contains a fully connected feed-forward network. This consists of two linear transformations with a ReLU activation in between:</p>
+<div class="math notranslate nohighlight">
+\[\text{FFN}(x) = \max(0, xW_1 + b_1)W_2 + b_2\]</div>
+</div>
+<div class="section" id="positional-encoding">
+<h3>Positional Encoding<a class="headerlink" href="#positional-encoding" title="Permalink to this headline">¶</a></h3>
+<p>In order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of tokens in the sequence. In this work, the authors use sine and cosine functions of different frequencies:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\text{PE}_{(pos, 2i)} &amp; = \sin(pos / 10000^{2i/d_{model}}) \\
+\text{PE}_{(pos, 2i+1)} &amp; = \cos(pos / 10000^{2i/d_{model}}) \\\end{split}\]</div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Graves, A. (2013). Generating sequences with recurrent neural networks. <em>arXiv preprint arXiv</em>:1308.0850.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Attention is All You Need</a><ul>
+<li><a class="reference internal" href="#model-architecture">Model architecture</a><ul>
+<li><a class="reference internal" href="#encoder-and-decoder-stacks">Encoder and Decoder Stacks</a></li>
+<li><a class="reference internal" href="#attention">Attention</a></li>
+<li><a class="reference internal" href="#position-wise-feed-forward-networks">Position-Wise Feed-Forward Networks</a></li>
+<li><a class="reference internal" href="#positional-encoding">Positional Encoding</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../transformer.html"
+                        title="previous chapter">Transformer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="img-is-16x16-words.html"
+                        title="next chapter">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/attention-is-all-you-need.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="img-is-16x16-words.html" title="An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../transformer.html" title="Transformer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Attention is All You Need</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

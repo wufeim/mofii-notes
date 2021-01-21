@@ -6,3 +6,4 @@ Other Papers
 
    pifpaf
    paper-reading/non-local-nns.rst
+   paper-reading/raft-for-optical-flow.rst

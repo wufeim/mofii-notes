@@ -69,9 +69,6 @@ A non-local block is defined as:
 
 The residual connection allows us to insert a new non-local block into any pre-trained model, without breaking its initial behavior.
 
-.. image:: figures/non-local-nns-1.png
-   :width: 360pt
-
 **Implementation of non-local blocks.** The authors set the number of channels represented by :math:`W_g`, :math:`W_\theta`, and :math:`W_\phi` to be half of the number of channels in :math:`\mathbf{x}`. This follows the bottlenect design of [3] and reduces the computation of a block by about a half.
 
 A subsampling trick is used to further reduce computation. We have:
@@ -80,9 +77,16 @@ A subsampling trick is used to further reduce computation. We have:
 
    \mathbf{y}_i = \frac{1}{\mathcal{C}(\hat{\mathbf{x}})} \sum_{\forall j} f(\mathbf{x}_i, \hat{\mathbf{x}}_j)g(\hat{\mathbf{x}}_j)
 
+where :math:`\hat{\mathbf{x}}` is a subsampled version of :math:`\mathbf{x}`.
+
+.. image:: figures/non-local-nns-1.png
+   :width: 360pt
+
 References
 --------------------------------------
 
 **[1]** Buades, A., Coll, B., & Morel, J. M. (2005, June). A non-local algorithm for image denoising. In *2005 IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'05)* (Vol. 2, pp. 60-65). IEEE.
 
 **[2]** Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. In *Advances in neural information processing systems* (pp. 5998-6008).
+
+**[3]** He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 770-778).

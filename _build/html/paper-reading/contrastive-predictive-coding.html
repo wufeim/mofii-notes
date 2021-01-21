@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Representation Learning with Contrastive Predictive Coding &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Representation Learning with Contrastive Predictive Coding</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="representation-learning-with-contrastive-predictive-coding">
+<h1>Representation Learning with Contrastive Predictive Coding<a class="headerlink" href="#representation-learning-with-contrastive-predictive-coding" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Jul 2018</div>
+<div class="line"><strong>Authors:</strong> Aaron van den Oord, Yazhe Li, Oriol Vinyals</div>
+<div class="line"><strong>Affiliations:</strong> DeepMind</div>
+</div>
+<p>One of the most common strategies for unsupervised learning has been to predict future, missing or contextual information. The idea of predictive coding is one of the oldest techniques in signal processing for data compression. <strong>The authors hypothesize that this approach is fruitful partly because the context from which we predict related values are often conditionally dependent on the same shared high-level latent information. And by casting this as a prediction problem, we automatically infer these features of interest to representation learning.</strong></p>
+<p>In this work, the authors propose a universal unsupervised learning approach to extract useful representations from high-dimensional data, called Contrastive Predictive Coding. The key insight is to learn such representations by predicting the future in latent space by using powerful autoaggressive models.</p>
+<p>The authors demonstrate that their approach is able to learn useful representations achieving strong performance on four distinct domains: speech, images, text, and reinforcement learning in 3D environments.</p>
+<div class="section" id="motivation-and-intuitions">
+<h2>Motivation and Intuitions<a class="headerlink" href="#motivation-and-intuitions" title="Permalink to this headline">¶</a></h2>
+<p>The main intuition behind this model is to learn the representations that encode the underlying shared information between different parts of the (high-dimensional) signal. At the same time it discards low-level information and noise that is more local.</p>
+<p>Images may contain thousands of bits of information while the high-level latent variables such as the class label contain much less information (10 bits for 1024 categories). This suggests that modeling <span class="math notranslate nohighlight">\(p(x \mid c)\)</span> directly may not be optimal for the purpose of extracting shared information between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(c\)</span>.</p>
+<p>Whey predicting future information, they encode the target <span class="math notranslate nohighlight">\(x\)</span> (future) and context <span class="math notranslate nohighlight">\(c\)</span> (present) into a compact distributed vector representations in a way that maximizes the mutual information defined as</p>
+<div class="math notranslate nohighlight">
+\[I(x; c) = \sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)}\]</div>
+<p>By maximizing the mutual information between the encoded representations, we extract the underlying latent variables the inputs have in common.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Representation Learning with Contrastive Predictive Coding</a><ul>
+<li><a class="reference internal" href="#motivation-and-intuitions">Motivation and Intuitions</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/contrastive-predictive-coding.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Representation Learning with Contrastive Predictive Coding</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

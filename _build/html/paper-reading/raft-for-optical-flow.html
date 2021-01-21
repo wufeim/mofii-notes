@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAFT: Recurrent All-Pairs Field Transforms for Optical Flow &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Non-Local Neural Networks" href="non-local-nns.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="non-local-nns.html" title="Non-Local Neural Networks"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../other-papers.html" accesskey="U">Other Papers</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RAFT: Recurrent All-Pairs Field Transforms for Optical Flow</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="raft-recurrent-all-pairs-field-transforms-for-optical-flow">
+<h1>RAFT: Recurrent All-Pairs Field Transforms for Optical Flow<a class="headerlink" href="#raft-recurrent-all-pairs-field-transforms-for-optical-flow" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> May 2020</div>
+<div class="line"><strong>Authors:</strong> Zachary Teed, Jia Deng</div>
+<div class="line"><strong>Affiliations:</strong> Princeton University</div>
+</div>
+<p>Optical flow is the task of estimating per-pixel motion between video frames. The best systems are limited by difficulties including fast-moving objects, occlusions, motion blur, and texturelss surfaces.</p>
+<p>Optical flow has traditionally been approached as an optimization problem which defines a trade-off between a <strong>data term</strong> which encourages the alignment of visually similar image regions and a <strong>regularization term</strong> which imposes priors on the plausibility of motion. Recently, deep learning has been shown as a promising alternative to traditional methods and achieves comparable performance while being significantly faster.</p>
+<p>In this paper, the authors introduce Recurrent All-Pairs Field Transforms (RAFT), a new deep network architecture for optical flow. It achieves SOTA results on KITTI and Sintel, and displays strong cross-dataset generalization and high efficiency.</p>
+<a class="reference internal image-reference" href="../_images/raft-for-optical-flow-1.png"><img alt="../_images/raft-for-optical-flow-1.png" src="../_images/raft-for-optical-flow-1.png" style="width: 600pt;" /></a>
+<div class="section" id="approach">
+<h2>Approach<a class="headerlink" href="#approach" title="Permalink to this headline">¶</a></h2>
+<p>Given a pair of RGB images, <span class="math notranslate nohighlight">\(I_1\)</span>, <span class="math notranslate nohighlight">\(I_2\)</span>, we estimate a dense displacement field <span class="math notranslate nohighlight">\((\mathbf{f}^1, \mathbf{f}^2)\)</span>, which maps each pixel <span class="math notranslate nohighlight">\((u, v)\)</span> in <span class="math notranslate nohighlight">\(I_1\)</span> to its corresponding coordinates <span class="math notranslate nohighlight">\((u', v') = (u + f^1(u), v + f^2(v))\)</span> in <span class="math notranslate nohighlight">\(I_2\)</span>.</p>
+<p>RAFT consists of a feature encoder, a correlation layer, and a recurrent GRU-based update operator, where all stages are differentiable and composed into an end-to-end trainable architecture.</p>
+<div class="section" id="feature-extraction">
+<h3>Feature Extraction<a class="headerlink" href="#feature-extraction" title="Permalink to this headline">¶</a></h3>
+<p>Feature are extracted from the input images using a convolutinoal network. The encoder <span class="math notranslate nohighlight">\(g_\theta\)</span> outputs features at 1/8 resolution with <span class="math notranslate nohighlight">\(D = 256\)</span>: <span class="math notranslate nohighlight">\(g_\theta: \mathbb{R}^{H \times W \times 3} \mapsto \mathbb{R}^{H/8 \times W/8 \times D}\)</span>. There is an additional context network <span class="math notranslate nohighlight">\(h_\theta\)</span> that extracts features only from the first image <span class="math notranslate nohighlight">\(I_1\)</span>.</p>
+</div>
+<div class="section" id="computing-visual-similarity">
+<h3>Computing Visual Similarity<a class="headerlink" href="#computing-visual-similarity" title="Permalink to this headline">¶</a></h3>
+<p>Given input features <span class="math notranslate nohighlight">\(g_\theta(I_1) \in \mathbb{R}^{H \times W \times D}\)</span> and <span class="math notranslate nohighlight">\(g_\theta(I_2) \in \mathbb{R}^{H \times W \times D}\)</span>, the correlation volume is formed by taking the dot product between all pairs of feature vectors:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{C}(g_\theta(I_1), g_\theta(I_2)) \in \mathbb{R}^{H \times W \times H \times W}\]</div>
+<p><strong>Correlation Pyramid:</strong> The authors construct a 4-layer pyramid <span class="math notranslate nohighlight">\(\{\mathbf{C}^1, \mathbf{C}^2, \mathbf{C}^3, \mathbf{C}^4\}\)</span> by pooling the last two dimensions. Thus <span class="math notranslate nohighlight">\(\mathbf{C}^k \in \mathbb{R}^{H \times W \times H/2^k \times W/2^k\}\)</span>. The set of volumes gives high resolution information about both large and small displacements.</p>
+<p><strong>Correlation Lookup:</strong> The authors define a lookup operator <span class="math notranslate nohighlight">\(L_\mathbf{C}\)</span> which generates a feature map by indexing from the correlation pyramid. Given a current estimate of optical flow <span class="math notranslate nohighlight">\((\mathbf{f}^1, \mathbf{f}^2)\)</span>, they map each pixel <span class="math notranslate nohighlight">\(\mathbf{x} = (u, v)\)</span> to its estimated correspondence <span class="math notranslate nohighlight">\(\mathbf{x}' = (u + f^1(u), v + f^2(v))\)</span>. Then they define a local grid around <span class="math notranslate nohighlight">\(\mathbf{x}'\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{N}(\mathbf{x}')_r = \left\{ \mathbf{x}' + \mathbf{dx} \mid \mathbf{dx} \in \mathbb{Z}^2, \lVert \mathbf{dx} \rVert_1 \leq r \right\}\]</div>
+<p>They use the local neighborhood <span class="math notranslate nohighlight">\(\mathcal{N}(\mathbf{x}')_r\)</span> to index from the correlation volume.</p>
+<p><strong>Efficient Computation for High Resolution Images:</strong> Although all pairs correlation scales <span class="math notranslate nohighlight">\(O(N^2)\)</span>, there is an equivalent implementation that scales <span class="math notranslate nohighlight">\(O(NM)\)</span> by exploiting the linearity of the inner product and average pooling.</p>
+</div>
+<div class="section" id="iterative-updates">
+<h3>Iterative Updates<a class="headerlink" href="#iterative-updates" title="Permalink to this headline">¶</a></h3>
+<p>They supervise the network with the L1 distance between the full sequence of predictions and the ground truth flow with exponentially increasing weights:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = \sum_{i=1}^N \gamma^{N - i} \lVert \mathbf{F}_{gt} - \mathbf{f}_i\rVert_1\]</div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAFT: Recurrent All-Pairs Field Transforms for Optical Flow</a><ul>
+<li><a class="reference internal" href="#approach">Approach</a><ul>
+<li><a class="reference internal" href="#feature-extraction">Feature Extraction</a></li>
+<li><a class="reference internal" href="#computing-visual-similarity">Computing Visual Similarity</a></li>
+<li><a class="reference internal" href="#iterative-updates">Iterative Updates</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="non-local-nns.html"
+                        title="previous chapter">Non-Local Neural Networks</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/raft-for-optical-flow.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="non-local-nns.html" title="Non-Local Neural Networks"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../other-papers.html" >Other Papers</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RAFT: Recurrent All-Pairs Field Transforms for Optical Flow</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
