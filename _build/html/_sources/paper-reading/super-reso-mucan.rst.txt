@@ -10,7 +10,7 @@ Video super-resolution (VSR) aims to utilize multiple low-resolution frames to g
 - Flow estimation is error-prone and affects recovery results.
 - Similar patterns in natural images are rarely exploited.
 
-In this work, the authors propose the multi-correspondence aggregation network (MuCAN) for VSR. This method achieves SOTA results on multiple benchmark datasets.
+In this work, the authors propose the multi-correspondence aggregation network (MuCAN) for VSR. This method achieves SOTA results on REDS and Vimeo-90K datasets.
 
 In contrast to previous methods that model VSR as separate alignment and regression stages, the authors view this problem as an inter- and intra-frame correspondence aggregation task.
 
@@ -54,10 +54,10 @@ Finally, the value at position :math:`\mathbf{p}_t` on the aligned neighboring f
    \bar{\mathbf{F}}_{t-1}^l (\mathbf{p}_t) = \bar{\mathbf{f}}_{t-1}^l \cdot \mathbf{W}_{t-1}^l(\mathbf{p}_t)
 
 .. image:: figures/mucan-4.png
-   :width: 360pt
+   :width: 400pt
 
 .. image:: figures/mucan-5.png
-   :width: 360pt
+   :width: 400pt
 
 Cross-Scale Nonlocal-Correspondence Aggregation Module (CN-CAM)
 -------------------------------------
@@ -71,12 +71,28 @@ Finally, the aggregated feature :math:`\bar{\mathbf{m}}_t^0` at position :math:`
    \bar{\mathbf{m}}_t^0 = \text{Aggr}([\text{Att}(\mathbf{m}_t^0), \text{Att}(\tilde{\mathbf{m}}_t^1), \text{Att}(\tilde{\mathbf{m}}_t^2), \text{Att}(\tilde{\mathbf{m}}_t^3)])
 
 .. image:: figures/mucan-6.png
-   :width: 340pt
+   :width: 400pt
 
 Edge-Aware Loss
 -------------------------------------
 
+Usually reconstructed high resolution images produced by VSR methods suffer from jagged edges. The authors propose an edge-aware loss to produce better refined edges. An edge detector first extract edge information from ground-truth HR images. Then the detected edge areas are weighted more in loss calculation.
+
+During training, they adopted the Charbonnier loss, defined as:
+
+.. math::
+
+   L_\text{Charbonnier} = \sqrt{\left\lVert \hat{\mathbf{I}}_t^H - \mathbf{I}_t^H \right\rVert^2 + \epsilon^2}
+
+The final loss is formulated as:
+
+.. math::
+
+   L = L_\text{Charbonnier} + \lambda \left\lVert \mathbf{E}_t \circ \left( \hat{\mathbf{I}}_t^H - \mathbf{I}_t^H \right) \right\rVert
+
+where :math:`\circ` stands for element-wise multiplication.
+
 References
 -------------------------------------
 
-**[1]**
+**[1]** Wang, X., Chan, K. C., Yu, K., Dong, C., & Change Loy, C. (2019). Edvr: Video restoration with enhanced deformable convolutional networks. In *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops* (pp. 0-0).

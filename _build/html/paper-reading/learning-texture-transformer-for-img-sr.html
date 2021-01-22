@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Texture Transformer Network for Image Super-Resolution &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Super Resolution" href="../super-resolution.html" />
+    <link rel="prev" title="A Survey on Visual Transformer" href="survey-vis-transformer.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../super-resolution.html" title="Super Resolution"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="survey-vis-transformer.html" title="A Survey on Visual Transformer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Learning Texture Transformer Network for Image Super-Resolution</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="learning-texture-transformer-network-for-image-super-resolution">
+<h1>Learning Texture Transformer Network for Image Super-Resolution<a class="headerlink" href="#learning-texture-transformer-network-for-image-super-resolution" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Jun 2020</div>
+<div class="line"><strong>Authors:</strong> Fuzhi Yang, Huan Yang, Jianlong Fu, Hongtao Lu, Baining Guo</div>
+<div class="line"><strong>Affiliations:</strong> Shanghai Jiao Tong University, MSRA</div>
+</div>
+<p>Image super-resolution (SR) is the task of recovering realistic textures from a low-resolution (LR) image. Recent progress has been made by taking high-resolution images as references (Ref), so that relevant textures can be transferred to LR images.</p>
+<p>Existing SR approaches neglect to use attention mechanisms to transfer high-resolution (HR) textures from Ref images. In this work, the authors propose a novel Texture Transformer Network for Image Super Resolution (TTSR). It consists of four closely-related modules optimized for image generation tasks:</p>
+<ul class="simple">
+<li><p>a learnable texture extractor</p></li>
+<li><p>a relevance embedding module</p></li>
+<li><p>a hard-attention module and a soft-attention module</p></li>
+</ul>
+<p>Experiments show that TTSR achieves significant improvements over SOTA approaches.</p>
+<div class="section" id="texture-transformer">
+<h2>Texture Transformer<a class="headerlink" href="#texture-transformer" title="Permalink to this headline">¶</a></h2>
+<p>LR, LR <span class="math notranslate nohighlight">\(\uparrow\)</span>, and Ref represent the input image, the 4x bicubic-upsampled input image, and the reference image. We obtain Ref <span class="math notranslate nohighlight">\(\downarrow\uparrow\)</span> by downsampling and then upsampling the reference image, which is dominant-consistent with LR <span class="math notranslate nohighlight">\(\uparrow\)</span>. The architecture overview is shown below.</p>
+<a class="reference internal image-reference" href="../_images/learning-texture-transformer-for-img-sr-1.png"><img alt="../_images/learning-texture-transformer-for-img-sr-1.png" src="../_images/learning-texture-transformer-for-img-sr-1.png" style="width: 480pt;" /></a>
+<p><strong>Learnable Texture Extractor.</strong> The authors use a learnable texture extractor to encourage a joint feature learning across teh LR and Ref image.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Q &amp; = \text{LTE}(LR\uparrow) \\
+K &amp; = \text{LTE}(Ref\downarrow\uparrow) \\
+V &amp; = \text{LTE}(Ref)\end{split}\]</div>
+<p><strong>Relevance Embedding.</strong> Relevance embedding aims to embed the relevance between the LR and Ref iamge by estimating the similarity between <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(K\)</span>. The authors first unfold <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(K\)</span> into patches</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp; q_i, \; i \in [1, H_{LR} \times W_{LR}] \\
+&amp; k_j, \; j \in [1, H_{Ref} \times W_{Ref}]\end{split}\]</div>
+<p>Then the relevance <span class="math notranslate nohighlight">\(r_{i, j}\)</span> is estimated by the normalized inner product:</p>
+<div class="math notranslate nohighlight">
+\[r_{i, j} = \left\langle \frac{q_i}{\lVert q_i \rVert}, \frac{k_j}{\lVert k_j \rVert} \right\rangle\]</div>
+<p><strong>Hard Attention.</strong> The hard-attention module transfer teh HR texture features <span class="math notranslate nohighlight">\(V\)</span> from the Ref image. To avoid blurry results, only features from the most relevant position in <span class="math notranslate nohighlight">\(V\)</span> are transferred. The hard-attention map <span class="math notranslate nohighlight">\(H\)</span> is calculated by:</p>
+<div class="math notranslate nohighlight">
+\[h_i = \text{argmax}_j r_{i, j}\]</div>
+<p>The transferred HR texture features <span class="math notranslate nohighlight">\(T\)</span> is simply selected from the <span class="math notranslate nohighlight">\(h_i\)</span> position in <span class="math notranslate nohighlight">\(V\)</span>.</p>
+<p><strong>Soft Attention.</strong> The soft-attention module synthesize features from the transferred HR texture features <span class="math notranslate nohighlight">\(T\)</span> and the LR features <span class="math notranslate nohighlight">\(F\)</span>. The soft-attention map <span class="math notranslate nohighlight">\(S\)</span> is computed by:</p>
+<div class="math notranslate nohighlight">
+\[s_i = \max_j r_{i, j}\]</div>
+<p>The fusion operation is represented as:</p>
+<div class="math notranslate nohighlight">
+\[F_{out} = F + \text{Conv}(\text{Concat}(F, T)) \bigodot S\]</div>
+</div>
+<div class="section" id="cross-scale-feature-integration">
+<h2>Cross-Scale Feature Integration<a class="headerlink" href="#cross-scale-feature-integration" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="loss-function">
+<h2>Loss Function<a class="headerlink" href="#loss-function" title="Permalink to this headline">¶</a></h2>
+<p>The loss function is the sum of the reconstruction loss, the adversarial loss, and the perceptual loss:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = \lambda_{rec}\mathcal{L}_{rec} + \lambda_{adv}\mathcal{L}_{adv} + \lambda_{per}\mathcal{L}_{per}\]</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Learning Texture Transformer Network for Image Super-Resolution</a><ul>
+<li><a class="reference internal" href="#texture-transformer">Texture Transformer</a></li>
+<li><a class="reference internal" href="#cross-scale-feature-integration">Cross-Scale Feature Integration</a></li>
+<li><a class="reference internal" href="#loss-function">Loss Function</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="survey-vis-transformer.html"
+                        title="previous chapter">A Survey on Visual Transformer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../super-resolution.html"
+                        title="next chapter">Super Resolution</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/learning-texture-transformer-for-img-sr.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../super-resolution.html" title="Super Resolution"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="survey-vis-transformer.html" title="A Survey on Visual Transformer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Learning Texture Transformer Network for Image Super-Resolution</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

@@ -57,7 +57,7 @@
 <li><p>Flow estimation is error-prone and affects recovery results.</p></li>
 <li><p>Similar patterns in natural images are rarely exploited.</p></li>
 </ul>
-<p>In this work, the authors propose the multi-correspondence aggregation network (MuCAN) for VSR. This method achieves SOTA results on multiple benchmark datasets.</p>
+<p>In this work, the authors propose the multi-correspondence aggregation network (MuCAN) for VSR. This method achieves SOTA results on REDS and Vimeo-90K datasets.</p>
 <p>In contrast to previous methods that model VSR as separate alignment and regression stages, the authors view this problem as an inter- and intra-frame correspondence aggregation task.</p>
 <ul class="simple">
 <li><p><strong>Inter-frame correspondence:</strong> Motion estimation may suffer from inevitable errors so the authors resort to simultaneously consider multiple correspondence candidates for each pixel. They propose a <strong>temporal multi-correspondence aggregation module</strong> (TM-CAM) for alignment.</p></li>
@@ -83,8 +83,8 @@
 <p>Finally, the value at position <span class="math notranslate nohighlight">\(\mathbf{p}_t\)</span> on the aligned neighboring frame <span class="math notranslate nohighlight">\(\bar{\mathbf{F}}_{t-1}^l\)</span> is obtained as</p>
 <div class="math notranslate nohighlight">
 \[\bar{\mathbf{F}}_{t-1}^l (\mathbf{p}_t) = \bar{\mathbf{f}}_{t-1}^l \cdot \mathbf{W}_{t-1}^l(\mathbf{p}_t)\]</div>
-<a class="reference internal image-reference" href="../_images/mucan-4.png"><img alt="../_images/mucan-4.png" src="../_images/mucan-4.png" style="width: 360pt;" /></a>
-<a class="reference internal image-reference" href="../_images/mucan-5.png"><img alt="../_images/mucan-5.png" src="../_images/mucan-5.png" style="width: 360pt;" /></a>
+<a class="reference internal image-reference" href="../_images/mucan-4.png"><img alt="../_images/mucan-4.png" src="../_images/mucan-4.png" style="width: 400pt;" /></a>
+<a class="reference internal image-reference" href="../_images/mucan-5.png"><img alt="../_images/mucan-5.png" src="../_images/mucan-5.png" style="width: 400pt;" /></a>
 </div>
 <div class="section" id="cross-scale-nonlocal-correspondence-aggregation-module-cn-cam">
 <h2>Cross-Scale Nonlocal-Correspondence Aggregation Module (CN-CAM)<a class="headerlink" href="#cross-scale-nonlocal-correspondence-aggregation-module-cn-cam" title="Permalink to this headline">¶</a></h2>
@@ -92,14 +92,22 @@
 <p>Finally, the aggregated feature <span class="math notranslate nohighlight">\(\bar{\mathbf{m}}_t^0\)</span> at position <span class="math notranslate nohighlight">\(\mathbf{p}_t\)</span> is calculated as:</p>
 <div class="math notranslate nohighlight">
 \[\bar{\mathbf{m}}_t^0 = \text{Aggr}([\text{Att}(\mathbf{m}_t^0), \text{Att}(\tilde{\mathbf{m}}_t^1), \text{Att}(\tilde{\mathbf{m}}_t^2), \text{Att}(\tilde{\mathbf{m}}_t^3)])\]</div>
-<a class="reference internal image-reference" href="../_images/mucan-6.png"><img alt="../_images/mucan-6.png" src="../_images/mucan-6.png" style="width: 340pt;" /></a>
+<a class="reference internal image-reference" href="../_images/mucan-6.png"><img alt="../_images/mucan-6.png" src="../_images/mucan-6.png" style="width: 400pt;" /></a>
 </div>
 <div class="section" id="edge-aware-loss">
 <h2>Edge-Aware Loss<a class="headerlink" href="#edge-aware-loss" title="Permalink to this headline">¶</a></h2>
+<p>Usually reconstructed high resolution images produced by VSR methods suffer from jagged edges. The authors propose an edge-aware loss to produce better refined edges. An edge detector first extract edge information from ground-truth HR images. Then the detected edge areas are weighted more in loss calculation.</p>
+<p>During training, they adopted the Charbonnier loss, defined as:</p>
+<div class="math notranslate nohighlight">
+\[L_\text{Charbonnier} = \sqrt{\left\lVert \hat{\mathbf{I}}_t^H - \mathbf{I}_t^H \right\rVert^2 + \epsilon^2}\]</div>
+<p>The final loss is formulated as:</p>
+<div class="math notranslate nohighlight">
+\[L = L_\text{Charbonnier} + \lambda \left\lVert \mathbf{E}_t \circ \left( \hat{\mathbf{I}}_t^H - \mathbf{I}_t^H \right) \right\rVert\]</div>
+<p>where <span class="math notranslate nohighlight">\(\circ\)</span> stands for element-wise multiplication.</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<p><strong>[1]</strong></p>
+<p><strong>[1]</strong> Wang, X., Chan, K. C., Yu, K., Dong, C., &amp; Change Loy, C. (2019). Edvr: Video restoration with enhanced deformable convolutional networks. In <em>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops</em> (pp. 0-0).</p>
 </div>
 </div>
 
