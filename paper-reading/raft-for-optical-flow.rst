@@ -62,8 +62,8 @@ The update operator takes flow, correlation, and a latent hidden state as input,
 
    z_t & = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_z)) \\
    r_t & = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_r)) \\
-   \tilde{h}_t & = \text{tanh}(\text{Conv}_{3 \times 3}([r_t \bigodot h_{t-1}, x_t], W_h)) \\
-   h_t & = (1 - z_t) \bigodot h_{t-1} + z_t \bigodot \tilde{h}_t
+   \tilde{h}_t & = \text{tanh}(\text{Conv}_{3 \times 3}([r_t \odot h_{t-1}, x_t], W_h)) \\
+   h_t & = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t
 
 **Flow Prediction:** The hidden state outputted by the GRU is passed through two convolutional layers to predict the flow update :math:`\Delta \mathbf{f}`.
 

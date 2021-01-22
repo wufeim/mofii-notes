@@ -63,7 +63,7 @@
 <div class="section" id="texture-transformer">
 <h2>Texture Transformer<a class="headerlink" href="#texture-transformer" title="Permalink to this headline">¶</a></h2>
 <p>LR, LR <span class="math notranslate nohighlight">\(\uparrow\)</span>, and Ref represent the input image, the 4x bicubic-upsampled input image, and the reference image. We obtain Ref <span class="math notranslate nohighlight">\(\downarrow\uparrow\)</span> by downsampling and then upsampling the reference image, which is dominant-consistent with LR <span class="math notranslate nohighlight">\(\uparrow\)</span>. The architecture overview is shown below.</p>
-<a class="reference internal image-reference" href="../_images/learning-texture-transformer-for-img-sr-1.png"><img alt="../_images/learning-texture-transformer-for-img-sr-1.png" src="../_images/learning-texture-transformer-for-img-sr-1.png" style="width: 480pt;" /></a>
+<a class="reference internal image-reference" href="../_images/learning-texture-transformer-for-img-sr-1.png"><img alt="../_images/learning-texture-transformer-for-img-sr-1.png" src="../_images/learning-texture-transformer-for-img-sr-1.png" style="width: 360pt;" /></a>
 <p><strong>Learnable Texture Extractor.</strong> The authors use a learnable texture extractor to encourage a joint feature learning across teh LR and Ref image.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}Q &amp; = \text{LTE}(LR\uparrow) \\
@@ -85,16 +85,26 @@ V &amp; = \text{LTE}(Ref)\end{split}\]</div>
 \[s_i = \max_j r_{i, j}\]</div>
 <p>The fusion operation is represented as:</p>
 <div class="math notranslate nohighlight">
-\[F_{out} = F + \text{Conv}(\text{Concat}(F, T)) \bigodot S\]</div>
+\[F_{out} = F + \text{Conv}(\text{Concat}(F, T)) \odot S\]</div>
 </div>
 <div class="section" id="cross-scale-feature-integration">
 <h2>Cross-Scale Feature Integration<a class="headerlink" href="#cross-scale-feature-integration" title="Permalink to this headline">¶</a></h2>
+<p>The texture transformer can be further stacked in a cross-scale way with a cross-scale feature integration module (CSFI).</p>
+<p>Stacked texture transformers output the synthesized features for three resolution scales (1x, 2x, and 4x). A CSFI module is applied each time the LR feature is up-sampled to the next scale.</p>
+<a class="reference internal image-reference" href="../_images/learning-texture-transformer-for-img-sr-2.png"><img alt="../_images/learning-texture-transformer-for-img-sr-2.png" src="../_images/learning-texture-transformer-for-img-sr-2.png" style="width: 400pt;" /></a>
 </div>
 <div class="section" id="loss-function">
 <h2>Loss Function<a class="headerlink" href="#loss-function" title="Permalink to this headline">¶</a></h2>
 <p>The loss function is the sum of the reconstruction loss, the adversarial loss, and the perceptual loss:</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{L} = \lambda_{rec}\mathcal{L}_{rec} + \lambda_{adv}\mathcal{L}_{adv} + \lambda_{per}\mathcal{L}_{per}\]</div>
+<p>The reconstruction loss is the L1 loss which is sharper for performance and easier for convergence:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_{rec} = \frac{1}{CHW} \left\lVert I^{HR} - I^{SR} \right\rVert_1\]</div>
+<p>The adversarial loss is introduced and the authors adopt WGAN-GP [1] which proposes a penalization of gradient norm to replace weight clipping, resulting in more stable training and better performance:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{L}_D &amp; = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})] - \mathbb{E}_{x \sim \mathbb{P}_r} [D(x)] + \lambda \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}} \left[ (\lVert \nabla_{\hat{x}} D(\hat{x}) \rVert_2 - 1)^2 \right] \\
+\mathcal{L}_G &amp; = - \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})]\end{split}\]</div>
 </div>
 </div>
 

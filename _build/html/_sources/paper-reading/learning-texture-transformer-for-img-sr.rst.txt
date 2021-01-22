@@ -21,7 +21,7 @@ Texture Transformer
 LR, LR :math:`\uparrow`, and Ref represent the input image, the 4x bicubic-upsampled input image, and the reference image. We obtain Ref :math:`\downarrow\uparrow` by downsampling and then upsampling the reference image, which is dominant-consistent with LR :math:`\uparrow`. The architecture overview is shown below.
 
 .. image:: figures/learning-texture-transformer-for-img-sr-1.png
-   :width: 480pt
+   :width: 360pt
 
 **Learnable Texture Extractor.** The authors use a learnable texture extractor to encourage a joint feature learning across teh LR and Ref image.
 
@@ -62,10 +62,17 @@ The fusion operation is represented as:
 
 .. math::
 
-   F_{out} = F + \text{Conv}(\text{Concat}(F, T)) \bigodot S
+   F_{out} = F + \text{Conv}(\text{Concat}(F, T)) \odot S
 
 Cross-Scale Feature Integration
 -------------------------------------
+
+The texture transformer can be further stacked in a cross-scale way with a cross-scale feature integration module (CSFI).
+
+Stacked texture transformers output the synthesized features for three resolution scales (1x, 2x, and 4x). A CSFI module is applied each time the LR feature is up-sampled to the next scale.
+
+.. image:: figures/learning-texture-transformer-for-img-sr-2.png
+   :width: 400pt
 
 Loss Function
 -------------------------------------
@@ -75,3 +82,16 @@ The loss function is the sum of the reconstruction loss, the adversarial loss, a
 .. math::
 
    \mathcal{L} = \lambda_{rec}\mathcal{L}_{rec} + \lambda_{adv}\mathcal{L}_{adv} + \lambda_{per}\mathcal{L}_{per}
+
+The reconstruction loss is the L1 loss which is sharper for performance and easier for convergence:
+
+.. math::
+
+   \mathcal{L}_{rec} = \frac{1}{CHW} \left\lVert I^{HR} - I^{SR} \right\rVert_1
+
+The adversarial loss is introduced and the authors adopt WGAN-GP [1] which proposes a penalization of gradient norm to replace weight clipping, resulting in more stable training and better performance:
+
+.. math::
+
+   \mathcal{L}_D & = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})] - \mathbb{E}_{x \sim \mathbb{P}_r} [D(x)] + \lambda \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}} \left[ (\lVert \nabla_{\hat{x}} D(\hat{x}) \rVert_2 - 1)^2 \right] \\
+   \mathcal{L}_G & = - \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})]

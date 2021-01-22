@@ -81,8 +81,8 @@
 <div class="math notranslate nohighlight">
 \[\begin{split}z_t &amp; = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_z)) \\
 r_t &amp; = \sigma(\text{Conv}_{3 \times 3}(h_{t-1}, x_t], W_r)) \\
-\tilde{h}_t &amp; = \text{tanh}(\text{Conv}_{3 \times 3}([r_t \bigodot h_{t-1}, x_t], W_h)) \\
-h_t &amp; = (1 - z_t) \bigodot h_{t-1} + z_t \bigodot \tilde{h}_t\end{split}\]</div>
+\tilde{h}_t &amp; = \text{tanh}(\text{Conv}_{3 \times 3}([r_t \odot h_{t-1}, x_t], W_h)) \\
+h_t &amp; = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t\end{split}\]</div>
 <p><strong>Flow Prediction:</strong> The hidden state outputted by the GRU is passed through two convolutional layers to predict the flow update <span class="math notranslate nohighlight">\(\Delta \mathbf{f}\)</span>.</p>
 </div>
 <div class="section" id="supervision">
