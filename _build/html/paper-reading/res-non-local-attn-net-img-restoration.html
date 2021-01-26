@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residual Non-Local Attention Networks for Image Restoration &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Super Resolution" href="../super-resolution.html" />
+    <link rel="prev" title="Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving" href="temporal-channel-transformer-for-video-od.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../super-resolution.html" title="Super Resolution"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="temporal-channel-transformer-for-video-od.html" title="Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Residual Non-Local Attention Networks for Image Restoration</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="residual-non-local-attention-networks-for-image-restoration">
+<h1>Residual Non-Local Attention Networks for Image Restoration<a class="headerlink" href="#residual-non-local-attention-networks-for-image-restoration" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Mar 2019</div>
+<div class="line"><strong>Authors:</strong> Yulun Zhang, Kunpeng Li, Kai Li, Bineng Zhong, Yun Fu</div>
+<div class="line"><strong>Affiliations:</strong> Northeastern Universiyt, Huaqiao University</div>
+</div>
+<p>Image restoration aims to recover high-quality (HQ) images from their corrupted low-quality (LQ) observations.</p>
+<p>Previous CNN-based image restoration methods have three limitations:</p>
+<ul class="simple">
+<li><p>the receptive field size is relatively small</p></li>
+<li><p>distinctive ability is limited: noise removal is eaiser in the plain area, so the model should focus on textual area more</p></li>
+<li><p>all channel-wise features are treated equally</p></li>
+</ul>
+<p>In this paper, the authors propose the residual non-local attention network (RNAN) for high-quality image restoration. They design residual local and non-local attention blocks to extract features that capture the long-range dependencies between pixels and pay more attention to the challenging parts.</p>
+<p>Experiments demonstrate that this method obtains comparable or better results compared with recently leading methods quantitatively and visually.</p>
+<div class="section" id="framework">
+<h2>Framework<a class="headerlink" href="#framework" title="Permalink to this headline">¶</a></h2>
+<p>Denote <span class="math notranslate nohighlight">\(I_L\)</span> and <span class="math notranslate nohighlight">\(I_H\)</span> as the low-quality and high-quality images. The reconstructed iamges <span class="math notranslate nohighlight">\(I_R\)</span> can be obtained by</p>
+<div class="math notranslate nohighlight">
+\[I_R = H_{RNAN} (I_L)\]</div>
+<p>The framework of RNAN is shown in the figure below. The first and last convolutional layers are shallow feature extractor and reconstruction layer. They propose residual local and non-local attention blocks (RAB and RNAB) to extract hierarchical attention-aware features.</p>
+<p>The goal of training RNAN is to minimize the L2 loss function:</p>
+<div class="math notranslate nohighlight">
+\[L = \frac{1}{N} \sum_{i=1}^N \lVert H_{RNAN}(I_L^i) - I_H^i \rVert_2\]</div>
+<a class="reference internal image-reference" href="../_images/res-non-local-attn-net-img-restoration-1.png"><img alt="../_images/res-non-local-attn-net-img-restoration-1.png" src="../_images/res-non-local-attn-net-img-restoration-1.png" style="width: 400pt;" /></a>
+</div>
+<div class="section" id="residual-non-local-attention-block">
+<h2>Residual Non-Local Attention Block<a class="headerlink" href="#residual-non-local-attention-block" title="Permalink to this headline">¶</a></h2>
+<p>Each attention block is divided into two parts: <span class="math notranslate nohighlight">\(q\)</span> residual blocks (RBs) in the beginning and end of attention block, and two branches in the middle part: trunk branch and mask branch.</p>
+<a class="reference internal image-reference" href="../_images/res-non-local-attn-net-img-restoration-2.png"><img alt="../_images/res-non-local-attn-net-img-restoration-2.png" src="../_images/res-non-local-attn-net-img-restoration-2.png" style="width: 320pt;" /></a>
+<p><strong>Trunk branch.</strong> The trunk branch includes <span class="math notranslate nohighlight">\(t\)</span> residual blocks (RBs). They adopt the simplified RB from [1]. Feature maps from trunk branches of different depths serve as hierarchical features.</p>
+<p><strong>Mask branch.</strong> The mask branch learn mixed attention maps in channel- and spatial-wise simultaneously. To grasp information of larger scope, the authors choose to use large-stride convolution and deconvolution to enlarge receptive field size.</p>
+<p><strong>Non-local mixed attention.</strong> Non-local blocks (NLBs) are incorporated into the mask branch to obtain non-local mixed attention. The non-local operation is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y_i &amp; = \left( \sum_{\forall j} f(x_i, x_j)g(x_j) \right) / \sum_{\forall j} f(x_i, x_j) \\
+f(x_i, x_j) &amp; = \exp(u(x_i)^\top v(x_j)) = \exp((W_ux_i)^\top W_vx_j)\end{split}\]</div>
+</div>
+<div class="section" id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Lim, B., Son, S., Kim, H., Nah, S., &amp; Mu Lee, K. (2017). Enhanced deep residual networks for single image super-resolution. In <em>Proceedings of the IEEE conference on computer vision and pattern recognition workshops</em> (pp. 136-144).</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Residual Non-Local Attention Networks for Image Restoration</a><ul>
+<li><a class="reference internal" href="#framework">Framework</a></li>
+<li><a class="reference internal" href="#residual-non-local-attention-block">Residual Non-Local Attention Block</a></li>
+<li><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="temporal-channel-transformer-for-video-od.html"
+                        title="previous chapter">Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../super-resolution.html"
+                        title="next chapter">Super Resolution</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/res-non-local-attn-net-img-restoration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../super-resolution.html" title="Super Resolution"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="temporal-channel-transformer-for-video-od.html" title="Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Residual Non-Local Attention Networks for Image Restoration</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

@@ -9,3 +9,6 @@ Transformer
    paper-reading/pretrained-img-proc-transformer.rst
    paper-reading/survey-vis-transformer.rst
    paper-reading/learning-texture-transformer-for-img-sr.rst
+   paper-reading/transformer-for-hr-synthesis.rst
+   paper-reading/temporal-channel-transformer-for-video-od.rst
+   paper-reading/res-non-local-attn-net-img-restoration.rst

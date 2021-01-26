@@ -95,3 +95,14 @@ The adversarial loss is introduced and the authors adopt WGAN-GP [1] which propo
 
    \mathcal{L}_D & = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})] - \mathbb{E}_{x \sim \mathbb{P}_r} [D(x)] + \lambda \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}} \left[ (\lVert \nabla_{\hat{x}} D(\hat{x}) \rVert_2 - 1)^2 \right] \\
    \mathcal{L}_G & = - \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})]
+
+The perceptual loss is used to improve visual quality. The key idea is to enhance the similarity in feature space between the prediction image and the target image.
+
+.. math::
+
+   \mathcal{L}_{per} = \frac{1}{C_iH_iW_i} \left\lVert \phi_i^{vgg} (I^{SR}) - \phi_i^{vgg} (I^{HR}) \right\rVert_2^2 + \frac{1}{C_jH_jW_j} \left\lVert \phi_i^{lte}(I^{SR} - T\right\rVert_2^2
+
+References
+-------------------------------------
+
+**[1]** Gulrajani, I., Ahmed, F., Arjovsky, M., Dumoulin, V., & Courville, A. C. (2017). Improved training of wasserstein gans. In *Advances in neural information processing systems* (pp. 5767-5777).

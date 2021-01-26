@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Residual Non-Local Attention Networks for Image Restoration" href="res-non-local-attn-net-img-restoration.html" />
+    <link rel="prev" title="Taming Transformers for High-Resolution Image Synthesis" href="transformer-for-hr-synthesis.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="res-non-local-attn-net-img-restoration.html" title="Residual Non-Local Attention Networks for Image Restoration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="transformer-for-hr-synthesis.html" title="Taming Transformers for High-Resolution Image Synthesis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="temporal-channel-transformer-for-3d-lidar-based-video-object-detection-in-autonomous-driving">
+<h1>Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving<a class="headerlink" href="#temporal-channel-transformer-for-3d-lidar-based-video-object-detection-in-autonomous-driving" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Nov 2020</div>
+<div class="line"><strong>Authors:</strong> Zhenxun Yuan, Xiao Song, Lei Bai, Wengang Zhou, Zhe Wang, Wanli Ouyang</div>
+<div class="line"><strong>Affiliations:</strong> The University of Sydney, SenseTime Group Limited, The University of New South Wales, The University of Science and Technology of China</div>
+</div>
+<p>Most current 3D object detection algorithms only model single frame data, ignoring the temporal information of the sequence of data. In this work, the authors propose Temporal-Channel Transformer to model the spatial-pyramid domain and channel domain relationships for video object detecting from Lidar data. It has two main components, 1) a data enhancement module that integrates the most relevant information from the context frames to the target frame based on transformer in a voxel-wise manner, 2) a data refinement module that filters out object-irrelevant information based on the gate mechanism.</p>
+<p>Experimental results show that Temporal-Channel Transformer achieves the SOTA performance in grid voxel-based 3D object detection on the nuScenes benchmark.</p>
+<a class="reference internal image-reference" href="../_images/temporal-channel-transformer-for-video-od-1.png"><img alt="../_images/temporal-channel-transformer-for-video-od-1.png" src="../_images/temporal-channel-transformer-for-video-od-1.png" style="width: 360pt;" /></a>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<p>The raw Lidar data generated at each time step is a sparse and irregular collection of point clouds frame, in which a point is represented as <span class="math notranslate nohighlight">\(\{x, y, z, r\}\)</span>, containing 3D space location information <span class="math notranslate nohighlight">\(\{x, y, z\}\)</span> and reflection magnitude <span class="math notranslate nohighlight">\(r\)</span>. Denote the raw point clouds frame at time step <span class="math notranslate nohighlight">\(t\)</span> as <span class="math notranslate nohighlight">\(I_t\)</span>. This work focuses on detecting objects at <span class="math notranslate nohighlight">\(t\)</span> with a set of continuous frames <span class="math notranslate nohighlight">\(\mathcal{I} = \{I_{t-T}, \dots, I_{t-1}, I_t, T_{t+1}, \dots, I_{t+T}\)</span>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving</a><ul>
+<li><a class="reference internal" href="#method">Method</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="transformer-for-hr-synthesis.html"
+                        title="previous chapter">Taming Transformers for High-Resolution Image Synthesis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="res-non-local-attn-net-img-restoration.html"
+                        title="next chapter">Residual Non-Local Attention Networks for Image Restoration</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/temporal-channel-transformer-for-video-od.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="res-non-local-attn-net-img-restoration.html" title="Residual Non-Local Attention Networks for Image Restoration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="transformer-for-hr-synthesis.html" title="Taming Transformers for High-Resolution Image Synthesis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

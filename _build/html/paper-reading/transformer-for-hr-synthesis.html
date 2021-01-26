@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+
+<html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taming Transformers for High-Resolution Image Synthesis &#8212; Mofii Notes 1.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Super Resolution" href="../super-resolution.html" />
+    <link rel="prev" title="Learning Texture Transformer Network for Image Super-Resolution" href="learning-texture-transformer-for-img-sr.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../super-resolution.html" title="Super Resolution"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="learning-texture-transformer-for-img-sr.html" title="Learning Texture Transformer Network for Image Super-Resolution"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" accesskey="U">Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Taming Transformers for High-Resolution Image Synthesis</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="taming-transformers-for-high-resolution-image-synthesis">
+<h1>Taming Transformers for High-Resolution Image Synthesis<a class="headerlink" href="#taming-transformers-for-high-resolution-image-synthesis" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Year:</strong> Dec 2020</div>
+<div class="line"><strong>Authors:</strong> Patrick Esser, Robin Rombach, Bjorn Ommer</div>
+<div class="line"><strong>Affiliations:</strong> Heidelberg University</div>
+</div>
+<p>In contrast to CNNs, Transformers contain no inductive bias that prioritizes local interactions. The authors show how to (i) use CNNs to learn a context-rich vocabulary of image constituents, and in turn (ii) utilize transformers to efficiently model their composition within high-resolution images.</p>
+<p>The authors apply this approach to conditional synthesis tasks, where both non-spatial information and spatial information can control the generated image. The authors present the first results on semantically-guided synthesis of megapixel images with transformers at <a class="reference external" href="https://git.io/JLlvY">https://git.io</a>.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="learning-texture-transformer-for-img-sr.html"
+                        title="previous chapter">Learning Texture Transformer Network for Image Super-Resolution</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../super-resolution.html"
+                        title="next chapter">Super Resolution</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/paper-reading/transformer-for-hr-synthesis.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../super-resolution.html" title="Super Resolution"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="learning-texture-transformer-for-img-sr.html" title="Learning Texture Transformer Network for Image Super-Resolution"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Mofii Notes 1.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../paper-reading.html" >Paper Reading Notes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../transformer.html" >Transformer</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Taming Transformers for High-Resolution Image Synthesis</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mofii.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

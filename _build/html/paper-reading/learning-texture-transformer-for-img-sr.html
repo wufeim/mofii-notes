@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Super Resolution" href="../super-resolution.html" />
+    <link rel="next" title="Taming Transformers for High-Resolution Image Synthesis" href="transformer-for-hr-synthesis.html" />
     <link rel="prev" title="A Survey on Visual Transformer" href="survey-vis-transformer.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../super-resolution.html" title="Super Resolution"
+          <a href="transformer-for-hr-synthesis.html" title="Taming Transformers for High-Resolution Image Synthesis"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="survey-vis-transformer.html" title="A Survey on Visual Transformer"
@@ -105,6 +105,13 @@ V &amp; = \text{LTE}(Ref)\end{split}\]</div>
 <div class="math notranslate nohighlight">
 \[\begin{split}\mathcal{L}_D &amp; = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})] - \mathbb{E}_{x \sim \mathbb{P}_r} [D(x)] + \lambda \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}} \left[ (\lVert \nabla_{\hat{x}} D(\hat{x}) \rVert_2 - 1)^2 \right] \\
 \mathcal{L}_G &amp; = - \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} [D(\tilde{x})]\end{split}\]</div>
+<p>The perceptual loss is used to improve visual quality. The key idea is to enhance the similarity in feature space between the prediction image and the target image.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_{per} = \frac{1}{C_iH_iW_i} \left\lVert \phi_i^{vgg} (I^{SR}) - \phi_i^{vgg} (I^{HR}) \right\rVert_2^2 + \frac{1}{C_jH_jW_j} \left\lVert \phi_i^{lte}(I^{SR} - T\right\rVert_2^2\]</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><strong>[1]</strong> Gulrajani, I., Ahmed, F., Arjovsky, M., Dumoulin, V., &amp; Courville, A. C. (2017). Improved training of wasserstein gans. In <em>Advances in neural information processing systems</em> (pp. 5767-5777).</p>
 </div>
 </div>
 
@@ -121,6 +128,7 @@ V &amp; = \text{LTE}(Ref)\end{split}\]</div>
 <li><a class="reference internal" href="#texture-transformer">Texture Transformer</a></li>
 <li><a class="reference internal" href="#cross-scale-feature-integration">Cross-Scale Feature Integration</a></li>
 <li><a class="reference internal" href="#loss-function">Loss Function</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
@@ -129,8 +137,8 @@ V &amp; = \text{LTE}(Ref)\end{split}\]</div>
   <p class="topless"><a href="survey-vis-transformer.html"
                         title="previous chapter">A Survey on Visual Transformer</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../super-resolution.html"
-                        title="next chapter">Super Resolution</a></p>
+  <p class="topless"><a href="transformer-for-hr-synthesis.html"
+                        title="next chapter">Taming Transformers for High-Resolution Image Synthesis</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -159,7 +167,7 @@ V &amp; = \text{LTE}(Ref)\end{split}\]</div>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../super-resolution.html" title="Super Resolution"
+          <a href="transformer-for-hr-synthesis.html" title="Taming Transformers for High-Resolution Image Synthesis"
              >next</a> |</li>
         <li class="right" >
           <a href="survey-vis-transformer.html" title="A Survey on Visual Transformer"
