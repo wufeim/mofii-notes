@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Super Resolution" href="../super-resolution.html" />
+    <link rel="next" title="Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving" href="temporal-channel-transformer-for-video-od.html" />
     <link rel="prev" title="Learning Texture Transformer Network for Image Super-Resolution" href="learning-texture-transformer-for-img-sr.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../super-resolution.html" title="Super Resolution"
+          <a href="temporal-channel-transformer-for-video-od.html" title="Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="learning-texture-transformer-for-img-sr.html" title="Learning Texture Transformer Network for Image Super-Resolution"
@@ -54,6 +54,19 @@
 </div>
 <p>In contrast to CNNs, Transformers contain no inductive bias that prioritizes local interactions. The authors show how to (i) use CNNs to learn a context-rich vocabulary of image constituents, and in turn (ii) utilize transformers to efficiently model their composition within high-resolution images.</p>
 <p>The authors apply this approach to conditional synthesis tasks, where both non-spatial information and spatial information can control the generated image. The authors present the first results on semantically-guided synthesis of megapixel images with transformers at <a class="reference external" href="https://git.io/JLlvY">https://git.io</a>.</p>
+<div class="section" id="approach">
+<h2>Approach<a class="headerlink" href="#approach" title="Permalink to this headline">¶</a></h2>
+<p>High-resolution image synthesis requires a model that understands the global composition of images, enabling it to generate locally realistic as well as globally consistent patterns. The authors represent images as a composition of perceptually rich image constituents from a codebook, which can significantly reduce the description length of compositions and allows us to model the globl interrelations with a transformer.</p>
+</div>
+<div class="section" id="learning-an-effective-codebook-of-image-constituents">
+<h2>Learning an Effective Codebook of Image Constituents<a class="headerlink" href="#learning-an-effective-codebook-of-image-constituents" title="Permalink to this headline">¶</a></h2>
+<p>Complex necessitates an approach that uses a discrete codebook of learned representations, such that any image <span class="math notranslate nohighlight">\(x \in \mathbb{R}^{H \times W \times 3}\)</span> can be represented by a spatial collection of codebook entries <span class="math notranslate nohighlight">\(z_\mathbf{q} \in \mathbb{R}^{h \times w \times n_z}\)</span>.</p>
+<p>First, the authors learn a convolutional model consisting of an encoder <span class="math notranslate nohighlight">\(E\)</span> and a decoder <span class="math notranslate nohighlight">\(G\)</span>, such that taken together, they learn to represent images with codes from a learned, discrete codebook <span class="math notranslate nohighlight">\(\mathcal{Z} = \{z_i\}_{k=1}^K \subset \mathbb{R}^{n_z}\)</span>. We have:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{z} &amp; = E(x) \in \mathbb{R}^{h \times w \times n_z} \\
+z_\mathbf{q} &amp; = \mathbf{q}(\hat{z}) := \left( \arg\min_{z_k \in \mathcal{Z}} \left\lVert \hat{z}_{ij} - z_k \right\rVert \right) \in \mathbb{R}^{h \times w \times n_z} \\
+\hat{x} &amp; = G(z_\mathbf{q}) = G(\mathbf{q}(E(x)))\end{split}\]</div>
+</div>
 </div>
 
 
@@ -63,12 +76,21 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Taming Transformers for High-Resolution Image Synthesis</a><ul>
+<li><a class="reference internal" href="#approach">Approach</a></li>
+<li><a class="reference internal" href="#learning-an-effective-codebook-of-image-constituents">Learning an Effective Codebook of Image Constituents</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="learning-texture-transformer-for-img-sr.html"
                         title="previous chapter">Learning Texture Transformer Network for Image Super-Resolution</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../super-resolution.html"
-                        title="next chapter">Super Resolution</a></p>
+  <p class="topless"><a href="temporal-channel-transformer-for-video-od.html"
+                        title="next chapter">Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -97,7 +119,7 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../super-resolution.html" title="Super Resolution"
+          <a href="temporal-channel-transformer-for-video-od.html" title="Temporal-Channel Transformer for 3D Lidar-Based Video Object Detection in Autonomous Driving"
              >next</a> |</li>
         <li class="right" >
           <a href="learning-texture-transformer-for-img-sr.html" title="Learning Texture Transformer Network for Image Super-Resolution"

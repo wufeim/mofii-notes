@@ -9,3 +9,5 @@ Compression (Image)
    paper-reading/soft-to-hard-vec-quant.rst
    paper-reading/cond-prob-model-deep-img-comp.rst
    paper-reading/gan-extreme-img-comp.rst
+   paper-reading/causal-contextual-pred-for-learned-img-comp.rst
+   paper-reading/variational-img-comp-with-hyperprior.rst

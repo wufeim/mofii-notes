@@ -81,7 +81,16 @@
 <p><strong>Non-local mixed attention.</strong> Non-local blocks (NLBs) are incorporated into the mask branch to obtain non-local mixed attention. The non-local operation is defined as:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}y_i &amp; = \left( \sum_{\forall j} f(x_i, x_j)g(x_j) \right) / \sum_{\forall j} f(x_i, x_j) \\
-f(x_i, x_j) &amp; = \exp(u(x_i)^\top v(x_j)) = \exp((W_ux_i)^\top W_vx_j)\end{split}\]</div>
+f(x_i, x_j) &amp; = \exp(u(x_i)^\top v(x_j)) = \exp((W_ux_i)^\top W_vx_j) \\
+g(x_j) &amp; = W_g x_j\end{split}\]</div>
+<a class="reference internal image-reference" href="../_images/res-non-local-attn-net-img-restoration-3.png"><img alt="../_images/res-non-local-attn-net-img-restoration-3.png" src="../_images/res-non-local-attn-net-img-restoration-3.png" style="width: 320pt;" /></a>
+<p><strong>Residual non-local attention learning.</strong> One form of attention residual learning was proposed in [1]:</p>
+<div class="math notranslate nohighlight">
+\[H_{RNA}(x) = H_{trunk}(x) (H_{mask}(x) + 1)\]</div>
+<p>which is found not suitable for image restoration tasks. Instead the authors use:</p>
+<div class="math notranslate nohighlight">
+\[H_{RNA}(x) = H_{trunk}(x) H_{mask}(x) + x\]</div>
+<p>which can preserve more low-level features.</p>
 </div>
 <div class="section" id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>

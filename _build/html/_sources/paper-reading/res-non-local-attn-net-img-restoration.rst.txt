@@ -54,7 +54,25 @@ Each attention block is divided into two parts: :math:`q` residual blocks (RBs) 
 .. math::
 
    y_i & = \left( \sum_{\forall j} f(x_i, x_j)g(x_j) \right) / \sum_{\forall j} f(x_i, x_j) \\
-   f(x_i, x_j) & = \exp(u(x_i)^\top v(x_j)) = \exp((W_ux_i)^\top W_vx_j)
+   f(x_i, x_j) & = \exp(u(x_i)^\top v(x_j)) = \exp((W_ux_i)^\top W_vx_j) \\
+   g(x_j) & = W_g x_j
+
+.. image:: figures/res-non-local-attn-net-img-restoration-3.png
+   :width: 320pt
+
+**Residual non-local attention learning.** One form of attention residual learning was proposed in [1]:
+
+.. math::
+
+   H_{RNA}(x) = H_{trunk}(x) (H_{mask}(x) + 1)
+
+which is found not suitable for image restoration tasks. Instead the authors use:
+
+.. math::
+
+   H_{RNA}(x) = H_{trunk}(x) H_{mask}(x) + x
+
+which can preserve more low-level features.
 
 Reference
 -------------------------------------
