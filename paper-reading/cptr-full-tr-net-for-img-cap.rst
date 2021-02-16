@@ -20,7 +20,7 @@ The encoder of CPTR consists of :math:`N_e` stacked identical layers, each of wh
 The decoder of CPTR uses sinusoid positional embedding to the word embedding features and includes :math:`N_d` stacked identical layers which consists of a masked multi-head self-attention layer followed by a multi-head cross attention and a positional feed-forward sublayer.
 
 .. image:: figures/cptr-1.png
-   :width: 400pt
+   :width: 600pt
 
 Experiments
 -------------------------------------

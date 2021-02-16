@@ -13,3 +13,4 @@ Transformer
    paper-reading/temporal-channel-transformer-for-video-od.rst
    paper-reading/res-non-local-attn-net-img-restoration.rst
    paper-reading/cptr-full-tr-net-for-img-cap.rst
+   paper-reading/t2t-vit.rst
